@@ -17,17 +17,17 @@ interface MoviePosterProps {
   onAddToWatchlist: (id: number) => void;
 }
 
-const MoviePoster: React.FC<MoviePosterProps> = ({ 
-  movie, 
-  onRank, 
-  onLike, 
-  onAddToWatchlist 
+const MoviePoster: React.FC<MoviePosterProps> = ({
+  movie,
+  onRank,
+  onLike,
+  onAddToWatchlist
 }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [hoveredRank, setHoveredRank] = useState(0);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col cursor-pointer">
       <div
         className="relative group overflow-hidden rounded-lg shadow-xl transition-all duration-300 ease-in-out"
         onMouseEnter={() => setShowDetails(true)}
@@ -57,9 +57,8 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
               {[1, 2, 3, 4, 5].map((rank) => (
                 <Star
                   key={rank}
-                  className={`w-8 h-8 cursor-pointer transition-colors ${
-                    rank <= hoveredRank ? 'text-yellow-400' : 'text-gray-500'
-                  } hover:text-yellow-300`}
+                  className={`w-8 h-8 cursor-pointer transition-colors ${rank <= hoveredRank ? 'text-yellow-400' : 'text-gray-500'
+                    } hover:text-yellow-300`}
                   onMouseEnter={() => setHoveredRank(rank)}
                   onMouseLeave={() => setHoveredRank(movie.rank)}
                   onClick={() => onRank(movie.id, rank)}
@@ -77,11 +76,10 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
             e.stopPropagation();
             onLike(movie.id);
           }}
-          className={`p-2 rounded-full transition-colors duration-300 ${
-            movie.isLiked 
-              ? 'bg-red-500 text-white' 
+          className={`p-2 rounded-full transition-colors duration-300 ${movie.isLiked
+              ? 'bg-red-500 text-white'
               : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
-          }`}
+            }`}
           title={movie.isLiked ? "Remove from favorites" : "Add to favorites"}
         >
           <Heart className={`w-5 h-5 ${movie.isLiked ? 'fill-current' : ''}`} />
@@ -91,11 +89,10 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
             e.stopPropagation();
             onAddToWatchlist(movie.id);
           }}
-          className={`p-2 rounded-full transition-colors duration-300 ${
-            movie.inWatchlist 
-              ? 'bg-purple-500 text-white' 
+          className={`p-2 rounded-full transition-colors duration-300 ${movie.inWatchlist
+              ? 'bg-purple-500 text-white'
               : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
-          }`}
+            }`}
           title={movie.inWatchlist ? "Remove from watchlist" : "Add to watchlist"}
         >
           <Plus className="w-5 h-5" />
