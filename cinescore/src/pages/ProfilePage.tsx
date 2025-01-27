@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { User, Film, Clapperboard, Star, Popcorn, Search, Heart, Plus } from 'lucide-react';
+import { User, Film, Clapperboard, Star, Popcorn, Search } from 'lucide-react';
 
 interface RankedMovie {
   rank: number;
@@ -18,20 +18,20 @@ const ProfilePage: React.FC = () => {
   const [rankedMovies, setRankedMovies] = useState<RankedMovie[]>([
     {
       rank: 1,
-      title: 'Inception',
-      poster: '/api/placeholder/200/300',
-      overallScore: 4.7,
+      title: 'Interstellar - 2014',
+      poster: 'https://www.themoviedb.org/t/p/w1280/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+      overallScore: 5.0,
     },
     {
       rank: 2,
-      title: 'The Matrix',
-      poster: '/api/placeholder/200/300',
-      overallScore: 4.5,
+      title: 'La La Land - 2016',
+      poster: 'https://www.themoviedb.org/t/p/w1280/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg',
+      overallScore: 4.7,
     },
     {
       rank: 3,
-      title: 'Interstellar',
-      poster: '/api/placeholder/200/300',
+      title: 'Back to the Future - 1985',
+      poster: 'https://www.themoviedb.org/t/p/w1280/rej4R5DIdlx29I2soNePfInICG3.jpg',
       overallScore: 4.8,
     },
   ]);
@@ -39,15 +39,15 @@ const ProfilePage: React.FC = () => {
   const [likedMovies, setLikedMovies] = useState<RankedMovie[]>([
     {
       rank: 0,
-      title: 'The Dark Knight',
-      poster: '/api/placeholder/200/300',
+      title: 'The Dark Knight - 2008',
+      poster: 'https://www.themoviedb.org/t/p/w1280/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
       overallScore: 4.9,
       isLiked: true,
     },
     {
       rank: 0,
-      title: 'Goodfellas',
-      poster: '/api/placeholder/200/300',
+      title: 'Goodfellas - 1990',
+      poster: 'https://www.themoviedb.org/t/p/w1280/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg',
       overallScore: 4.8,
       isLiked: true,
     },
@@ -56,15 +56,15 @@ const ProfilePage: React.FC = () => {
   const [watchlist, setWatchlist] = useState<RankedMovie[]>([
     {
       rank: 0,
-      title: 'The Godfather',
-      poster: '/api/placeholder/200/300',
+      title: 'The Godfather - 1972',
+      poster: 'https://www.themoviedb.org/t/p/w1280/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
       overallScore: 4.9,
       inWatchlist: true,
     },
     {
       rank: 0,
-      title: 'Fight Club',
-      poster: '/api/placeholder/200/300',
+      title: 'Fight Club - 1999',
+      poster: 'https://www.themoviedb.org/t/p/w1280/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg',
       overallScore: 4.7,
       inWatchlist: true,
     },
@@ -173,6 +173,10 @@ const ProfilePage: React.FC = () => {
           <MovieGrid title="My Watchlist" movies={watchlist} />
         </div>
       </main>
+
+      <footer className="bg-neutral-900 text-neutral-400 py-6 mt-auto text-center">
+        <p>Created and Copyrighted by Owen Perry and Connor Sample. All Rights Reserved © 2025.</p>
+      </footer>
     </div>
   );
 };

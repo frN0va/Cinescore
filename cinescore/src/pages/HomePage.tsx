@@ -7,9 +7,9 @@ const movieCategories = {
   'Trending Now': [
     {
       id: 1,
-      title: 'Inception',
-      poster: '/api/placeholder/200/300',
-      description: 'A mind-bending sci-fi thriller about dream infiltration.',
+      title: 'Carry-On',
+      poster: 'https://image.tmdb.org/t/p/w780/sjMN7DRi4sGiledsmllEw5HJjPy.jpg',
+      description: 'A young airline security guard is blackmailed by a mysterious passenger who threatens to smuggle a dangerous package onto a plane on Christmas Eve.',
       rank: 0,
       overallScore: 4.7,
       isLiked: false,
@@ -18,7 +18,7 @@ const movieCategories = {
     {
       id: 2,
       title: 'The Matrix',
-      poster: '/api/placeholder/200/300',
+      poster: 'https://www.themoviedb.org/t/p/w1280/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
       description: 'A computer programmer discovers the world is a simulation.',
       rank: 0,
       overallScore: 4.5,
@@ -28,10 +28,10 @@ const movieCategories = {
     {
       id: 3,
       title: 'Interstellar',
-      poster: '/api/placeholder/200/300',
+      poster: 'https://www.themoviedb.org/t/p/w1280/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
       description: 'A journey through space and time to save humanity.',
       rank: 0,
-      overallScore: 4.8,
+      overallScore: 5.0,
       isLiked: false,
       inWatchlist: false,
     },
@@ -40,7 +40,7 @@ const movieCategories = {
     {
       id: 4,
       title: 'The Shawshank Redemption',
-      poster: '/api/placeholder/200/300',
+      poster: 'https://www.themoviedb.org/t/p/w1280/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg',
       description: 'A story of hope and friendship in prison.',
       rank: 0,
       overallScore: 4.9,
@@ -49,11 +49,11 @@ const movieCategories = {
     },
     {
       id: 5,
-      title: 'Pulp Fiction',
-      poster: '/api/placeholder/200/300',
-      description: 'Interconnected stories of Los Angeles criminals.',
+      title: 'Knives Out',
+      poster: 'https://www.themoviedb.org/t/p/w1280/pThyQovXQrw2m0s9x82twj48Jq4.jpg',
+      description: 'A famous author is murdered. Who did it?',
       rank: 0,
-      overallScore: 4.6,
+      overallScore: 4.9,
       isLiked: false,
       inWatchlist: false,
     },
@@ -102,7 +102,7 @@ const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-neutral-950 text-white">
+    <div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col">
       <nav className="fixed top-0 left-0 right-0 z-50 bg-neutral-900/90 backdrop-blur-sm shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center h-16">
@@ -155,7 +155,7 @@ const HomePage: React.FC = () => {
         </div>
       </nav>
 
-      <main className="pt-20 px-6 pb-6 max-w-7xl mx-auto">
+      <main className="pt-20 px-6 pb-6 max-w-7xl mx-auto flex-grow">
         {Object.entries(movies).map(([category, categoryMovies]) => (
           <section key={category} className="mb-12">
             <h2 className="text-2xl font-semibold mb-6 text-blue-300 border-b border-neutral-800 pb-2">
@@ -175,6 +175,10 @@ const HomePage: React.FC = () => {
           </section>
         ))}
       </main>
+
+      <footer className="bg-neutral-900 text-neutral-400 py-6 mt-auto text-center">
+        <p>Created and Copyrighted by Owen Perry and Connor Sample. All Rights Reserved © 2025.</p>
+      </footer>
     </div>
   );
 };
