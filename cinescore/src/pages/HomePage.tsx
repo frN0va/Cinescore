@@ -4,11 +4,10 @@ import {
 	Film,
 	User,
 	Clapperboard,
-	Star,
-	Popcorn,
 	Search,
-	Heart,
-	Plus,
+	Popcorn,
+	ChevronLeft,
+	ChevronRight,
 } from "lucide-react";
 import MoviePoster from "../components/MoviePoster";
 
@@ -47,10 +46,34 @@ const movieCategories = {
 			isLiked: false,
 			inWatchlist: false,
 		},
+		{
+			id: 4,
+			title: "Inception",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+			description:
+				"A thief who steals corporate secrets through dream-sharing technology.",
+			rank: 0,
+			overallScore: 4.8,
+			isLiked: false,
+			inWatchlist: false,
+		},
+		{
+			id: 5,
+			title: "Dune",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
+			description:
+				"A noble family becomes embroiled in a war for control over the galaxy's most valuable asset.",
+			rank: 0,
+			overallScore: 4.6,
+			isLiked: false,
+			inWatchlist: false,
+		},
 	],
 	"Top Rated": [
 		{
-			id: 4,
+			id: 6,
 			title: "The Shawshank Redemption",
 			poster:
 				"https://www.themoviedb.org/t/p/w1280/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg",
@@ -61,7 +84,7 @@ const movieCategories = {
 			inWatchlist: false,
 		},
 		{
-			id: 5,
+			id: 7,
 			title: "Knives Out",
 			poster:
 				"https://www.themoviedb.org/t/p/w1280/pThyQovXQrw2m0s9x82twj48Jq4.jpg",
@@ -71,13 +94,83 @@ const movieCategories = {
 			isLiked: false,
 			inWatchlist: false,
 		},
+		{
+			id: 8,
+			title: "The Godfather",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
+			description:
+				"The aging patriarch of an organized crime dynasty transfers control to his son.",
+			rank: 0,
+			overallScore: 5.0,
+			isLiked: false,
+			inWatchlist: false,
+		},
+		{
+			id: 9,
+			title: "Pulp Fiction",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+			description:
+				"Various interconnected stories of criminals in Los Angeles.",
+			rank: 0,
+			overallScore: 4.8,
+			isLiked: false,
+			inWatchlist: false,
+		},
+	],
+	"New Releases": [
+		{
+			id: 10,
+			title: "Oppenheimer",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+			description:
+				"The story of J. Robert Oppenheimer and the creation of the atomic bomb.",
+			rank: 0,
+			overallScore: 4.7,
+			isLiked: false,
+			inWatchlist: false,
+		},
+		{
+			id: 11,
+			title: "Barbie",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/iuFNMS8U5cb6xfzi51Dbkovj7vM.jpg",
+			description:
+				"Barbie and Ken go on a journey of self-discovery in the real world.",
+			rank: 0,
+			overallScore: 4.5,
+			isLiked: false,
+			inWatchlist: false,
+		},
+		{
+			id: 12,
+			title: "Poor Things",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/kCGlIMHnOm8JPXq3rXM6c5wMxcT.jpg",
+			description:
+				"The story of Bella Baxter, a young woman brought back to life by an unorthodox scientist.",
+			rank: 0,
+			overallScore: 4.6,
+			isLiked: false,
+			inWatchlist: false,
+		},
 	],
 };
+
+const MOVIES_PER_PAGE = 5;
 
 const HomePage: React.FC = () => {
 	const [movies, setMovies] = useState(movieCategories);
 	const [activeNav, setActiveNav] = useState("Films");
 	const [searchQuery, setSearchQuery] = useState("");
+	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() =>
+		Object.keys(movieCategories).reduce(
+			(acc, category) => ({ ...acc, [category]: 0 }),
+			{},
+		),
+	);
 
 	const handleRankMovie = (movieId: number, rank: number) => {
 		const updatedMovies = { ...movies };
@@ -111,21 +204,37 @@ const HomePage: React.FC = () => {
 		setMovies(updatedMovies);
 	};
 
+	const handleNextPage = (category: string) => {
+		const totalPages = Math.ceil(movies[category].length / MOVIES_PER_PAGE);
+		setCurrentPage((prev) => ({
+			...prev,
+			[category]: (prev[category] + 1) % totalPages,
+		}));
+	};
+
+	const handlePrevPage = (category: string) => {
+		const totalPages = Math.ceil(movies[category].length / MOVIES_PER_PAGE);
+		setCurrentPage((prev) => ({
+			...prev,
+			[category]: (prev[category] - 1 + totalPages) % totalPages,
+		}));
+	};
+
 	const navItems = [
-		{ name: "Films", icon: <Film className="w-5 h-5" /> },
-		{ name: "Actors", icon: <User className="w-5 h-5" /> },
-		{ name: "Directors", icon: <Clapperboard className="w-5 h-5" /> },
+		{ name: "Films", icon: <Film className="h-5 w-5" /> },
+		{ name: "Actors", icon: <User className="h-5 w-5" /> },
+		{ name: "Directors", icon: <Clapperboard className="h-5 w-5" /> },
 	];
 
 	return (
-		<div className="w-full min-h-screen bg-neutral-950 text-white flex flex-col">
-			<nav className="fixed top-0 left-0 right-0 z-50 bg-neutral-900/90 backdrop-blur-sm shadow-lg">
-				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="flex items-center h-16">
+		<div className="flex min-h-screen w-full flex-col bg-neutral-950 text-white">
+			<nav className="fixed left-0 right-0 top-0 z-50 bg-neutral-900/90 shadow-lg backdrop-blur-sm">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="flex h-16 items-center">
 						<div className="flex items-center space-x-8">
-							<Link to="/" className="flex items-center">
-								<Popcorn className="w-6 h-6 mr-2 text-purple-400" />
-								<span className="text-lg font-bold text-white tracking-wider">
+							<Link className="flex items-center" to="/">
+								<Popcorn className="mr-2 h-6 w-6 text-purple-400" />
+								<span className="text-lg font-bold tracking-wider text-white">
 									Cinescore
 								</span>
 							</Link>
@@ -133,13 +242,13 @@ const HomePage: React.FC = () => {
 								{navItems.map((item) => (
 									<Link
 										key={item.name}
-										to={`/${item.name.toLowerCase()}`}
-										className={`flex items-center space-x-2 px-3 py-2 rounded-md transition-colors duration-300 ${
+										className={`flex items-center space-x-2 rounded-md px-3 py-2 transition-colors duration-300 ${
 											activeNav === item.name
 												? "bg-purple-400 text-white"
 												: "text-neutral-300 hover:bg-neutral-800 hover:text-white"
 										}`}
 										onClick={() => setActiveNav(item.name)}
+										to={`/${item.name.toLowerCase()}`}
 									>
 										{item.icon}
 										<span className="text-sm font-medium">{item.name}</span>
@@ -147,54 +256,75 @@ const HomePage: React.FC = () => {
 								))}
 							</div>
 						</div>
-						<div className="flex items-center ml-auto space-x-4">
+						<div className="ml-auto flex items-center space-x-4">
 							<div className="relative">
-								<div className="flex items-center bg-neutral-800/50 rounded-full pr-4">
+								<div className="flex items-center rounded-full bg-neutral-800/50 pr-4">
 									<div className="flex items-center pl-4 pr-2">
-										<Search className="w-5 h-5 text-neutral-400" />
+										<Search className="h-5 w-5 text-neutral-400" />
 									</div>
 									<input
-										type="text"
-										placeholder="Search Cinescore..."
-										className="bg-transparent border-none focus:outline-none text-white py-2 w-64 placeholder-neutral-400"
-										value={searchQuery}
+										className="w-64 bg-transparent py-2 text-white placeholder-neutral-400 focus:outline-none"
 										onChange={(e) => setSearchQuery(e.target.value)}
+										placeholder="Search Cinescore..."
+										type="text"
+										value={searchQuery}
 									/>
 								</div>
 							</div>
 							<Link
+								className="rounded-full p-2 transition duration-200 hover:bg-neutral-800"
 								to="/profile"
-								className="hover:bg-neutral-800 p-2 rounded-full transition duration-200"
 							>
-								<User className="w-6 h-6 text-purple-400 hover:text-purple-300 transition" />
+								<User className="h-6 w-6 text-purple-400 transition hover:text-purple-300" />
 							</Link>
 						</div>
 					</div>
 				</div>
 			</nav>
 
-			<main className="pt-20 px-6 pb-6 max-w-7xl mx-auto flex-grow">
+			<main className="mx-auto flex-grow max-w-7xl px-6 pb-6 pt-20">
 				{Object.entries(movies).map(([category, categoryMovies]) => (
 					<section key={category} className="mb-12">
-						<h2 className="text-2xl font-semibold mb-6 text-blue-300 border-b border-neutral-800 pb-2">
-							{category}
-						</h2>
-						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-							{categoryMovies.map((movie) => (
-								<MoviePoster
-									key={movie.id}
-									movie={movie}
-									onRank={handleRankMovie}
-									onLike={handleLikeMovie}
-									onAddToWatchlist={handleAddToWatchlist}
-								/>
-							))}
+						<div className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-2">
+							<h2 className="text-2xl font-semibold text-blue-300">
+								{category}
+							</h2>
+							<div className="flex space-x-2">
+								<button
+									className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
+									onClick={() => handlePrevPage(category)}
+								>
+									<ChevronLeft className="h-6 w-6" />
+								</button>
+								<button
+									className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
+									onClick={() => handleNextPage(category)}
+								>
+									<ChevronRight className="h-6 w-6" />
+								</button>
+							</div>
+						</div>
+						<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+							{categoryMovies
+								.slice(
+									currentPage[category] * MOVIES_PER_PAGE,
+									(currentPage[category] + 1) * MOVIES_PER_PAGE,
+								)
+								.map((movie) => (
+									<MoviePoster
+										key={movie.id}
+										movie={movie}
+										onAddToWatchlist={handleAddToWatchlist}
+										onLike={handleLikeMovie}
+										onRank={handleRankMovie}
+									/>
+								))}
 						</div>
 					</section>
 				))}
 			</main>
 
-			<footer className="bg-neutral-900 text-neutral-400 py-6 mt-auto text-center">
+			<footer className="mt-auto bg-neutral-900 py-6 text-center text-neutral-400">
 				<p>
 					Created and Copyrighted by Owen Perry and Connor Sample. All Rights
 					Reserved © 2025.
@@ -205,4 +335,3 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
-

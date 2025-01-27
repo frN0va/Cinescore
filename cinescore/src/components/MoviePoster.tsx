@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Star, Heart, Plus } from "lucide-react";
+import { Star, Heart, Plus, Check } from "lucide-react";
 
 interface MoviePosterProps {
 	movie: {
@@ -37,27 +37,26 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 					<img
 						src={movie.poster}
 						alt={movie.title}
-						className="w-full h-[300px] object-cover transition-transform duration-300 group-hover:scale-105"
+						className="h-[300px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
 					/>
 					{movie.overallScore !== undefined && (
-						<div className="absolute top-3 right-3 bg-black/70 text-yellow-400 px-3 py-1 rounded-full flex items-center">
-							<Star className="w-5 h-5 mr-1" />
+						<div className="absolute right-3 top-3 flex items-center rounded-full bg-black/70 px-3 py-1 text-yellow-400">
+							<Star className="mr-1 h-5 w-5" />
 							<span className="font-bold">{movie.overallScore.toFixed(1)}</span>
 						</div>
 					)}
 				</div>
-
 				{showDetails && (
-					<div className="absolute inset-0 bg-black/80 text-white p-4 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+					<div className="absolute inset-0 flex flex-col justify-between bg-black/80 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
 						<div>
-							<h3 className="text-2xl font-bold mb-2">{movie.title}</h3>
+							<h3 className="mb-2 text-2xl font-bold">{movie.title}</h3>
 							<p className="text-sm">{movie.description}</p>
 						</div>
-						<div className="flex justify-center space-x-2 mt-4">
+						<div className="mt-4 flex justify-center space-x-2">
 							{[1, 2, 3, 4, 5].map((rank) => (
 								<Star
 									key={rank}
-									className={`w-8 h-8 cursor-pointer transition-colors ${
+									className={`h-8 w-8 cursor-pointer transition-colors ${
 										rank <= hoveredRank ? "text-yellow-400" : "text-gray-500"
 									} hover:text-yellow-300`}
 									onMouseEnter={() => setHoveredRank(rank)}
@@ -69,38 +68,49 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 					</div>
 				)}
 			</div>
-
-			{/* Moved buttons below the poster */}
-			<div className="flex justify-center space-x-2 mt-2">
+			<div className="mt-2 flex justify-center space-x-2">
 				<button
 					onClick={(e) => {
 						e.stopPropagation();
 						onLike(movie.id);
 					}}
-					className={`p-2 rounded-full transition-colors duration-300 ${
+					className={`rounded-full p-2 transition-colors duration-300 ${
 						movie.isLiked
-							? "bg-red-500 text-white"
+							? "bg-red-100 text-red-500"
 							: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
 					}`}
 					title={movie.isLiked ? "Remove from favorites" : "Add to favorites"}
 				>
-					<Heart className={`w-5 h-5 ${movie.isLiked ? "fill-current" : ""}`} />
+					<Heart
+						className={`h-5 w-5 transition-transform duration-300 ${
+							movie.isLiked
+								? "fill-red-400 text-red-500"
+								: "fill-none stroke-white"
+						}`}
+						style={{
+							strokeWidth: movie.isLiked ? 0 : 2,
+						}}
+					/>
 				</button>
 				<button
 					onClick={(e) => {
 						e.stopPropagation();
 						onAddToWatchlist(movie.id);
 					}}
-					className={`p-2 rounded-full transition-colors duration-300 ${
+					className={`rounded-full p-2 transition-colors duration-300 ${
 						movie.inWatchlist
-							? "bg-purple-500 text-white"
+							? "bg-green-100 text-green-500"
 							: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
 					}`}
 					title={
 						movie.inWatchlist ? "Remove from watchlist" : "Add to watchlist"
 					}
 				>
-					<Plus className="w-5 h-5" />
+					{movie.inWatchlist ? (
+						<Check className="h-5 w-5" />
+					) : (
+						<Plus className="h-5 w-5" />
+					)}
 				</button>
 			</div>
 		</div>
