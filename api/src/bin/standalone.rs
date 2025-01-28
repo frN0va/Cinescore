@@ -2,7 +2,7 @@ use api::build_router;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // dotenvy::from_filename("Secrets.toml")?;
+    dotenvy::from_filename("Secrets.toml")?;
 
     let router = build_router();
 
