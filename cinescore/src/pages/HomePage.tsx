@@ -1,4 +1,4 @@
-import type React from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";
@@ -22,12 +22,8 @@ interface MovieCategories {
 }
 
 const staticMovieCategories = {
-	"Top Rated": [
-		
-	],
-	"New Releases": [
-		
-	],
+	"Top Rated": [],
+	"New Releases": [],
 };
 
 const HomePage: React.FC = () => {
@@ -50,7 +46,7 @@ const HomePage: React.FC = () => {
 	useEffect(() => {
 		const fetchTrendingMovies = async () => {
 			try {
-				const response = await fetch("/api/v1/discover/trending")
+				const response = await fetch("/api/v1/discover/trending");
 				if (!response.ok) {
 					throw new Error("Failed to fetch trending movies");
 				}
