@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-	Film,
-	User,
-	Clapperboard,
-	Search,
-	Popcorn,
-	ChevronLeft,
-	ChevronRight,
-} from "lucide-react";
-import MoviePoster from "../components/MoviePoster";
+import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";
+import CategoryCarosel from "../components/CategoryCarousel";
 
 const movieCategories = {
 	"Trending Now": [
@@ -159,8 +151,6 @@ const movieCategories = {
 	],
 };
 
-const MOVIES_PER_PAGE = 5;
-
 const HomePage: React.FC = () => {
 	const [movies, setMovies] = useState(movieCategories);
 	const [activeNav, setActiveNav] = useState("Films");
@@ -284,50 +274,24 @@ const HomePage: React.FC = () => {
 
 			<main className="mx-auto flex-grow max-w-7xl px-6 pb-6 pt-20">
 				{Object.entries(movies).map(([category, categoryMovies]) => (
-					<section key={category} className="mb-12">
-						<div className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-2">
-							<h2 className="text-2xl font-semibold text-blue-300">
-								{category}
-							</h2>
-							<div className="flex space-x-2">
-								<button
-									className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
-									onClick={() => handlePrevPage(category)}
-								>
-									<ChevronLeft className="h-6 w-6" />
-								</button>
-								<button
-									className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
-									onClick={() => handleNextPage(category)}
-								>
-									<ChevronRight className="h-6 w-6" />
-								</button>
-							</div>
-						</div>
-						<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-							{categoryMovies
-								.slice(
-									currentPage[category] * MOVIES_PER_PAGE,
-									(currentPage[category] + 1) * MOVIES_PER_PAGE,
-								)
-								.map((movie) => (
-									<MoviePoster
-										key={movie.id}
-										movie={movie}
-										onAddToWatchlist={handleAddToWatchlist}
-										onLike={handleLikeMovie}
-										onRank={handleRankMovie}
-									/>
-								))}
-						</div>
-					</section>
+					<CategoryCarosel
+						key={category}
+						category={category}
+						categoryMovies={categoryMovies}
+						currentPage={currentPage}
+						onRank={handleRankMovie}
+						onLike={handleLikeMovie}
+						onAddToWatchlist={handleAddToWatchlist}
+						onPrevPage={handlePrevPage}
+						onNextPage={handleNextPage}
+					/>
 				))}
 			</main>
 
 			<footer className="mt-auto bg-neutral-900 py-6 text-center text-neutral-400">
 				<p>
 					Created and Copyrighted by Owen Perry and Connor Sample. All Rights
-					Reserved © 2025.
+					Reserved &copy; 2025.
 				</p>
 			</footer>
 		</div>

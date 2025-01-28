@@ -1,17 +1,9 @@
 import React, { useState } from "react";
 import { Star, Heart, Plus, Check } from "lucide-react";
+import type { Movie } from "../types";
 
 interface MoviePosterProps {
-	movie: {
-		id: number;
-		title: string;
-		poster: string;
-		description: string;
-		rank: number;
-		overallScore?: number;
-		isLiked: boolean;
-		inWatchlist: boolean;
-	};
+	movie: Movie;
 	onRank: (id: number, rank: number) => void;
 	onLike: (id: number) => void;
 	onAddToWatchlist: (id: number) => void;
