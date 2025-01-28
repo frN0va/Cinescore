@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    restart: always
+    container_name: cinescore-api
+  frontend:
+    build:
+      context: ./cinescore
+      dockerfile: Dockerfile
+    container_name: cinescore-frontend
+    volumes:
+      - react-build:/app/dist
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: cinescore-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - react-build:/usr/share/nginx/frontend
+    depends_on:
+      - frontend
+      - api
+
+volumes:
+  react-build:

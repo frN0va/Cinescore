@@ -2,11 +2,15 @@ use api::build_router;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenvy::from_filename("Secrets.toml")?;
+    dotenvy::from_filename(".env")?;
 
     let router = build_router();
 
-    let address = "127.0.0.1:8000";
+    let address = if cfg!(debug_assertions) {
+        "127.0.0.1:8000"
+    } else {
+        "0.0.0.0:8000"
+    };
 
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
