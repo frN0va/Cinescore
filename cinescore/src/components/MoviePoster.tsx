@@ -62,6 +62,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 			</div>
 			<div className="mt-2 flex justify-center space-x-2">
 				<button
+					type="button"
 					onClick={(e) => {
 						e.stopPropagation();
 						onLike(movie.id);
@@ -85,6 +86,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 					/>
 				</button>
 				<button
+					type="button"
 					onClick={(e) => {
 						e.stopPropagation();
 						onAddToWatchlist(movie.id);

@@ -1,6 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MoviePoster from "./MoviePoster";
 import type { Movie } from "../types";
+import React from "react";
 
 interface CarouselProps {
 	category: string;
