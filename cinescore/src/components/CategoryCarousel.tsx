@@ -13,7 +13,7 @@ interface CarouselProps {
 	onNextPage: (category: string) => void;
 }
 
-const MOVIES_PER_PAGE = 5;
+export const MOVIES_PER_PAGE = 5;
 
 const CategoryCarousel: React.FC<CarouselProps> = ({
 	category,

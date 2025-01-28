@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";
-import CategoryCarosel from "../components/CategoryCarousel";
+import CategoryCarosel, {
+	MOVIES_PER_PAGE,
+} from "../components/CategoryCarousel";
 
 const movieCategories = {
 	"Trending Now": [
