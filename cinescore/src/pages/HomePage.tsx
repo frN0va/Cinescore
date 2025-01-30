@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";

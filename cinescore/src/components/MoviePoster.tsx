@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Star, Heart, Plus, Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { Movie } from "../types";
 
 interface MoviePosterProps {
@@ -17,9 +19,14 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 }) => {
 	const [showDetails, setShowDetails] = useState(false);
 	const [hoveredRank, setHoveredRank] = useState(0);
+	const navigate = useNavigate();
 
 	return (
-		<div className="flex flex-col cursor-pointer">
+		// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+		<div
+			className="flex flex-col cursor-pointer"
+			onClick={() => navigate(`/movie/${movie.id}`)}
+		>
 			<div
 				className="relative group overflow-hidden rounded-lg shadow-xl transition-all duration-300 ease-in-out"
 				onMouseEnter={() => setShowDetails(true)}
@@ -53,7 +60,10 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 									} hover:text-yellow-300`}
 									onMouseEnter={() => setHoveredRank(rank)}
 									onMouseLeave={() => setHoveredRank(movie.rank)}
-									onClick={() => onRank(movie.id, rank)}
+									onClick={(e) => {
+										e.stopPropagation();
+										onRank(movie.id, rank);
+									}}
 								/>
 							))}
 						</div>
