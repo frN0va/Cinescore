@@ -178,6 +178,15 @@ pub struct FrontendMovieDetails {
     tagline: String,
     /// Optional movie credits (cast and crew).
     credits: Option<FrontendCredits>,
+    /// The overall score or rating of the movie.
+    #[serde(rename = "overallScore")]
+    overall_score: f32,
+    /// Whether the user has liked the movie.
+    #[serde(rename = "isLiked")]
+    is_liked: bool,
+    /// Whether the movie is in the user's watchlist.
+    #[serde(rename = "inWatchlist")]
+    in_watchlist: bool,
 }
 
 /// Converts a [`MovieDetails`] struct into a [`FrontendMovieDetails`] for frontend representation.
@@ -204,7 +213,11 @@ impl From<MovieDetails> for FrontendMovieDetails {
             credits: match value.credits {
                 Some(v) => Some(FrontendCredits::from(v)),
                 None => None,
-            }
+            },
+            // TODO: these 3
+            overall_score: 0.0,
+            is_liked: false,
+            in_watchlist: false,
         }
     }
 }
