@@ -52,9 +52,9 @@ impl MovieListQuery for MovieListTrendingRequest {
     }
 }
 
-generate_request_struct!(MovieListNowPlaying);
+generate_request_struct!(MovieListNowPlayingRequest);
 
-impl MovieListQuery for MovieListNowPlaying {
+impl MovieListQuery for MovieListNowPlayingRequest {
     fn params(&mut self) -> &mut HashMap<&'static str, String> {
         &mut self.params
     }

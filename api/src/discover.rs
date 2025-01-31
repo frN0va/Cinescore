@@ -6,11 +6,15 @@ use crate::{
         client::TMDBClient,
         queries::{
             movie_details::{MovieDetailsQuery, MovieDetailsRequest},
-            movie_lists::{MovieListNowPlaying, MovieListQuery, MovieListTrendingRequest},
+            movie_lists::{MovieListNowPlayingRequest, MovieListQuery, MovieListTrendingRequest},
         },
     },
 };
 
+/// Fetches a list of trending movies
+///
+/// # Returns
+/// A JSON-wrapped `FrontendMovieList` containing trending movies.
 pub async fn fetch_trending() -> Json<FrontendMovieList> {
     let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
     Json(
@@ -24,7 +28,7 @@ pub async fn fetch_trending() -> Json<FrontendMovieList> {
 pub async fn fetch_now_playing() -> Json<FrontendMovieList> {
     let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
     Json(
-        MovieListNowPlaying::new()
+        MovieListNowPlayingRequest::new()
             .fetch(&client)
             .await
             .expect("handle errors later"),
