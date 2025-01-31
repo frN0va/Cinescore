@@ -176,7 +176,11 @@ const ProfilePage: React.FC = () => {
 	const navItems = [
 		{ name: "Films", icon: <Film className="w-5 h-5" />, to: "/" },
 		{ name: "Actors", icon: <User className="w-5 h-5" />, to: "/actors" },
-		{ name: "Directors", icon: <Clapperboard className="w-5 h-5" />, to: "/directors" },
+		{
+			name: "Directors",
+			icon: <Clapperboard className="w-5 h-5" />,
+			to: "/directors",
+		},
 	];
 
 	const handlePrevPage = (category: string) => {

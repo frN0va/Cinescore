@@ -36,7 +36,11 @@ const HomePage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() =>
-		Object.keys({ "Trending Now": [], "Now Playing": [], ...staticMovieCategories }).reduce(
+		Object.keys({
+			"Trending Now": [],
+			"Now Playing": [],
+			...staticMovieCategories,
+		}).reduce(
 			// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
 			(acc, category) => ({ ...acc, [category]: 0 }),
 			{},
@@ -48,7 +52,7 @@ const HomePage: React.FC = () => {
 			try {
 				const [trendingResponse, nowPlayingResponse] = await Promise.all([
 					fetch("/api/v1/discover/trending"),
-					fetch("/api/v1/discover/now_playing")
+					fetch("/api/v1/discover/now_playing"),
 				]);
 
 				if (!trendingResponse.ok) {
@@ -73,11 +77,7 @@ const HomePage: React.FC = () => {
 					})),
 				}));
 			} catch (err) {
-				setError(
-					err instanceof Error
-						? err.message
-						: "Failed to fetch movies"
-				);
+				setError(err instanceof Error ? err.message : "Failed to fetch movies");
 			} finally {
 				setIsLoading(false);
 			}
@@ -137,7 +137,11 @@ const HomePage: React.FC = () => {
 	const navItems = [
 		{ name: "Films", icon: <Film className="h-5 w-5" />, to: "/" },
 		{ name: "Actors", icon: <User className="h-5 w-5" />, to: "/actors" },
-		{ name: "Directors", icon: <Clapperboard className="h-5 w-5" />, to: "/directors" },
+		{
+			name: "Directors",
+			icon: <Clapperboard className="h-5 w-5" />,
+			to: "/directors",
+		},
 	];
 
 	return (
@@ -199,9 +203,7 @@ const HomePage: React.FC = () => {
 			<main className="mx-auto flex-grow max-w-7xl px-6 pb-6 pt-20">
 				{isLoading ? (
 					<div className="flex items-center justify-center pt-20">
-						<div className="text-lg text-neutral-400">
-							Loading movies...
-						</div>
+						<div className="text-lg text-neutral-400">Loading movies...</div>
 					</div>
 				) : error ? (
 					<div className="flex items-center justify-center pt-20">

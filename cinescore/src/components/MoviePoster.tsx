@@ -51,8 +51,8 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 							<h3 className="mb-2 text-2xl font-bold">{movie.title}</h3>
 							<p className="text-sm">
 								{movie.description.length > 180
-									// biome-ignore lint/style/useTemplate: <explanation>
-									? movie.description.substring(0, 180) + "..."
+									? // biome-ignore lint/style/useTemplate: <explanation>
+										movie.description.substring(0, 180) + "..."
 									: movie.description}
 							</p>
 						</div>
