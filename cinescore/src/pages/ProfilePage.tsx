@@ -1,6 +1,16 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { User, Film, Clapperboard, Star, Popcorn, Search } from "lucide-react";
+import {
+	User,
+	Film,
+	Clapperboard,
+	Star,
+	Popcorn,
+	Search,
+	ChevronLeft,
+	ChevronRight,
+} from "lucide-react";
 
 interface RankedMovie {
 	rank: number;
@@ -9,14 +19,23 @@ interface RankedMovie {
 	overallScore?: number;
 	isLiked?: boolean;
 	inWatchlist?: boolean;
+	id: number;
 }
+
+const MOVIES_PER_PAGE = 5;
 
 const ProfilePage: React.FC = () => {
 	const [activeNav, setActiveNav] = useState("Films");
 	const [searchQuery, setSearchQuery] = useState("");
+	const [currentPage, setCurrentPage] = useState<Record<string, number>>({
+		"Top 5 Movies": 0,
+		"My Liked Movies": 0,
+		"My Watchlist": 0,
+	});
 
 	const [rankedMovies, setRankedMovies] = useState<RankedMovie[]>([
 		{
+			id: 1,
 			rank: 1,
 			title: "Interstellar - 2014",
 			poster:
@@ -24,6 +43,7 @@ const ProfilePage: React.FC = () => {
 			overallScore: 5.0,
 		},
 		{
+			id: 2,
 			rank: 2,
 			title: "La La Land - 2016",
 			poster:
@@ -31,16 +51,34 @@ const ProfilePage: React.FC = () => {
 			overallScore: 4.7,
 		},
 		{
+			id: 3,
 			rank: 3,
 			title: "Back to the Future - 1985",
 			poster:
 				"https://www.themoviedb.org/t/p/w1280/rej4R5DIdlx29I2soNePfInICG3.jpg",
 			overallScore: 4.8,
 		},
+		{
+			id: 4,
+			rank: 4,
+			title: "Inception - 2010",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/9gk7adHYeDvHkCSEqAvQNLV5Uge.jpg",
+			overallScore: 4.6,
+		},
+		{
+			id: 5,
+			rank: 5,
+			title: "Knives Out - 2019",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/pThyQovXQrw2m0s9x82twj48Jq4.jpg",
+			overallScore: 4.5,
+		},
 	]);
 
 	const [likedMovies, setLikedMovies] = useState<RankedMovie[]>([
 		{
+			id: 6,
 			rank: 0,
 			title: "The Dark Knight - 2008",
 			poster:
@@ -49,6 +87,7 @@ const ProfilePage: React.FC = () => {
 			isLiked: true,
 		},
 		{
+			id: 7,
 			rank: 0,
 			title: "Goodfellas - 1990",
 			poster:
@@ -56,10 +95,38 @@ const ProfilePage: React.FC = () => {
 			overallScore: 4.8,
 			isLiked: true,
 		},
+		{
+			id: 8,
+			rank: 0,
+			title: "Pulp Fiction - 1994",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg",
+			overallScore: 4.7,
+			isLiked: true,
+		},
+		{
+			id: 9,
+			rank: 0,
+			title: "The Shawshank Redemption - 1994",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+			overallScore: 4.9,
+			isLiked: true,
+		},
+		{
+			id: 10,
+			rank: 0,
+			title: "Forrest Gump - 1994",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/saHP97rTPS5eLmrLQEcANmKrsFl.jpg",
+			overallScore: 4.8,
+			isLiked: true,
+		},
 	]);
 
 	const [watchlist, setWatchlist] = useState<RankedMovie[]>([
 		{
+			id: 11,
 			rank: 0,
 			title: "The Godfather - 1972",
 			poster:
@@ -68,10 +135,38 @@ const ProfilePage: React.FC = () => {
 			inWatchlist: true,
 		},
 		{
+			id: 12,
 			rank: 0,
 			title: "Fight Club - 1999",
 			poster:
 				"https://www.themoviedb.org/t/p/w1280/pB8BM7pdSp6B6Ih7QZ4DrQ3PmJK.jpg",
+			overallScore: 4.7,
+			inWatchlist: true,
+		},
+		{
+			id: 13,
+			rank: 0,
+			title: "Schindler's List - 1993",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/sF1U4EUQS8YHUYjNl3pMGNIQyr0.jpg",
+			overallScore: 4.9,
+			inWatchlist: true,
+		},
+		{
+			id: 14,
+			rank: 0,
+			title: "12 Angry Men - 1957",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/ppd84D2i9W8jXmsyInGyihiSyqz.jpg",
+			overallScore: 4.8,
+			inWatchlist: true,
+		},
+		{
+			id: 15,
+			rank: 0,
+			title: "The Silence of the Lambs - 1991",
+			poster:
+				"https://www.themoviedb.org/t/p/w1280/uS9m8OBk1A8eM9I042bx8XXpqAq.jpg",
 			overallScore: 4.7,
 			inWatchlist: true,
 		},
@@ -83,45 +178,92 @@ const ProfilePage: React.FC = () => {
 		{ name: "Directors", icon: <Clapperboard className="w-5 h-5" /> },
 	];
 
-	const MovieGrid: React.FC<{ movies: RankedMovie[]; title: string }> = ({
-		movies,
-		title,
-	}) => (
-		<section className="mb-12">
-			<h2 className="text-2xl font-bold mb-6 text-blue-300">{title}</h2>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-				{movies.map((movie, index) => (
-					<div
-						key={index}
-						className="bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition hover:scale-105 hover:shadow-2xl"
+	const handlePrevPage = (category: string) => {
+		setCurrentPage((prev) => ({
+			...prev,
+			[category]: Math.max(0, prev[category] - 1),
+		}));
+	};
+
+	const handleNextPage = (category: string) => {
+		const maxPage =
+			Math.ceil(
+				(category === "Top 5 Movies"
+					? rankedMovies
+					: category === "My Liked Movies"
+						? likedMovies
+						: watchlist
+				).length / MOVIES_PER_PAGE,
+			) - 1;
+
+		setCurrentPage((prev) => ({
+			...prev,
+			[category]: Math.min(maxPage, prev[category] + 1),
+		}));
+	};
+
+	const CategoryCarousel: React.FC<{
+		category: string;
+		movies: RankedMovie[];
+	}> = ({ category, movies }) => (
+		<section key={category} className="mb-12">
+			<div className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-2">
+				<h2 className="text-2xl font-bold text-blue-300">{category}</h2>
+				<div className="flex space-x-2">
+					<button
+						type="button"
+						className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
+						onClick={() => handlePrevPage(category)}
 					>
-						<div className="relative">
-							<img
-								src={movie.poster}
-								alt={movie.title}
-								className="w-full h-[450px] object-cover"
-							/>
-							{movie.overallScore && (
-								<div className="absolute top-4 right-4 bg-black/70 text-yellow-400 px-3 py-1 rounded-full flex items-center">
-									<Star className="w-5 h-5 mr-1" />
-									<span className="font-bold">
-										{movie.overallScore.toFixed(1)}
-									</span>
-								</div>
-							)}
-							{movie.rank > 0 && (
-								<div className="absolute top-4 left-4 bg-purple-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold">
-									#{movie.rank}
-								</div>
-							)}
+						<ChevronLeft className="h-6 w-6" />
+					</button>
+					<button
+						type="button"
+						className="rounded-full p-1 text-neutral-400 transition-colors hover:bg-neutral-800 hover:text-white"
+						onClick={() => handleNextPage(category)}
+					>
+						<ChevronRight className="h-6 w-6" />
+					</button>
+				</div>
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+				{movies
+					.slice(
+						currentPage[category] * MOVIES_PER_PAGE,
+						(currentPage[category] + 1) * MOVIES_PER_PAGE,
+					)
+					.map((movie, index) => (
+						<div
+							key={movie.id}
+							className="bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition hover:scale-105 hover:shadow-2xl"
+						>
+							<div className="relative">
+								<img
+									src={movie.poster}
+									alt={movie.title}
+									className="w-full h-[300px] object-cover"
+								/>
+								{movie.overallScore && (
+									<div className="absolute top-4 right-4 bg-black/70 text-yellow-400 px-3 py-1 rounded-full flex items-center">
+										<Star className="w-5 h-5 mr-1" />
+										<span className="font-bold">
+											{movie.overallScore.toFixed(1)}
+										</span>
+									</div>
+								)}
+								{movie.rank > 0 && (
+									<div className="absolute top-4 left-4 bg-purple-600 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold">
+										#{movie.rank}
+									</div>
+								)}
+							</div>
+							<div className="p-4">
+								<h2 className="text-lg font-semibold text-blue-300 line-clamp-2">
+									{movie.title}
+								</h2>
+							</div>
 						</div>
-						<div className="p-4">
-							<h2 className="text-xl font-semibold text-blue-300">
-								{movie.title}
-							</h2>
-						</div>
-					</div>
-				))}
+					))}
 			</div>
 		</section>
 	);
@@ -183,10 +325,60 @@ const ProfilePage: React.FC = () => {
 			</nav>
 
 			<main className="pt-20 px-6 pb-6 max-w-7xl mx-auto">
+				{/* Profile Section */}
+				<div className="mb-12 bg-neutral-900 rounded-lg p-8 flex flex-col md:flex-row gap-8">
+					<div className="flex-shrink-0">
+						<div className="w-48 h-48 rounded-full overflow-hidden bg-neutral-800">
+							<img
+								src="https://n0va.tech/images/TempProfilePic.png"
+								alt="Profile"
+								className="w-full h-full object-cover"
+							/>
+						</div>
+					</div>
+					<div className="flex-grow">
+						<h1 className="text-3xl font-bold text-blue-300 mb-2">
+							N0va
+						</h1>
+						<div className="space-y-4">
+							<p className="text-neutral-400">
+								1/2 of the developer team. Movie & TV Lover.
+							</p>
+							<div className="flex gap-4">
+								<div className="bg-neutral-800 px-4 py-2 rounded-lg">
+									<span className="block text-sm text-neutral-400">
+										Movies Rated
+									</span>
+									<span className="text-xl font-bold text-blue-300">247</span>
+								</div>
+								<div className="bg-neutral-800 px-4 py-2 rounded-lg">
+									<span className="block text-sm text-neutral-400">
+										Reviews Written
+									</span>
+									<span className="text-xl font-bold text-blue-300">125</span>
+								</div>
+								<div className="bg-neutral-800 px-4 py-2 rounded-lg">
+									<span className="block text-sm text-neutral-400">
+										Following
+									</span>
+									<span className="text-xl font-bold text-blue-300">7</span>
+								</div>
+								<div className="bg-neutral-800 px-4 py-2 rounded-lg">
+									<span className="block text-sm text-neutral-400">
+										Followers
+									</span>
+									<span className="text-xl font-bold text-blue-300">2094</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{/* Movie Categories */}
 				<div className="space-y-12">
-					<MovieGrid title="My Ranked Movies" movies={rankedMovies} />
-					<MovieGrid title="My Liked Movies" movies={likedMovies} />
-					<MovieGrid title="My Watchlist" movies={watchlist} />
+					<CategoryCarousel category="Top 5 Movies" movies={rankedMovies} />
+					<CategoryCarousel category="My Liked Movies" movies={likedMovies} />
+					<CategoryCarousel category="My Watchlist" movies={watchlist} />
 				</div>
 			</main>
 
