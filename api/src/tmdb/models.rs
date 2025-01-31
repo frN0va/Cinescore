@@ -155,6 +155,19 @@ pub struct Language {
     pub name: String,
 }
 
+/// Represents a collection of movies
+#[derive(Debug, PartialEq, Deserialize, Serialize)]
+pub struct Collection {
+    /// The collection ID
+    pub id: u64,
+    /// The collection name
+    pub name: String,
+    /// The collection's poster image path
+    pub poster_path: String,
+    /// The collection's backdrop image path
+    pub backdrop_path: String,
+}
+
 /// Represents detailed information about a movie.
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
 pub struct MovieDetails {
@@ -163,7 +176,7 @@ pub struct MovieDetails {
     /// Path to the movie's backdrop image.
     pub backdrop_path: Option<String>,
     /// Collection the movie belongs to, if any.
-    pub belongs_to_collection: Option<String>,
+    pub belongs_to_collection: Option<Collection>,
     /// Budget of the movie in dollars.
     pub budget: u64,
     /// List of genres associated with the movie.
