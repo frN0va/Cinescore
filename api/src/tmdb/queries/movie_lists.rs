@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use crate::{
     frontend_models::FrontendMovieList,
+    generate_request_struct,
     tmdb::{client::TMDBClient, models::MovieListSearch},
 };
 
@@ -35,20 +36,9 @@ pub trait MovieListQuery {
     }
 }
 
-#[derive(Default)]
-pub struct MovieListTrending {
-    params: HashMap<&'static str, String>,
-}
+generate_request_struct!(MovieListTrendingRequest);
 
-impl MovieListTrending {
-    pub fn new() -> Self {
-        Self {
-            params: HashMap::new(),
-        }
-    }
-}
-
-impl MovieListQuery for MovieListTrending {
+impl MovieListQuery for MovieListTrendingRequest {
     fn params(&mut self) -> &mut HashMap<&'static str, String> {
         &mut self.params
     }
@@ -62,18 +52,7 @@ impl MovieListQuery for MovieListTrending {
     }
 }
 
-#[derive(Default)]
-pub struct MovieListNowPlaying {
-    params: HashMap<&'static str, String>,
-}
-
-impl MovieListNowPlaying {
-    pub fn new() -> Self {
-        Self {
-            params: HashMap::new(),
-        }
-    }
-}
+generate_request_struct!(MovieListNowPlaying);
 
 impl MovieListQuery for MovieListNowPlaying {
     fn params(&mut self) -> &mut HashMap<&'static str, String> {

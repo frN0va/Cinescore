@@ -2,9 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
-    models::{
-        Cast, Crew, Genre, Language, MovieCredits, MovieDetails, MovieListSearch, SearchMovie,
-    },
+    models::{Cast, Crew, Language, MovieCredits, MovieDetails, MovieListSearch, SearchMovie},
 };
 
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
@@ -129,6 +127,7 @@ pub struct FrontendMovieDetails {
     #[serde(rename = "spokenLanguages")]
     spoken_languages: Vec<Language>,
     tagline: String,
+    credits: Option<FrontendCredits>,
 }
 
 impl From<MovieDetails> for FrontendMovieDetails {
@@ -147,12 +146,10 @@ impl From<MovieDetails> for FrontendMovieDetails {
             runtime: value.runtime,
             spoken_languages: value.spoken_languages,
             tagline: value.tagline,
+            credits: match value.credits {
+                Some(v) => Some(FrontendCredits::from(v)),
+                None => None,
+            }
         }
     }
-}
-
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
-struct FrontendMoviePage {
-    details: FrontendMovieDetails,
-    credits: FrontendCredits,
 }

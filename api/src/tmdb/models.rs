@@ -34,7 +34,7 @@ pub struct SearchMovie {
 
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
 pub struct MovieCredits {
-    pub id: u64,
+    pub id: Option<u64>,
     pub cast: Vec<Cast>,
     pub crew: Vec<Crew>,
 }
@@ -118,4 +118,6 @@ pub struct MovieDetails {
     pub video: bool,
     pub vote_average: f64,
     pub vote_count: u64,
+    // if append_to_response is used
+    pub credits: Option<MovieCredits>,
 }

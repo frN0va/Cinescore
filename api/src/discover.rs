@@ -1,17 +1,20 @@
-use axum::Json;
+use axum::{extract::Path, Json};
 
 use crate::{
-    frontend_models::FrontendMovieList,
+    frontend_models::{FrontendMovieDetails, FrontendMovieList},
     tmdb::{
         client::TMDBClient,
-        queries::movie_lists::{MovieListNowPlaying, MovieListQuery, MovieListTrending},
+        queries::{
+            movie_details::{MovieDetailsQuery, MovieDetailsRequest},
+            movie_lists::{MovieListNowPlaying, MovieListQuery, MovieListTrendingRequest},
+        },
     },
 };
 
 pub async fn fetch_trending() -> Json<FrontendMovieList> {
     let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
     Json(
-        MovieListTrending::new()
+        MovieListTrendingRequest::new()
             .fetch(&client)
             .await
             .expect("handle errors later"),
@@ -23,6 +26,17 @@ pub async fn fetch_now_playing() -> Json<FrontendMovieList> {
     Json(
         MovieListNowPlaying::new()
             .fetch(&client)
+            .await
+            .expect("handle errors later"),
+    )
+}
+
+pub async fn fetch_movie_details(Path(movie_id): Path<u64>) -> Json<FrontendMovieDetails> {
+    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    Json(
+        MovieDetailsRequest::new()
+            .append_to_response("credits")
+            .fetch(&client, movie_id)
             .await
             .expect("handle errors later"),
     )
