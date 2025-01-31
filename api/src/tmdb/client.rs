@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use reqwest::{
-    header::{ACCEPT, AUTHORIZATION},
+    header::{ACCEPT, AUTHORIZATION, USER_AGENT},
     Client,
 };
 use serde::de::DeserializeOwned;
@@ -69,6 +69,10 @@ impl TMDBClient {
             .query(&params)
             .header(AUTHORIZATION, format!("Bearer {}", self.api_key))
             .header(ACCEPT, "application/json")
+            .header(
+                USER_AGENT,
+                format!("Cinescore {}", env!("CARGO_PKG_VERSION")),
+            )
             .send()
             .await?
             .json::<T>()
