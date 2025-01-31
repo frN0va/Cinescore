@@ -207,7 +207,7 @@ const MoviePage: React.FC = () => {
 									{movie.credits.cast.slice(0, 8).map((actor) => (
 										<div
 											key={actor.id}
-											className="group relative overflow-hidden rounded-lg"
+											className="group relative overflow-hidden rounded-lg cursor-pointer"
 										>
 											<img
 												src={actor.iconUrl}
