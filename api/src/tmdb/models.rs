@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Represents a genre
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Genre {
     /// Unique identifier for the genre.
     pub id: u64,
@@ -10,7 +10,7 @@ pub struct Genre {
 }
 
 /// Represents a list of movies retrieved from a search query.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct MovieListSearch {
     /// Current page number of results.
     pub page: u64,
@@ -23,7 +23,7 @@ pub struct MovieListSearch {
 }
 
 /// Represents a movie in a search result.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct SearchMovie {
     /// Indicates whether the movie is for adults.
     pub adult: bool,
@@ -56,7 +56,7 @@ pub struct SearchMovie {
 }
 
 /// Represents credits information for a movie, including cast and crew.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct MovieCredits {
     /// Unique identifier for the movie.
     pub id: Option<u64>,
@@ -67,7 +67,7 @@ pub struct MovieCredits {
 }
 
 /// Represents a cast member in a movie.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Cast {
     /// Indicates whether the cast member is an adult.
     pub adult: bool,
@@ -96,7 +96,7 @@ pub struct Cast {
 }
 
 /// Represents a crew member in a movie.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Crew {
     /// Indicates whether the crew member is an adult.
     pub adult: bool,
@@ -123,7 +123,7 @@ pub struct Crew {
 }
 
 /// Represents a production company involved in a movie.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ProductionCompany {
     /// Unique identifier for the company.
     pub id: u64,
@@ -136,7 +136,7 @@ pub struct ProductionCompany {
 }
 
 /// Represents a country involved in movie production.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ProductionCountry {
     /// ISO 3166-1 country code.
     pub iso_3166_1: String,
@@ -145,7 +145,7 @@ pub struct ProductionCountry {
 }
 
 /// Represents a language spoken in a movie.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Language {
     /// English name of the language.
     pub english_name: String,
@@ -156,7 +156,7 @@ pub struct Language {
 }
 
 /// Represents a collection of movies
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Collection {
     /// The collection ID
     pub id: u64,
@@ -169,7 +169,7 @@ pub struct Collection {
 }
 
 /// Represents detailed information about a movie.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct MovieDetails {
     /// Indicates whether the movie is for adults.
     pub adult: bool,

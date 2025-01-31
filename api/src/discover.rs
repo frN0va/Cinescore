@@ -32,7 +32,7 @@ impl From<reqwest::Error> for ApiFetchError {
         Self {
             status_code: match value.status() {
                 Some(v) => v.to_string(),
-                None => "N/A".to_string(),
+                None => "N/A".to_owned(),
             },
         }
     }

@@ -69,7 +69,7 @@ pub trait MovieDetailsQuery {
         Self: Sized,
     {
         self.params()
-            .insert("append_to_response", append.to_string());
+            .insert("append_to_response", append.to_owned());
         self
     }
 }

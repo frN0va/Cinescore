@@ -6,13 +6,13 @@ use crate::tmdb::{
 };
 
 /// Represents a list of movies formatted for the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendMovieList {
     movies: Vec<MovieListing>,
 }
 
 /// Represents an individual movie entry in the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct MovieListing {
     /// Unique identifier for the movie.
     id: u64,
@@ -63,7 +63,7 @@ impl From<MovieListSearch> for FrontendMovieList {
 }
 
 /// Represents movie credits formatted for the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendCredits {
     /// List of cast members.
     cast: Vec<FrontendCast>,
@@ -72,7 +72,7 @@ pub struct FrontendCredits {
 }
 
 /// Represents a cast member for the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendCast {
     /// Name of the cast member.
     name: String,
@@ -86,7 +86,7 @@ pub struct FrontendCast {
 }
 
 /// Represents a crew member for the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendCrew {
     /// Name of the crew member.
     name: String,
@@ -142,7 +142,7 @@ impl From<MovieCredits> for FrontendCredits {
 }
 
 /// Represents detailed movie information formatted for the frontend.
-#[derive(Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendMovieDetails {
     /// URL to the movie's backdrop image.
     #[serde(rename = "backdropUrl")]
@@ -210,10 +210,7 @@ impl From<MovieDetails> for FrontendMovieDetails {
             runtime: value.runtime,
             spoken_languages: value.spoken_languages,
             tagline: value.tagline,
-            credits: match value.credits {
-                Some(v) => Some(FrontendCredits::from(v)),
-                None => None,
-            },
+            credits: value.credits.map(FrontendCredits::from),
             // TODO: these 3
             overall_score: 0.0,
             is_liked: false,

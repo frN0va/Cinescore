@@ -34,7 +34,7 @@ impl TMDBClient {
         Self {
             client: Client::new(),
             api_key,
-            base_url: API_BASE_URL.to_string(),
+            base_url: API_BASE_URL.to_owned(),
         }
     }
 
