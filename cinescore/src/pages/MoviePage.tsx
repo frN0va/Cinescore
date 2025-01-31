@@ -29,6 +29,8 @@ interface FrontendMovieDetails {
 	runtime: number;
 	spokenLanguages: Array<{ name: string }>;
 	tagline: string;
+	rank?: number;
+	overallScore?: number;
 	credits?: {
 		cast: Array<{
 			name: string;
@@ -52,6 +54,7 @@ const MoviePage: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const [isLiked, setIsLiked] = useState(false);
 	const [inWatchlist, setInWatchlist] = useState(false);
+	const [hoveredRank, setHoveredRank] = useState(0);
 
 	useEffect(() => {
 		const fetchMovieDetails = async () => {
@@ -63,6 +66,7 @@ const MoviePage: React.FC = () => {
 				}
 				const data = await response.json();
 				setMovie(data);
+				setHoveredRank(data.rank || 0);
 			} catch (err) {
 				setError(
 					err instanceof Error ? err.message : "Failed to fetch movie details",
@@ -74,6 +78,14 @@ const MoviePage: React.FC = () => {
 
 		fetchMovieDetails();
 	}, [id]);
+
+	const handleRank = async (rank: number) => {
+		if (!movie) return;
+		setHoveredRank(rank);
+		// Here you would typically make an API call to update the rank
+		// For now, we'll just update the local state
+		setMovie({ ...movie, rank });
+	};
 
 	if (isLoading) {
 		return (
@@ -131,7 +143,7 @@ const MoviePage: React.FC = () => {
 								</p>
 							)}
 
-							<div className="mb-6 flex items-center space-x-4">
+							<div className="mb-6 flex flex-col space-y-4">
 								<div className="flex space-x-2">
 									<button
 										onClick={() => setIsLiked(!isLiked)}
@@ -159,6 +171,21 @@ const MoviePage: React.FC = () => {
 											<Plus className="h-6 w-6" />
 										)}
 									</button>
+								</div>
+								<div className="flex justify-start space-x-2">
+									{[1, 2, 3, 4, 5].map((rank) => (
+										<Star
+											key={rank}
+											className={`h-8 w-8 cursor-pointer transition-colors ${
+												rank <= hoveredRank
+													? "text-yellow-400"
+													: "text-gray-500"
+											} hover:text-yellow-300`}
+											onMouseEnter={() => setHoveredRank(rank)}
+											onMouseLeave={() => setHoveredRank(movie.rank || 0)}
+											onClick={() => handleRank(rank)}
+										/>
+									))}
 								</div>
 							</div>
 
