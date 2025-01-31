@@ -6,7 +6,7 @@ use reqwest::{
 };
 use serde::de::DeserializeOwned;
 
-pub const IMAGE_BASE_URL: &str = "https://image.tmdb.org/t/p/w780/";
+pub const IMAGE_BASE_URL: &str = "https://image.tmdb.org/t/p/original/";
 pub const API_BASE_URL: &str = "https://api.themoviedb.org/3";
 
 #[derive(Debug, Clone)]
