@@ -2,7 +2,18 @@ use api::build_router;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenvy::from_filename(".env")?;
+    // load dotenv file if exists, and if not, check that environment variable is defined
+    if dotenvy::from_filename(".env").is_err() {
+        assert!(
+            std::env::var("TMDB_API_KEY").is_ok(),
+            ".env file does not exists and environment variable TMDB_API_KEY is not set"
+        )
+    }
+
+    assert!(
+        std::env::var("TMDB_API_KEY").is_ok(),
+        "environment variable TMDB_API_KEY is not set"
+    );
 
     let router = build_router();
 
