@@ -10,6 +10,7 @@ import {
 	Search,
 	ChevronLeft,
 	ChevronRight,
+	Trophy,
 } from "lucide-react";
 
 interface RankedMovie {
@@ -173,9 +174,9 @@ const ProfilePage: React.FC = () => {
 	]);
 
 	const navItems = [
-		{ name: "Films", icon: <Film className="w-5 h-5" /> },
-		{ name: "Actors", icon: <User className="w-5 h-5" /> },
-		{ name: "Directors", icon: <Clapperboard className="w-5 h-5" /> },
+		{ name: "Films", icon: <Film className="w-5 h-5" />, to: "/" },
+		{ name: "Actors", icon: <User className="w-5 h-5" />, to: "/actors" },
+		{ name: "Directors", icon: <Clapperboard className="w-5 h-5" />, to: "/directors" },
 	];
 
 	const handlePrevPage = (category: string) => {
@@ -201,6 +202,49 @@ const ProfilePage: React.FC = () => {
 			[category]: Math.min(maxPage, prev[category] + 1),
 		}));
 	};
+
+	const TopFiveSection: React.FC<{ movies: RankedMovie[] }> = ({ movies }) => (
+		<section className="mb-16 bg-neutral-900/50 p-8 rounded-xl shadow-xl">
+			<div className="mb-8 flex items-center justify-between border-b border-neutral-800 pb-3">
+				<div className="flex items-center gap-3">
+					<Trophy className="w-7 h-7 text-purple-400" />
+					<h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+						Top 5 Movies
+					</h2>
+				</div>
+			</div>
+			<div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+				{movies.map((movie) => (
+					<div
+						key={movie.id}
+						className="group bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border border-neutral-800 hover:border-purple-500/30"
+					>
+						<div className="relative">
+							<img
+								src={movie.poster}
+								alt={movie.title}
+								className="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105"
+							/>
+							<div className="absolute top-4 right-4 bg-black/70 text-yellow-400 px-3 py-1 rounded-full flex items-center">
+								<Star className="w-5 h-5 mr-1" />
+								<span className="font-bold">
+									{movie.overallScore?.toFixed(1)}
+								</span>
+							</div>
+							<div className="absolute top-4 left-4 bg-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-2xl font-bold shadow-lg border border-purple-400/30">
+								#{movie.rank}
+							</div>
+						</div>
+						<div className="p-4">
+							<h2 className="text-lg font-semibold text-blue-300 line-clamp-2 group-hover:text-blue-200">
+								{movie.title}
+							</h2>
+						</div>
+					</div>
+				))}
+			</div>
+		</section>
+	);
 
 	const CategoryCarousel: React.FC<{
 		category: string;
@@ -330,16 +374,14 @@ const ProfilePage: React.FC = () => {
 					<div className="flex-shrink-0">
 						<div className="w-48 h-48 rounded-full overflow-hidden bg-neutral-800">
 							<img
-								src="https://n0va.tech/images/TempProfilePic.png"
+								src="https://wallpapers.com/images/hd/cool-profile-picture-minion-13pu7815v42uvrsg.jpg"
 								alt="Profile"
 								className="w-full h-full object-cover"
 							/>
 						</div>
 					</div>
 					<div className="flex-grow">
-						<h1 className="text-3xl font-bold text-blue-300 mb-2">
-							N0va
-						</h1>
+						<h1 className="text-3xl font-bold text-blue-300 mb-2">N0va</h1>
 						<div className="space-y-4">
 							<p className="text-neutral-400">
 								1/2 of the developer team. Movie & TV Lover.
@@ -376,7 +418,7 @@ const ProfilePage: React.FC = () => {
 
 				{/* Movie Categories */}
 				<div className="space-y-12">
-					<CategoryCarousel category="Top 5 Movies" movies={rankedMovies} />
+					<TopFiveSection movies={rankedMovies} />
 					<CategoryCarousel category="My Liked Movies" movies={likedMovies} />
 					<CategoryCarousel category="My Watchlist" movies={watchlist} />
 				</div>

@@ -23,12 +23,12 @@ interface MovieCategories {
 
 const staticMovieCategories = {
 	"Top Rated": [],
-	"New Releases": [],
 };
 
 const HomePage: React.FC = () => {
 	const [movies, setMovies] = useState<MovieCategories>({
 		"Trending Now": [],
+		"Now Playing": [],
 		...staticMovieCategories,
 	});
 	const [activeNav, setActiveNav] = useState("Films");
@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() =>
-		Object.keys({ "Trending Now": [], ...staticMovieCategories }).reduce(
+		Object.keys({ "Trending Now": [], "Now Playing": [], ...staticMovieCategories }).reduce(
 			// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
 			(acc, category) => ({ ...acc, [category]: 0 }),
 			{},
@@ -44,17 +44,30 @@ const HomePage: React.FC = () => {
 	);
 
 	useEffect(() => {
-		const fetchTrendingMovies = async () => {
+		const fetchMovies = async () => {
 			try {
-				const response = await fetch("/api/v1/discover/trending");
-				if (!response.ok) {
+				const [trendingResponse, nowPlayingResponse] = await Promise.all([
+					fetch("/api/v1/discover/trending"),
+					fetch("/api/v1/discover/now_playing")
+				]);
+
+				if (!trendingResponse.ok) {
 					throw new Error("Failed to fetch trending movies");
 				}
-				const data = await response.json();
+				if (!nowPlayingResponse.ok) {
+					throw new Error("Failed to fetch now playing movies");
+				}
+
+				const trendingData = await trendingResponse.json();
+				const nowPlayingData = await nowPlayingResponse.json();
 
 				setMovies((prev) => ({
 					...prev,
-					"Trending Now": data.movies.map((movie: MovieListing) => ({
+					"Trending Now": trendingData.movies.map((movie: MovieListing) => ({
+						...movie,
+						rank: 0,
+					})),
+					"Now Playing": nowPlayingData.movies.map((movie: MovieListing) => ({
 						...movie,
 						rank: 0,
 					})),
@@ -63,14 +76,14 @@ const HomePage: React.FC = () => {
 				setError(
 					err instanceof Error
 						? err.message
-						: "Failed to fetch trending movies",
+						: "Failed to fetch movies"
 				);
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
-		fetchTrendingMovies();
+		fetchMovies();
 	}, []);
 
 	const handleRankMovie = (movieId: number, rank: number) => {
@@ -122,9 +135,9 @@ const HomePage: React.FC = () => {
 	};
 
 	const navItems = [
-		{ name: "Films", icon: <Film className="h-5 w-5" /> },
-		{ name: "Actors", icon: <User className="h-5 w-5" /> },
-		{ name: "Directors", icon: <Clapperboard className="h-5 w-5" /> },
+		{ name: "Films", icon: <Film className="h-5 w-5" />, to: "/" },
+		{ name: "Actors", icon: <User className="h-5 w-5" />, to: "/actors" },
+		{ name: "Directors", icon: <Clapperboard className="h-5 w-5" />, to: "/directors" },
 	];
 
 	return (
@@ -187,7 +200,7 @@ const HomePage: React.FC = () => {
 				{isLoading ? (
 					<div className="flex items-center justify-center pt-20">
 						<div className="text-lg text-neutral-400">
-							Loading trending movies...
+							Loading movies...
 						</div>
 					</div>
 				) : error ? (
