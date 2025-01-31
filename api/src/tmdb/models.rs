@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
-pub struct PopularMovies {
+pub struct MovieListSearch {
     pub page: u64,
     pub results: Vec<SearchMovie>,
     pub total_pages: u64,

@@ -1,12 +1,12 @@
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    tmdb_models::{PopularMovies, SearchMovie},
-    IMAGE_BASE_URL,
+use crate::tmdb::{
+    client::IMAGE_BASE_URL,
+    models::{MovieListSearch, SearchMovie},
 };
 
 #[derive(Debug, PartialEq, Deserialize, Serialize)]
-pub struct Trending {
+pub struct FrontendMovieList {
     movies: Vec<MovieListing>,
 }
 
@@ -43,8 +43,8 @@ impl From<SearchMovie> for MovieListing {
     }
 }
 
-impl From<PopularMovies> for Trending {
-    fn from(value: PopularMovies) -> Self {
+impl From<MovieListSearch> for FrontendMovieList {
+    fn from(value: MovieListSearch) -> Self {
         Self {
             movies: value.results.into_iter().map(MovieListing::from).collect(),
         }

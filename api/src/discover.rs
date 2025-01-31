@@ -1,27 +1,29 @@
 use axum::Json;
-use reqwest::header::{ACCEPT, AUTHORIZATION};
 
-use crate::{frontend_models::Trending, tmdb_models::PopularMovies};
+use crate::{
+    frontend_models::FrontendMovieList,
+    tmdb::{
+        client::TMDBClient,
+        queries::movie_lists::{MovieListNowPlaying, MovieListPopular, MovieListQuery},
+    },
+};
 
-pub async fn fetch_trending() -> Json<Trending> {
-    let client = reqwest::Client::new();
+pub async fn fetch_trending() -> Json<FrontendMovieList> {
+    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    Json(
+        MovieListPopular::new()
+            .fetch(&client)
+            .await
+            .expect("handle errors later"),
+    )
+}
 
-    let resp = match client
-        .get("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1")
-        .header(
-            AUTHORIZATION,
-            format!("Bearer {}", std::env::var("TMDB_API_KEY").unwrap()),
-        )
-        .header(ACCEPT, "application/json")
-        .send()
-        .await
-    {
-        Ok(v) => v,
-        Err(_) => panic!("TODO"),
-    };
-
-    match resp.json::<PopularMovies>().await {
-        Ok(v) => Json(Trending::from(v)),
-        Err(e) => panic!("{}", e),
-    }
+pub async fn fetch_now_playing() -> Json<FrontendMovieList> {
+    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    Json(
+        MovieListNowPlaying::new()
+            .fetch(&client)
+            .await
+            .expect("handle errors later"),
+    )
 }
