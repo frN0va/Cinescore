@@ -6,11 +6,42 @@ use crate::{
     tmdb::{client::TMDBClient, models::MovieListSearch},
 };
 
+/// A trait for querying a list of movies from the TMDB API.
 #[allow(dead_code)]
 pub trait MovieListQuery {
+    /// Returns a mutable reference to the query parameters.
+    ///
+    /// This allows modifying the parameters before making a request.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to a `HashMap` containing the query parameters.
     fn params(&mut self) -> &mut HashMap<&'static str, String>;
+
+    /// Asynchronously fetches a list of movies from the TMDB API.
+    ///
+    /// # Arguments
+    ///
+    /// * `client` - The `TMDBClient` instance used to make the API request.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing a `FrontendMovieList` on success or a `reqwest::Error` on failure.
+    ///
+    /// # Errors
+    ///
+    /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error>;
 
+    /// Sets the `language` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `language` - A `String` representing the language to filter results by.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
     fn language(mut self, language: String) -> Self
     where
         Self: Sized,
@@ -19,6 +50,15 @@ pub trait MovieListQuery {
         self
     }
 
+    /// Sets the `page` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `page` - A `u32` representing the page number for paginated results.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
     fn page(mut self, page: u32) -> Self
     where
         Self: Sized,
@@ -27,6 +67,15 @@ pub trait MovieListQuery {
         self
     }
 
+    /// Sets the `region` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `region` - A `String` representing the region code for region-based filtering.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
     fn region(mut self, region: String) -> Self
     where
         Self: Sized,
@@ -36,13 +85,34 @@ pub trait MovieListQuery {
     }
 }
 
-generate_request_struct!(MovieListTrendingRequest);
+generate_request_struct!(
+    MovieListTrendingRequest,
+    "Request struct for fetching today's trending movies."
+);
 
 impl MovieListQuery for MovieListTrendingRequest {
+    /// Returns a mutable reference to the query parameters for the trending movies request.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to the `HashMap` containing query parameters.
     fn params(&mut self) -> &mut HashMap<&'static str, String> {
         &mut self.params
     }
 
+    /// Asynchronously fetches the trending movies list from the TMDB API.
+    ///
+    /// # Arguments
+    ///
+    /// * `client` - The `TMDBClient` instance used to make the API request.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `FrontendMovieList` on success or a `reqwest::Error` on failure.
+    ///
+    /// # Errors
+    ///
+    /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
         let response = client
             .get::<MovieListSearch>("/trending/movie/day", self.params)
@@ -52,13 +122,34 @@ impl MovieListQuery for MovieListTrendingRequest {
     }
 }
 
-generate_request_struct!(MovieListNowPlayingRequest);
+generate_request_struct!(
+    MovieListNowPlayingRequest,
+    "Request struct for fetching movies that are now playing in theatures."
+);
 
 impl MovieListQuery for MovieListNowPlayingRequest {
+    /// Returns a mutable reference to the query parameters for the now playing movies request.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to the `HashMap` containing query parameters.
     fn params(&mut self) -> &mut HashMap<&'static str, String> {
         &mut self.params
     }
 
+    /// Asynchronously fetches the now playing movies list from the TMDB API.
+    ///
+    /// # Arguments
+    ///
+    /// * `client` - The `TMDBClient` instance used to make the API request.
+    ///
+    /// # Returns
+    ///
+    /// A `Result` containing the `FrontendMovieList` on success or a `reqwest::Error` on failure.
+    ///
+    /// # Errors
+    ///
+    /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
         let response = client
             .get::<MovieListSearch>("movie/now_playing", self.params)

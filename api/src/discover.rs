@@ -11,10 +11,6 @@ use crate::{
     },
 };
 
-/// Fetches a list of trending movies
-///
-/// # Returns
-/// A JSON-wrapped `FrontendMovieList` containing trending movies.
 pub async fn fetch_trending() -> Json<FrontendMovieList> {
     let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
     Json(

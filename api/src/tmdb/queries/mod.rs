@@ -3,7 +3,8 @@ pub mod movie_lists;
 
 #[macro_export]
 macro_rules! generate_request_struct {
-    ($request_name:ident) => {
+    ($request_name:ident, $docs:expr) => {
+        #[doc=$docs]
         #[derive(Default)]
         pub struct $request_name {
             params: HashMap<&'static str, String>,
