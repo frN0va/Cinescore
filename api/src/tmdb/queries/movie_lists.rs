@@ -36,11 +36,11 @@ pub trait MovieListQuery {
 }
 
 #[derive(Default)]
-pub struct MovieListPopular {
+pub struct MovieListTrending {
     params: HashMap<&'static str, String>,
 }
 
-impl MovieListPopular {
+impl MovieListTrending {
     pub fn new() -> Self {
         Self {
             params: HashMap::new(),
@@ -48,14 +48,14 @@ impl MovieListPopular {
     }
 }
 
-impl MovieListQuery for MovieListPopular {
+impl MovieListQuery for MovieListTrending {
     fn params(&mut self) -> &mut HashMap<&'static str, String> {
         &mut self.params
     }
 
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
         let response = client
-            .get::<MovieListSearch>("movie/popular", self.params)
+            .get::<MovieListSearch>("/trending/movie/day", self.params)
             .await?;
 
         Ok(FrontendMovieList::from(response))
