@@ -14,6 +14,7 @@ import {
 	DollarSign,
 	Globe,
 } from "lucide-react";
+import { Credits } from "../types";
 
 interface FrontendMovieDetails {
 	backdropUrl: string;
@@ -31,20 +32,7 @@ interface FrontendMovieDetails {
 	tagline: string;
 	rank?: number;
 	overallScore?: number;
-	credits?: {
-		cast: Array<{
-			name: string;
-			iconUrl: string;
-			character: string;
-			id: number;
-		}>;
-		crew: Array<{
-			name: string;
-			iconUrl: string;
-			department: string;
-			id: number;
-		}>;
-	};
+	credits?: Credits;
 }
 
 const MoviePage: React.FC = () => {
