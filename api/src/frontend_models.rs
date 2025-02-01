@@ -2,7 +2,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
-    models::{Cast, Crew, Language, MovieCredits, MovieDetails, MovieListSearch, SearchMovie},
+    models::{
+        Cast, Crew, Language, MovieCredits, MovieDetails, MovieListSearch, PersonDetails,
+        SearchMovie, Socials,
+    },
 };
 
 /// Represents a list of movies formatted for the frontend.
@@ -215,6 +218,63 @@ impl From<MovieDetails> for FrontendMovieDetails {
             overall_score: 0.0,
             is_liked: false,
             in_watchlist: false,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FrontendSocials {
+    imdb: Option<String>,
+    facebook: Option<String>,
+    instagram: Option<String>,
+    tiktok: Option<String>,
+    twitter: Option<String>,
+}
+
+impl From<Socials> for FrontendSocials {
+    fn from(value: Socials) -> Self {
+        Self {
+            imdb: value.imdb_id,
+            facebook: value.facebook_id,
+            instagram: value.instagram_id,
+            tiktok: value.tiktok_id,
+            twitter: value.twitter_id,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FrontendPersonDetails {
+    biography: String,
+    birthday: String,
+    deathday: String,
+    gender: u8,
+    id: u64,
+    #[serde(rename = "knownForDepartment")]
+    known_for_department: String,
+    name: String,
+    #[serde(rename = "placeOfBirth")]
+    place_of_birth: String,
+    #[serde(rename = "iconUrl")]
+    icon_url: String,
+    credits: Option<FrontendCredits>,
+    socials: Option<FrontendSocials>,
+}
+
+impl From<PersonDetails> for FrontendPersonDetails {
+    fn from(value: PersonDetails) -> Self {
+        Self {
+            biography: value.biography,
+            birthday: value.birthday,
+            deathday: value.deathday,
+            gender: value.gender,
+            id: value.id,
+            known_for_department: value.known_for_department,
+            name: value.name,
+            place_of_birth: value.place_of_birth,
+            icon_url: value.profile_path.unwrap_or("https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned()),
+            credits: value.credits.map(FrontendCredits::from),
+            socials: value.external_ids.map(FrontendSocials::from)
         }
     }
 }

@@ -224,3 +224,37 @@ pub struct MovieDetails {
     /// Optional credits information if requested.
     pub credits: Option<MovieCredits>,
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Socials {
+    pub freebase_mid: Option<String>,
+    pub freebase_id: Option<String>,
+    pub imdb_id: Option<String>,
+    pub tvrage_id: Option<u64>,
+    pub wikidata_id: Option<String>,
+    pub facebook_id: Option<String>,
+    pub instagram_id: Option<String>,
+    pub tiktok_id: Option<String>,
+    pub twitter_id: Option<String>,
+    pub youtube_id: Option<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PersonDetails {
+    pub adult: bool,
+    pub also_known_as: Vec<String>,
+    pub biography: String,
+    pub birthday: String,
+    pub deathday: String,
+    pub gender: u8,
+    pub homepage: String,
+    pub id: u64,
+    pub imdb_id: String,
+    pub known_for_department: String,
+    pub name: String,
+    pub place_of_birth: String,
+    pub popularity: f64,
+    pub profile_path: Option<String>,
+    pub credits: Option<MovieCredits>,
+    pub external_ids: Option<Socials>,
+}
