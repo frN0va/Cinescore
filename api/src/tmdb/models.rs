@@ -9,13 +9,13 @@ pub struct Genre {
     pub name: String,
 }
 
-/// Represents a list of movies retrieved from a search query.
+/// Represents a paginated list retrieved from a search query.
 #[derive(Debug, Deserialize, Serialize)]
-pub struct PaginatedSearchResult {
+pub struct PaginatedSearchResult<T> {
     /// Current page number of results.
     pub page: u64,
     /// List of movies matching the search criteria.
-    pub results: Vec<SearchMovie>,
+    pub results: Vec<T>,
     /// Total number of pages available.
     pub total_pages: u64,
     /// Total number of results found.
@@ -257,4 +257,19 @@ pub struct PersonDetails {
     pub profile_path: Option<String>,
     pub credits: Option<MovieCredits>,
     pub external_ids: Option<Socials>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SearchPerson {
+    pub adult: bool,
+    pub gender: u8,
+    pub id: u64,
+    pub known_for_department: String,
+    pub name: String,
+    pub original_name: String,
+    pub media_type: String,
+    pub popularity: f64,
+    pub profile_path: Option<String>,
+    // This won't be useful so im not going to bother deserializing it
+    pub known_for: Option<serde_json::Value>,
 }

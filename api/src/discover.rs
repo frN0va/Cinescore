@@ -1,14 +1,16 @@
 use axum::{extract::Path, response::IntoResponse, Json};
 
 use crate::{
-    frontend_models::{FrontendMovieDetails, FrontendMovieList, FrontendPersonDetails},
+    frontend_models::{
+        FrontendMovieDetails, FrontendMovieList, FrontendPeopleList, FrontendPersonDetails,
+    },
     tmdb::{
         client::TMDBClient,
         queries::{
             common::DetailsQuery,
             movie_details::MovieDetailsRequest,
             movie_lists::{MovieListNowPlayingRequest, MovieListQuery, MovieListTrendingRequest},
-            people_details::PersonDetailsRequest,
+            people_details::{PersonDetailsRequest, TrendingPeopleQuery, TrendingPeopleRequest},
         },
     },
 };
@@ -43,6 +45,11 @@ impl From<reqwest::Error> for ApiFetchError {
 pub async fn fetch_trending() -> Result<Json<FrontendMovieList>, ApiFetchError> {
     let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
     Ok(Json(MovieListTrendingRequest::new().fetch(&client).await?))
+}
+
+pub async fn fetch_trending_people() -> Result<Json<FrontendPeopleList>, ApiFetchError> {
+    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    Ok(Json(TrendingPeopleRequest::new().fetch(&client).await?))
 }
 
 pub async fn fetch_now_playing() -> Result<Json<FrontendMovieList>, ApiFetchError> {

@@ -4,7 +4,7 @@ use crate::tmdb::{
     client::IMAGE_BASE_URL,
     models::{
         Cast, Crew, Language, MovieCredits, MovieDetails, PaginatedSearchResult, PersonDetails,
-        SearchMovie, Socials,
+        SearchMovie, SearchPerson, Socials,
     },
 };
 
@@ -56,9 +56,9 @@ impl From<SearchMovie> for MovieListing {
     }
 }
 
-/// Converts a [`MovieListSearch`] into a [`FrontendMovieList`].
-impl From<PaginatedSearchResult> for FrontendMovieList {
-    fn from(value: PaginatedSearchResult) -> Self {
+/// Converts a [`PaginatedSearchResult<SearchMovie>`] into a [`FrontendMovieList`].
+impl From<PaginatedSearchResult<SearchMovie>> for FrontendMovieList {
+    fn from(value: PaginatedSearchResult<SearchMovie>) -> Self {
         Self {
             movies: value.results.into_iter().map(MovieListing::from).collect(),
         }
@@ -279,6 +279,49 @@ impl From<PersonDetails> for FrontendPersonDetails {
             },
             credits: value.credits.map(FrontendCredits::from),
             socials: value.external_ids.map(FrontendSocials::from)
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FrontendPeopleList {
+    people: Vec<FrontendPersonListing>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct FrontendPersonListing {
+    id: u64,
+    name: String,
+    gender: u8,
+    department: String,
+    #[serde(rename = "iconUrl")]
+    icon_url: String,
+}
+
+impl From<SearchPerson> for FrontendPersonListing {
+    fn from(value: SearchPerson) -> Self {
+        Self {
+            id: value.id,
+            name: value.name,
+            gender: value.gender,
+            department: value.known_for_department,
+            icon_url: match value.profile_path {
+                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
+                // TODO: real image
+                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
+            },
+        }
+    }
+}
+
+impl From<PaginatedSearchResult<SearchPerson>> for FrontendPeopleList {
+    fn from(value: PaginatedSearchResult<SearchPerson>) -> Self {
+        Self {
+            people: value
+                .results
+                .into_iter()
+                .map(FrontendPersonListing::from)
+                .collect(),
         }
     }
 }

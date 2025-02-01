@@ -3,7 +3,10 @@ use std::collections::HashMap;
 use crate::{
     frontend_models::FrontendMovieList,
     generate_request_struct,
-    tmdb::{client::TMDBClient, models::PaginatedSearchResult},
+    tmdb::{
+        client::TMDBClient,
+        models::{PaginatedSearchResult, SearchMovie},
+    },
 };
 
 /// A trait for querying a list of movies from the TMDB API.
@@ -115,7 +118,7 @@ impl MovieListQuery for MovieListTrendingRequest {
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
         let response = client
-            .get::<PaginatedSearchResult>("/trending/movie/day", self.params)
+            .get::<PaginatedSearchResult<SearchMovie>>("/trending/movie/day", self.params)
             .await?;
 
         Ok(FrontendMovieList::from(response))
@@ -152,7 +155,7 @@ impl MovieListQuery for MovieListNowPlayingRequest {
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
         let response = client
-            .get::<PaginatedSearchResult>("movie/now_playing", self.params)
+            .get::<PaginatedSearchResult<SearchMovie>>("movie/now_playing", self.params)
             .await?;
 
         Ok(FrontendMovieList::from(response))
