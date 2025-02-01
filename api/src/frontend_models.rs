@@ -3,8 +3,9 @@ use serde::{Deserialize, Serialize};
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
     models::{
-        Cast, Crew, IndividualCast, IndividualCrew, Language, MovieCredits, MovieDetails,
-        PaginatedSearchResult, PersonCredits, PersonDetails, SearchMovie, SearchPerson, Socials,
+        Language, MovieCreditCast, MovieCreditCrew, MovieCredits, MovieDetails,
+        PaginatedSearchResult, PersonCreditCast, PersonCreditCrew, PersonCredits, PersonDetails,
+        SearchMovie, SearchPerson, Socials,
     },
 };
 
@@ -109,8 +110,8 @@ pub struct FrontendCrew {
 }
 
 /// Converts a [`Crew`] struct into a [`FrontendCrew`] for frontend representation.
-impl From<Crew> for FrontendCrew {
-    fn from(value: Crew) -> Self {
+impl From<MovieCreditCrew> for FrontendCrew {
+    fn from(value: MovieCreditCrew) -> Self {
         Self {
             name: Some(value.name),
             icon_url: Some(match value.profile_path {
@@ -127,8 +128,8 @@ impl From<Crew> for FrontendCrew {
 }
 
 /// Converts a [`Cast`] struct into a [`FrontendCast`] for frontend representation.
-impl From<Cast> for FrontendCast {
-    fn from(value: Cast) -> Self {
+impl From<MovieCreditCast> for FrontendCast {
+    fn from(value: MovieCreditCast) -> Self {
         Self {
             name: Some(value.name),
             icon_url: Some(match value.profile_path {
@@ -144,8 +145,8 @@ impl From<Cast> for FrontendCast {
     }
 }
 
-impl From<IndividualCrew> for FrontendCrew {
-    fn from(value: IndividualCrew) -> Self {
+impl From<PersonCreditCrew> for FrontendCrew {
+    fn from(value: PersonCreditCrew) -> Self {
         Self {
             name: None,
             icon_url: None,
@@ -161,8 +162,8 @@ impl From<IndividualCrew> for FrontendCrew {
     }
 }
 
-impl From<IndividualCast> for FrontendCast {
-    fn from(value: IndividualCast) -> Self {
+impl From<PersonCreditCast> for FrontendCast {
+    fn from(value: PersonCreditCast) -> Self {
         Self {
             name: None,
             icon_url: None,

@@ -61,14 +61,14 @@ pub struct MovieCredits {
     /// Unique identifier for the movie.
     pub id: Option<u64>,
     /// List of cast members.
-    pub cast: Vec<Cast>,
+    pub cast: Vec<MovieCreditCast>,
     /// List of crew members.
-    pub crew: Vec<Crew>,
+    pub crew: Vec<MovieCreditCrew>,
 }
 
 /// Represents a cast member in a movie.
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Cast {
+pub struct MovieCreditCast {
     /// Indicates whether the cast member is an adult.
     pub adult: bool,
     /// Gender of the cast member (if available).
@@ -97,7 +97,7 @@ pub struct Cast {
 
 /// Represents a crew member in a movie.
 #[derive(Debug, Deserialize, Serialize)]
-pub struct Crew {
+pub struct MovieCreditCrew {
     /// Indicates whether the crew member is an adult.
     pub adult: bool,
     /// Gender of the crew member (if available).
@@ -276,11 +276,11 @@ pub struct SearchPerson {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct PersonCredits {
-    pub cast: Vec<IndividualCast>,
-    pub crew: Vec<IndividualCrew>,
+    pub cast: Vec<PersonCreditCast>,
+    pub crew: Vec<PersonCreditCrew>,
 }
 #[derive(Debug, Deserialize, Serialize)]
-pub struct IndividualCast {
+pub struct PersonCreditCast {
     /// Indicates whether the cast member is an adult.
     pub adult: bool,
     pub backdrop_path: Option<String>,
@@ -302,7 +302,7 @@ pub struct IndividualCast {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct IndividualCrew {
+pub struct PersonCreditCrew {
     pub adult: bool,
     pub backdrop_path: Option<String>,
     pub genre_ids: Vec<u64>,
