@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
     models::{
-        Cast, Crew, Language, MovieCredits, MovieDetails, MovieListSearch, PersonDetails,
+        Cast, Crew, Language, MovieCredits, MovieDetails, PaginatedSearchResult, PersonDetails,
         SearchMovie, Socials,
     },
 };
@@ -57,8 +57,8 @@ impl From<SearchMovie> for MovieListing {
 }
 
 /// Converts a [`MovieListSearch`] into a [`FrontendMovieList`].
-impl From<MovieListSearch> for FrontendMovieList {
-    fn from(value: MovieListSearch) -> Self {
+impl From<PaginatedSearchResult> for FrontendMovieList {
+    fn from(value: PaginatedSearchResult) -> Self {
         Self {
             movies: value.results.into_iter().map(MovieListing::from).collect(),
         }
@@ -272,7 +272,11 @@ impl From<PersonDetails> for FrontendPersonDetails {
             known_for_department: value.known_for_department,
             name: value.name,
             place_of_birth: value.place_of_birth,
-            icon_url: value.profile_path.unwrap_or("https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned()),
+            icon_url: match value.profile_path {
+                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
+                // TODO: real image
+                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
+            },
             credits: value.credits.map(FrontendCredits::from),
             socials: value.external_ids.map(FrontendSocials::from)
         }

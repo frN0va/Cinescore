@@ -11,7 +11,7 @@ pub struct Genre {
 
 /// Represents a list of movies retrieved from a search query.
 #[derive(Debug, Deserialize, Serialize)]
-pub struct MovieListSearch {
+pub struct PaginatedSearchResult {
     /// Current page number of results.
     pub page: u64,
     /// List of movies matching the search criteria.
