@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
     models::{
-        Cast, Crew, Language, MovieCredits, MovieDetails, PaginatedSearchResult, PersonDetails,
-        SearchMovie, SearchPerson, Socials,
+        Cast, Crew, IndividualCast, IndividualCrew, Language, MovieCredits, MovieDetails,
+        PaginatedSearchResult, PersonCredits, PersonDetails, SearchMovie, SearchPerson, Socials,
     },
 };
 
@@ -78,12 +78,15 @@ pub struct FrontendCredits {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendCast {
     /// Name of the cast member.
-    name: String,
+    name: Option<String>,
     /// URL to the cast member's profile picture.
     #[serde(rename = "iconUrl")]
-    icon_url: String,
+    icon_url: Option<String>,
     /// The character played by the cast member.
     character: String,
+    #[serde(rename = "posterUrl")]
+    poster_url: Option<String>,
+    title: Option<String>,
     /// Unique identifier for the cast member.
     id: u64,
 }
@@ -92,12 +95,15 @@ pub struct FrontendCast {
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendCrew {
     /// Name of the crew member.
-    name: String,
+    name: Option<String>,
     /// URL to the crew member's profile picture.
     #[serde(rename = "iconUrl")]
-    icon_url: String,
+    icon_url: Option<String>,
     /// Department in which the crew member worked.
     department: String,
+    #[serde(rename = "posterUrl")]
+    poster_url: Option<String>,
+    title: Option<String>,
     /// Unique identifier for the crew member.
     id: u64,
 }
@@ -106,14 +112,16 @@ pub struct FrontendCrew {
 impl From<Crew> for FrontendCrew {
     fn from(value: Crew) -> Self {
         Self {
-            name: value.name,
-            icon_url: match value.profile_path {
+            name: Some(value.name),
+            icon_url: Some(match value.profile_path {
                 Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
                 // TODO: real image
                 None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            }),
             department: value.known_for_department,
             id: value.id,
+            poster_url: None,
+            title: None
         }
     }
 }
@@ -122,14 +130,50 @@ impl From<Crew> for FrontendCrew {
 impl From<Cast> for FrontendCast {
     fn from(value: Cast) -> Self {
         Self {
-            name: value.name,
-            icon_url: match value.profile_path {
+            name: Some(value.name),
+            icon_url: Some(match value.profile_path {
                 Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
                 // TODO: real image
                 None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            }),
             character: value.character,
             id: value.id,
+            poster_url: None,
+            title: None
+        }
+    }
+}
+
+impl From<IndividualCrew> for FrontendCrew {
+    fn from(value: IndividualCrew) -> Self {
+        Self {
+            name: None,
+            icon_url: None,
+            department: value.department,
+            poster_url: Some(match value.poster_path {
+                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
+                // TODO: real image
+                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
+            }),
+            title: Some(value.title),
+            id: value.id,
+        }
+    }
+}
+
+impl From<IndividualCast> for FrontendCast {
+    fn from(value: IndividualCast) -> Self {
+        Self {
+            name: None,
+            icon_url: None,
+            poster_url: Some(match value.poster_path {
+                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
+                // TODO: real image
+                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
+            }),
+            title: Some(value.title),
+            id: value.id,
+            character: value.character,
         }
     }
 }
@@ -137,6 +181,15 @@ impl From<Cast> for FrontendCast {
 /// Converts [`MovieCredits`] into [`FrontendCredits`] for frontend representation.
 impl From<MovieCredits> for FrontendCredits {
     fn from(value: MovieCredits) -> Self {
+        Self {
+            cast: value.cast.into_iter().map(FrontendCast::from).collect(),
+            crew: value.crew.into_iter().map(FrontendCrew::from).collect(),
+        }
+    }
+}
+
+impl From<PersonCredits> for FrontendCredits {
+    fn from(value: PersonCredits) -> Self {
         Self {
             cast: value.cast.into_iter().map(FrontendCast::from).collect(),
             crew: value.crew.into_iter().map(FrontendCrew::from).collect(),
@@ -247,7 +300,7 @@ impl From<Socials> for FrontendSocials {
 pub struct FrontendPersonDetails {
     biography: String,
     birthday: String,
-    deathday: String,
+    deathday: Option<String>,
     gender: u8,
     id: u64,
     #[serde(rename = "knownForDepartment")]

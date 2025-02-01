@@ -245,9 +245,9 @@ pub struct PersonDetails {
     pub also_known_as: Vec<String>,
     pub biography: String,
     pub birthday: String,
-    pub deathday: String,
+    pub deathday: Option<String>,
     pub gender: u8,
-    pub homepage: String,
+    pub homepage: Option<String>,
     pub id: u64,
     pub imdb_id: String,
     pub known_for_department: String,
@@ -255,7 +255,7 @@ pub struct PersonDetails {
     pub place_of_birth: String,
     pub popularity: f64,
     pub profile_path: Option<String>,
-    pub credits: Option<MovieCredits>,
+    pub credits: Option<PersonCredits>,
     pub external_ids: Option<Socials>,
 }
 
@@ -272,4 +272,52 @@ pub struct SearchPerson {
     pub profile_path: Option<String>,
     // This won't be useful so im not going to bother deserializing it
     pub known_for: Option<serde_json::Value>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct PersonCredits {
+    pub cast: Vec<IndividualCast>,
+    pub crew: Vec<IndividualCrew>,
+}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct IndividualCast {
+    /// Indicates whether the cast member is an adult.
+    pub adult: bool,
+    pub backdrop_path: Option<String>,
+    pub genre_ids: Vec<u64>,
+    pub id: u64,
+    pub original_language: String,
+    pub original_title: String,
+    pub overview: String,
+    pub popularity: f64,
+    pub poster_path: Option<String>,
+    pub release_date: String,
+    pub title: String,
+    pub video: bool,
+    pub vote_average: f64,
+    pub vote_count: u64,
+    pub character: String,
+    pub credit_id: String,
+    pub order: u64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct IndividualCrew {
+    pub adult: bool,
+    pub backdrop_path: Option<String>,
+    pub genre_ids: Vec<u64>,
+    pub id: u64,
+    pub original_language: String,
+    pub original_title: String,
+    pub overview: String,
+    pub popularity: f64,
+    pub poster_path: Option<String>,
+    pub release_date: String,
+    pub title: String,
+    pub video: bool,
+    pub vote_average: f64,
+    pub vote_count: u64,
+    pub credit_id: String,
+    pub department: String,
+    pub job: String,
 }
