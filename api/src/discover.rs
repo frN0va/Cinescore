@@ -45,20 +45,24 @@ impl From<reqwest::Error> for ApiFetchError {
     }
 }
 
+fn get_tmdb_client() -> TMDBClient {
+    TMDBClient::new(std::env::var("TMDB_API_KEY").expect("TMDB_API_KEY must be set"))
+}
+
 pub async fn fetch_trending() -> Result<Json<FrontendMovieList>, ApiFetchError> {
-    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    let client = get_tmdb_client();
     log::info!("Fetching trending movies");
     Ok(Json(MovieListTrendingRequest::new().fetch(&client).await?))
 }
 
 pub async fn fetch_trending_people() -> Result<Json<FrontendPeopleList>, ApiFetchError> {
-    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    let client = get_tmdb_client();
     log::info!("Fetching trending people");
     Ok(Json(TrendingPeopleRequest::new().fetch(&client).await?))
 }
 
 pub async fn fetch_now_playing() -> Result<Json<FrontendMovieList>, ApiFetchError> {
-    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    let client = get_tmdb_client();
     log::info!("Fetching now playing movies");
     Ok(Json(
         MovieListNowPlayingRequest::new().fetch(&client).await?,
@@ -68,7 +72,7 @@ pub async fn fetch_now_playing() -> Result<Json<FrontendMovieList>, ApiFetchErro
 pub async fn fetch_movie_details(
     Path(movie_id): Path<u64>,
 ) -> Result<Json<FrontendMovieDetails>, ApiFetchError> {
-    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    let client = get_tmdb_client();
     log::info!("Fetching details for movie ID: {}", movie_id);
     Ok(Json(
         MovieDetailsRequest::new()
@@ -81,7 +85,7 @@ pub async fn fetch_movie_details(
 pub async fn fetch_person_details(
     Path(person_id): Path<u64>,
 ) -> Result<Json<FrontendPersonDetails>, ApiFetchError> {
-    let client = TMDBClient::new(std::env::var("TMDB_API_KEY").unwrap());
+    let client = get_tmdb_client();
     log::info!("Fetching details for person ID: {}", person_id);
     Ok(Json(
         PersonDetailsRequest::new()

@@ -11,6 +11,16 @@ use crate::tmdb::{
     },
 };
 
+const DEFAULT_PLACEHOLDER_IMAGE: &str =
+    "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png";
+
+fn get_image_url(path: Option<String>) -> String {
+    match path {
+        Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
+        None => DEFAULT_PLACEHOLDER_IMAGE.to_owned(),
+    }
+}
+
 /// Represents a list of movies formatted for the frontend.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FrontendMovieList {
@@ -45,12 +55,11 @@ impl From<SearchMovie> for MovieListing {
         Self {
             id: value.base.id,
             title: value.base.title,
-            poster: match value.base.poster_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
-            description: value.base.overview.unwrap_or("No overview provided".to_owned()),
+            poster: get_image_url(value.base.poster_path),
+            description: value
+                .base
+                .overview
+                .unwrap_or("No overview provided".to_owned()),
             // TODO: these 3
             overall_score: 0.0,
             is_liked: false,
@@ -116,15 +125,11 @@ impl From<MovieCreditCrew> for FrontendCrew {
     fn from(value: MovieCreditCrew) -> Self {
         Self {
             name: Some(value.base.name),
-            icon_url: Some(match value.base.profile_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            }),
+            icon_url: Some(get_image_url(value.base.profile_path)),
             department: value.base.known_for_department,
             id: value.base.id,
             poster_url: None,
-            title: None
+            title: None,
         }
     }
 }
@@ -134,15 +139,11 @@ impl From<MovieCreditCast> for FrontendCast {
     fn from(value: MovieCreditCast) -> Self {
         Self {
             name: Some(value.base.name),
-            icon_url: Some(match value.base.profile_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            }),
+            icon_url: Some(get_image_url(value.base.profile_path)),
             character: value.character,
             id: value.base.id,
             poster_url: None,
-            title: None
+            title: None,
         }
     }
 }
@@ -153,11 +154,7 @@ impl From<PersonCreditCrew> for FrontendCrew {
             name: None,
             icon_url: None,
             department: value.department,
-            poster_url: Some(match value.base.poster_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            }),
+            poster_url: Some(get_image_url(value.base.poster_path)),
             title: Some(value.base.title),
             id: value.base.id,
         }
@@ -169,11 +166,7 @@ impl From<PersonCreditCast> for FrontendCast {
         Self {
             name: None,
             icon_url: None,
-            poster_url: Some(match value.base.poster_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            }),
+            poster_url: Some(get_image_url(value.base.poster_path)),
             title: Some(value.base.title),
             id: value.base.id,
             character: value.character,
@@ -252,21 +245,13 @@ pub struct FrontendMovieDetails {
 impl From<MovieDetails> for FrontendMovieDetails {
     fn from(value: MovieDetails) -> Self {
         Self {
-            backdrop_url: match value.base.backdrop_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            backdrop_url: get_image_url(value.base.backdrop_path),
             budget: value.budget,
             id: value.base.id,
             imdb_id: value.imdb_id,
             original_language: value.base.original_language,
             overview: value.base.overview.unwrap_or("N/A".to_owned()),
-            poster_url: match value.base.poster_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            poster_url: get_image_url(value.base.poster_path),
             title: value.base.title,
             release_date: value.base.release_date,
             revenue: value.revenue,
@@ -332,13 +317,9 @@ impl From<PersonDetails> for FrontendPersonDetails {
             known_for_department: value.known_for_department,
             name: value.name,
             place_of_birth: value.place_of_birth,
-            icon_url: match value.profile_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            icon_url: get_image_url(value.profile_path),
             credits: value.credits.map(FrontendCredits::from),
-            socials: value.external_ids.map(FrontendSocials::from)
+            socials: value.external_ids.map(FrontendSocials::from),
         }
     }
 }
@@ -365,11 +346,7 @@ impl From<SearchPerson> for FrontendPersonListing {
             name: value.name,
             gender: value.gender,
             department: value.known_for_department,
-            icon_url: match value.profile_path {
-                Some(v) => format!("{}{}", IMAGE_BASE_URL, v),
-                // TODO: real image
-                None => "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png".to_owned(),
-            },
+            icon_url: get_image_url(value.profile_path),
         }
     }
 }
