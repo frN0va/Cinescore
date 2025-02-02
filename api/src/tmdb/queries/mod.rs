@@ -1,8 +1,8 @@
 //! This module handles API queries to TMDB with automatic serialization and deserialization.
 //! It provides request structures for different types of queries and a macro for generating them.
 
-/// Common utilities and types used in multiple API queries.
-pub mod common;
+/// TODO:Common utilities and types used in multiple API queries.
+pub mod traits;
 
 /// Request models for fetching detailed movie information from TMDB.
 pub mod movie_details;
@@ -29,6 +29,12 @@ macro_rules! generate_request_struct {
                 Self {
                     params: std::collections::HashMap::new(),
                 }
+            }
+        }
+
+        impl crate::tmdb::queries::traits::HasParams for $request_name {
+            fn params(&mut self) -> &mut HashMap<&'static str, String> {
+                &mut self.params
             }
         }
     };

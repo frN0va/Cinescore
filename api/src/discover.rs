@@ -8,10 +8,10 @@ use crate::{
     tmdb::{
         client::{ApiFetchError, TMDBClient},
         queries::{
-            common::DetailsQuery,
             movie_details::MovieDetailsRequest,
-            movie_lists::{MovieListNowPlayingRequest, MovieListQuery, MovieListTrendingRequest},
-            people_details::{PersonDetailsRequest, TrendingPeopleQuery, TrendingPeopleRequest},
+            movie_lists::{MovieListNowPlayingRequest, MovieListTrendingRequest},
+            people_details::{PersonDetailsRequest, TrendingPeopleRequest},
+            traits::{AppendToResponseQueryParam, IdQuery, Query},
         },
     },
 };

@@ -9,23 +9,14 @@ use crate::{
     },
 };
 
-use super::common::DetailsQuery;
+use super::traits::{AppendToResponseQueryParam, IdQuery, LanguageQueryParam};
 
 generate_request_struct!(
     MovieDetailsRequest,
     "Request struct for fetching movie details."
 );
 
-impl DetailsQuery<FrontendMovieDetails> for MovieDetailsRequest {
-    /// Returns a mutable reference to the query parameters for the movie details request.
-    ///
-    /// # Returns
-    ///
-    /// A mutable reference to the `HashMap` containing query parameters.
-    fn params(&mut self) -> &mut HashMap<&'static str, String> {
-        &mut self.params
-    }
-
+impl IdQuery<FrontendMovieDetails> for MovieDetailsRequest {
     /// Asynchronously fetches the movie details from the TMDB API for the given movie ID.
     ///
     /// # Arguments
@@ -54,3 +45,6 @@ impl DetailsQuery<FrontendMovieDetails> for MovieDetailsRequest {
         Ok(FrontendMovieDetails::from(response))
     }
 }
+
+impl AppendToResponseQueryParam for MovieDetailsRequest {}
+impl LanguageQueryParam for MovieDetailsRequest {}
