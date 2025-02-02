@@ -3,7 +3,10 @@ use std::collections::HashMap;
 use crate::{
     frontend_models::movies::FrontendMovieDetails,
     generate_request_struct,
-    tmdb::{client::TMDBClient, models::movie::MovieDetails},
+    tmdb::{
+        client::{ApiFetchError, TMDBClient},
+        models::movie::MovieDetails,
+    },
 };
 
 use super::common::DetailsQuery;
@@ -41,7 +44,7 @@ impl DetailsQuery<FrontendMovieDetails> for MovieDetailsRequest {
         self,
         client: &TMDBClient,
         id: u64,
-    ) -> Result<FrontendMovieDetails, reqwest::Error> {
+    ) -> Result<FrontendMovieDetails, ApiFetchError> {
         log::info!("Fetching movie details for movie ID {}", id);
 
         let response = client

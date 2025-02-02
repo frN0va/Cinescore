@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use crate::tmdb::client::TMDBClient;
+use crate::tmdb::client::{ApiFetchError, TMDBClient};
 
 /// A trait for querying movie/cast details from the TMDB API.
 #[allow(dead_code)]
@@ -33,7 +33,7 @@ where
     /// # Errors
     ///
     /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
-    async fn fetch(self, client: &TMDBClient, id: u64) -> Result<T, reqwest::Error>;
+    async fn fetch(self, client: &TMDBClient, id: u64) -> Result<T, ApiFetchError>;
 
     /// Sets the `language` query parameter for the request.
     ///

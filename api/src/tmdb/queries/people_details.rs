@@ -4,7 +4,7 @@ use crate::{
     frontend_models::people::{FrontendPeopleList, FrontendPersonDetails},
     generate_request_struct,
     tmdb::{
-        client::TMDBClient,
+        client::{ApiFetchError, TMDBClient},
         models::{
             pagination::PaginatedSearchResult,
             person::{PersonDetails, SearchPerson},
@@ -49,7 +49,7 @@ pub trait TrendingPeopleQuery {
     /// # Errors
     ///
     /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
-    async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, reqwest::Error>;
+    async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, ApiFetchError>;
 
     /// Sets the `language` query parameter for the request.
     ///
@@ -99,7 +99,7 @@ impl DetailsQuery<FrontendPersonDetails> for PersonDetailsRequest {
         self,
         client: &TMDBClient,
         id: u64,
-    ) -> Result<FrontendPersonDetails, reqwest::Error> {
+    ) -> Result<FrontendPersonDetails, ApiFetchError> {
         log::info!("Fetching person details for person ID {}", id);
 
         let response = client
@@ -115,7 +115,7 @@ impl TrendingPeopleQuery for TrendingPeopleRequest {
         &mut self.params
     }
 
-    async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, reqwest::Error> {
+    async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, ApiFetchError> {
         log::info!("Fetching daily trending people from TMDB API");
 
         let response = client

@@ -4,7 +4,7 @@ use crate::{
     frontend_models::movies::FrontendMovieList,
     generate_request_struct,
     tmdb::{
-        client::TMDBClient,
+        client::{ApiFetchError, TMDBClient},
         models::{movie::SearchMovie, pagination::PaginatedSearchResult},
     },
 };
@@ -34,7 +34,7 @@ pub trait MovieListQuery {
     /// # Errors
     ///
     /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
-    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error>;
+    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, ApiFetchError>;
 
     /// Sets the `language` query parameter for the request.
     ///
@@ -122,7 +122,7 @@ impl MovieListQuery for MovieListTrendingRequest {
     /// # Errors
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
-    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
+    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, ApiFetchError> {
         log::info!("Fetching daily trending movies from TMDB API");
 
         let response = client
@@ -161,7 +161,7 @@ impl MovieListQuery for MovieListNowPlayingRequest {
     /// # Errors
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
-    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
+    async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, ApiFetchError> {
         log::info!("Fetching now playing movies from TMDB API");
 
         let response = client

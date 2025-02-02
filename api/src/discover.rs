@@ -1,4 +1,4 @@
-use axum::{extract::Path, response::IntoResponse, Json};
+use axum::{extract::Path, Json};
 
 use crate::{
     frontend_models::{
@@ -6,7 +6,7 @@ use crate::{
         people::{FrontendPeopleList, FrontendPersonDetails},
     },
     tmdb::{
-        client::TMDBClient,
+        client::{ApiFetchError, TMDBClient},
         queries::{
             common::DetailsQuery,
             movie_details::MovieDetailsRequest,
@@ -15,45 +15,6 @@ use crate::{
         },
     },
 };
-
-pub struct ApiFetchError {
-    status_code: String,
-}
-
-impl IntoResponse for ApiFetchError {
-    fn into_response(self) -> axum::response::Response {
-        let error = format!(
-            "Error while fetching data from TMDB. Got status: {}",
-            self.status_code
-        );
-
-        log::error!("{}", error);
-
-        (axum::http::StatusCode::INTERNAL_SERVER_ERROR, error).into_response()
-    }
-}
-impl From<reqwest::Error> for ApiFetchError {
-    /// Converts a [`reqwest::Error`] into a [`ApiFetchError`].
-    ///
-    /// # Arguments
-    ///
-    /// * `value` - The source [`reqwest::Error`] to convert from
-    ///
-    /// # Returns
-    ///
-    /// A new [`ApiFetchError`] instance with all fields mapped from the source.
-    fn from(value: reqwest::Error) -> Self {
-        let status = match value.status() {
-            Some(v) => v.to_string(),
-            None => "N/A".to_owned(),
-        };
-        log::error!("Reqwest error occurred: {:?}, status: {}", value, status);
-
-        Self {
-            status_code: status,
-        }
-    }
-}
 
 fn get_tmdb_client() -> TMDBClient {
     TMDBClient::new(std::env::var("TMDB_API_KEY").expect("TMDB_API_KEY must be set"))

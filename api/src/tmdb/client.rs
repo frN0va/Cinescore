@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use axum::response::IntoResponse;
 use reqwest::{
     header::{ACCEPT, AUTHORIZATION, USER_AGENT},
     Client,
@@ -11,6 +12,35 @@ pub const IMAGE_BASE_URL: &str = "https://image.tmdb.org/t/p/original/";
 
 /// Base URL for the TMDB API.
 pub const API_BASE_URL: &str = "https://api.themoviedb.org/3";
+
+/// Represents various errors that can be encountered while querying the TMDB API
+#[derive(Debug, thiserror::Error)]
+pub enum ApiFetchError {
+    /// An error that was encountered while actively fetching the data. This may be something like
+    /// a network error (404, 500) on the part of TMDB or it may be a malformed response body
+    #[error("Error while fetching data from TMDB. Got status: {0}")]
+    Request(#[from] reqwest::Error),
+    /// An error that occured during the deserialization of the JSON returned from the TMDB API
+    #[error("Deserialization error at {path}: {source}")]
+    Deserialization {
+        path: String,
+        #[source]
+        source: serde_json::Error,
+    },
+}
+
+impl IntoResponse for ApiFetchError {
+    /// Converts an ApiFetchError into an [`axum::response::Response`]
+    fn into_response(self) -> axum::response::Response {
+        log::error!("{}", self);
+
+        (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            "Error while fetching data from the TMDB API",
+        )
+            .into_response()
+    }
+}
 
 /// A struct representing a client for interacting with the TMDB API.
 #[derive(Debug, Clone)]
@@ -61,7 +91,7 @@ impl TMDBClient {
         &self,
         endpoint: &str,
         params: HashMap<&str, String>,
-    ) -> Result<T, reqwest::Error> {
+    ) -> Result<T, ApiFetchError> {
         let url = format!("{}/{}", self.base_url, endpoint);
         log::info!("Making GET request to URL: {}", url);
 
@@ -84,8 +114,20 @@ impl TMDBClient {
             log::warn!("Non-success status code received: {}", response.status());
         }
 
-        let parsed_response = response.json::<T>().await?;
+        let response_as_value = response.json::<serde_json::Value>().await?;
 
-        Ok(parsed_response)
+        let json_string = response_as_value.to_string();
+
+        let mut deserializer = serde_json::Deserializer::from_str(&json_string);
+
+        match serde_path_to_error::deserialize::<&mut serde_json::Deserializer<_>, T>(
+            &mut deserializer,
+        ) {
+            Ok(v) => Ok(v),
+            Err(e) => Err(ApiFetchError::Deserialization {
+                path: e.path().to_string(),
+                source: e.into_inner(),
+            }),
+        }
     }
 }
