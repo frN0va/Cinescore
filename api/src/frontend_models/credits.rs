@@ -26,8 +26,10 @@ pub struct FrontendCast {
     icon_url: Option<String>,
     /// The character played by the cast member.
     character: String,
+    /// The URL to the image of the relavant movie poster if this is a credit
     #[serde(rename = "posterUrl")]
     poster_url: Option<String>,
+    /// The title of the relavant movie if this is a credit
     title: Option<String>,
     /// Unique identifier for the cast member.
     id: u64,
@@ -43,8 +45,10 @@ pub struct FrontendCrew {
     icon_url: Option<String>,
     /// Department in which the crew member worked.
     department: String,
+    /// The URL to the image of the relavant movie poster if this is a credit
     #[serde(rename = "posterUrl")]
     poster_url: Option<String>,
+    /// The title of the relavant movie if this is a credit
     title: Option<String>,
     /// Unique identifier for the crew member.
     id: u64,
