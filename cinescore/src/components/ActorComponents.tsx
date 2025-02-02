@@ -4,7 +4,9 @@ interface Actor {
 	id: number;
 	name: string;
 	image: string;
-	knownFor: string;
+	department: string;
+	popularity: number;
+	imdb?: string;
 }
 
 interface ActorsCardProps {
@@ -14,7 +16,6 @@ interface ActorsCardProps {
 
 export const ActorsCard: React.FC<ActorsCardProps> = ({ actor, onClick }) => {
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 		<div
 			className="group cursor-pointer overflow-hidden rounded-lg bg-neutral-900 transition-transform hover:scale-105"
 			onClick={() => onClick?.(actor.id)}
@@ -28,7 +29,9 @@ export const ActorsCard: React.FC<ActorsCardProps> = ({ actor, onClick }) => {
 				<div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
 				<div className="absolute bottom-0 p-4">
 					<h3 className="text-lg font-semibold text-white">{actor.name}</h3>
-					<p className="text-sm text-neutral-400">{actor.knownFor}</p>
+					<p className="text-sm text-neutral-400">
+						{actor.department} • {actor.popularity.toFixed(1)} popularity
+					</p>
 				</div>
 			</div>
 		</div>
@@ -46,7 +49,6 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
 
 	return (
 		<>
-			{/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
 			<div
 				className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm"
 				onClick={onClose}

@@ -36,7 +36,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 					<img
 						src={movie.poster}
 						alt={movie.title}
-						className="h-[300px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						className="h-[320px] w-full object-cover transition-transform duration-300 group-hover:scale-105"
 					/>
 					{movie.overallScore !== undefined && (
 						<div className="absolute right-3 top-3 flex items-center rounded-full bg-black/70 px-3 py-1 text-yellow-400">

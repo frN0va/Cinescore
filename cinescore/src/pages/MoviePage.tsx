@@ -14,7 +14,7 @@ import {
 	DollarSign,
 	Globe,
 } from "lucide-react";
-import { Credits } from "../types";
+import type { Credits } from "../types";
 
 interface FrontendMovieDetails {
 	backdropUrl: string;
@@ -43,6 +43,7 @@ const MoviePage: React.FC = () => {
 	const [isLiked, setIsLiked] = useState(false);
 	const [inWatchlist, setInWatchlist] = useState(false);
 	const [hoveredRank, setHoveredRank] = useState(0);
+	const [showAllCast, setShowAllCast] = useState(false);
 
 	useEffect(() => {
 		const fetchMovieDetails = async () => {
@@ -99,8 +100,11 @@ const MoviePage: React.FC = () => {
 		<div className="flex min-h-screen flex-col bg-neutral-950 text-white">
 			{/* Hero Section with Backdrop */}
 			<div
-				className="relative h-[60vh] w-full bg-cover bg-center"
-				style={{ backgroundImage: `url(${movie.backdropUrl})` }}
+				className="relative h-[60vh] w-full bg-cover"
+				style={{
+					backgroundImage: `url(${movie.backdropUrl})`,
+					backgroundPosition: "center top 25%",
+				}}
 			>
 				<div className="absolute inset-0 bg-gradient-to-t from-neutral-950 to-transparent" />
 				<div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 to-transparent" />
@@ -134,6 +138,7 @@ const MoviePage: React.FC = () => {
 							<div className="mb-6 flex flex-col space-y-4">
 								<div className="flex space-x-2">
 									<button
+										type="button"
 										onClick={() => setIsLiked(!isLiked)}
 										className={`rounded-full p-3 transition-colors duration-300 ${
 											isLiked
@@ -146,6 +151,7 @@ const MoviePage: React.FC = () => {
 										/>
 									</button>
 									<button
+										type="button"
 										onClick={() => setInWatchlist(!inWatchlist)}
 										className={`rounded-full p-3 transition-colors duration-300 ${
 											inWatchlist
@@ -219,25 +225,39 @@ const MoviePage: React.FC = () => {
 							<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
 								<h2 className="mb-4 text-2xl font-bold">Cast</h2>
 								<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4">
-									{movie.credits.cast.slice(0, 8).map((actor) => (
-										<div
-											key={actor.id}
-											className="group relative overflow-hidden rounded-lg cursor-pointer"
-										>
-											<img
-												src={actor.iconUrl}
-												alt={actor.name}
-												className="w-full transition-transform duration-300 group-hover:scale-105"
-											/>
-											<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-4">
-												<span className="font-medium">{actor.name}</span>
-												<span className="text-sm text-neutral-300">
-													{actor.character}
-												</span>
-											</div>
-										</div>
-									))}
+									{movie.credits.cast
+										.slice(0, showAllCast ? undefined : 8)
+										.map((actor) => (
+											<Link
+												to={`/actors/${actor.id}`}
+												key={actor.id}
+												className="group relative overflow-hidden rounded-lg cursor-pointer"
+											>
+												<img
+													src={actor.iconUrl}
+													alt={actor.name}
+													className="w-full transition-transform duration-300 group-hover:scale-105"
+												/>
+												<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-4">
+													<span className="font-medium text-white">
+														{actor.name}
+													</span>
+													<span className="text-sm text-neutral-300">
+														{actor.character}
+													</span>
+												</div>
+											</Link>
+										))}
 								</div>
+								{movie.credits.cast.length > 8 && (
+									<button
+										type="button"
+										onClick={() => setShowAllCast(!showAllCast)}
+										className="mt-6 w-full rounded-lg bg-neutral-800 px-4 py-2 text-center font-medium text-white transition-colors hover:bg-neutral-700"
+									>
+										{showAllCast ? "Show Less" : "See All Cast"}
+									</button>
+								)}
 							</div>
 						)}
 					</div>
@@ -248,7 +268,7 @@ const MoviePage: React.FC = () => {
 			<footer className="bg-neutral-900 py-6 text-center text-neutral-400">
 				<p>
 					Created and Copyrighted by Owen Perry and Connor Sample. All Rights
-					Reserved © 2025.
+					Reserved &copy; 2025.
 				</p>
 			</footer>
 		</div>

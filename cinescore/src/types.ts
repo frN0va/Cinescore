@@ -7,6 +7,7 @@ export type Movie = {
 	overallScore?: number;
 	isLiked: boolean;
 	inWatchlist: boolean;
+	releaseDate: string;
 };
 
 export type Cast = {

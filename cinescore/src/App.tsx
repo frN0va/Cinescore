@@ -12,7 +12,7 @@ function App() {
 				<Route path="/films" element={<HomePage />} />
 				<Route path="/profile" element={<ProfilePage />} />
 				<Route path="/movie/:id" element={<MoviePage />} />
-				<Route path="/actors" element={<ActorsPage />} />
+				<Route path="/actors/:id" element={<ActorsPage />} />
 			</Routes>
 		</BrowserRouter>
 	);

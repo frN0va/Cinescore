@@ -1,227 +1,251 @@
 import type React from "react";
 import { useState, useEffect } from "react";
-import { User, Search, Film, Clapperboard, Popcorn, X } from "lucide-react";
-import { Link } from "react-router-dom";
-import { ActorsCard, Modal } from "../components/ActorComponents";
+import { useParams, Link } from "react-router-dom";
+import {
+	Film,
+	Heart,
+	Plus,
+	Check,
+	ChevronLeft,
+	Calendar,
+	Globe,
+} from "lucide-react";
+import type { Movie, Credits } from "../types";
 
-interface Actor {
-	id: number;
-	name: string;
-	image: string;
-	birthYear: number;
-	nationality: string;
-	knownFor: string;
+interface FrontendSocials {
+	imdb?: string;
+	facebook?: string;
+	instagram?: string;
+	tiktok?: string;
+	twitter?: string;
 }
 
-interface Movie {
-	id: number;
-	title: string;
-	year: number;
-	poster: string;
-	role: string;
-}
-
-interface ActorDetails extends Actor {
+interface FrontendPersonDetails {
 	biography: string;
-	filmography: Movie[];
+	birthday: string;
+	deathday?: string;
+	gender: number;
+	id: number;
+	knownForDepartment: string;
+	name: string;
+	placeOfBirth: string;
+	iconUrl: string;
+	credits?: Credits;
+	socials?: FrontendSocials;
 }
 
-const ActorsPage: React.FC = () => {
-	const [actors, setActors] = useState<Actor[]>([]);
-	const [selectedActor, setSelectedActor] = useState<ActorDetails | null>(null);
+const ActorPage: React.FC = () => {
+	const { id } = useParams();
+	const [actor, setActor] = useState<FrontendPersonDetails | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [searchQuery, setSearchQuery] = useState("");
-	const [activeNav, setActiveNav] = useState("Actors");
+	const [isLiked, setIsLiked] = useState(false);
+	const [inWatchlist, setInWatchlist] = useState(false);
 
 	useEffect(() => {
-		const fetchActors = async () => {
+		const fetchActorDetails = async () => {
 			try {
-				const response = await fetch("/api/v1/actors/popular");
-				if (!response.ok) throw new Error("Failed to fetch actors");
+				setIsLoading(true);
+				const response = await fetch(`/api/v1/people/${id}`);
+				if (!response.ok) {
+					throw new Error("Failed to fetch actor details");
+				}
 				const data = await response.json();
-				setActors(data.actors);
+				setActor(data);
 			} catch (err) {
-				setError(err instanceof Error ? err.message : "Failed to fetch actors");
+				setError(
+					err instanceof Error ? err.message : "Failed to fetch actor details",
+				);
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
-		fetchActors();
-	}, []);
+		fetchActorDetails();
+	}, [id]);
 
-	const handleActorClick = async (actorId: number) => {
-		try {
-			const response = await fetch(`/api/v1/actors/${actorId}`);
-			if (!response.ok) throw new Error("Failed to fetch actor details");
-			const data = await response.json();
-			setSelectedActor(data);
-		} catch (err) {
-			setError(
-				err instanceof Error ? err.message : "Failed to fetch actor details",
-			);
-		}
+	const getImageUrl = (path?: string) => {
+		if (!path) return "/placeholder-person.jpg";
+		return path;
 	};
 
-	const navItems = [
-		{ name: "Films", icon: <Film className="h-5 w-5" /> },
-		{ name: "Actors", icon: <User className="h-5 w-5" /> },
-		{ name: "Directors", icon: <Clapperboard className="h-5 w-5" /> },
-	];
+	const getFontSizeClass = (name: string) => {
+		if (name.length > 25) return "text-lg";
+		if (name.length > 20) return "text-xl";
+		return "text-2xl";
+	};
 
-	const filteredActors = actors.filter((actor) =>
-		actor.name.toLowerCase().includes(searchQuery.toLowerCase()),
-	);
+	if (isLoading) {
+		return (
+			<div className="flex min-h-screen items-center justify-center bg-neutral-950">
+				<div className="text-lg text-neutral-400">Loading actor details...</div>
+			</div>
+		);
+	}
+
+	if (error || !actor) {
+		return (
+			<div className="flex min-h-screen items-center justify-center bg-neutral-950">
+				<div className="text-lg text-red-400">{error || "Actor not found"}</div>
+			</div>
+		);
+	}
 
 	return (
-		<div className="flex min-h-screen w-full flex-col bg-neutral-950 text-white">
-			{/* Navigation Bar */}
-			<nav className="fixed left-0 right-0 top-0 z-50 bg-neutral-900/90 shadow-lg backdrop-blur-sm">
-				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="flex h-16 items-center">
-						<div className="flex items-center space-x-8">
-							<Link className="flex items-center" to="/">
-								<Popcorn className="mr-2 h-6 w-6 text-purple-400" />
-								<span className="text-lg font-bold tracking-wider text-white">
-									Cinescore
-								</span>
-							</Link>
-							<div className="flex space-x-4">
-								{navItems.map((item) => (
-									<Link
-										key={item.name}
-										className={`flex items-center space-x-2 rounded-md px-3 py-2 transition-colors duration-300 ${
-											activeNav === item.name
-												? "bg-purple-400 text-white"
-												: "text-neutral-300 hover:bg-neutral-800 hover:text-white"
-										}`}
-										onClick={() => setActiveNav(item.name)}
-										to={`/${item.name.toLowerCase()}`}
-									>
-										{item.icon}
-										<span className="text-sm font-medium">{item.name}</span>
-									</Link>
-								))}
-							</div>
-						</div>
-						<div className="ml-auto flex items-center space-x-4">
-							<div className="relative">
-								<div className="flex items-center rounded-full bg-neutral-800/50 pr-4">
-									<div className="flex items-center pl-4 pr-2">
-										<Search className="h-5 w-5 text-neutral-400" />
-									</div>
-									<input
-										className="w-64 bg-transparent py-2 text-white placeholder-neutral-400 focus:outline-none"
-										onChange={(e) => setSearchQuery(e.target.value)}
-										placeholder="Search actors..."
-										type="text"
-										value={searchQuery}
-									/>
+		<div className="flex min-h-screen flex-col bg-neutral-950 text-white">
+			<div className="mx-auto max-w-7xl px-8">
+				<Link
+					to="/actors"
+					className="absolute left-8 top-8 flex items-center space-x-2 rounded-full bg-neutral-900/50 px-4 py-2 backdrop-blur-sm transition hover:bg-neutral-800"
+				>
+					<ChevronLeft className="h-5 w-5" />
+					<span>Back to Actors</span>
+				</Link>
+			</div>
+
+			<div className="relative mx-auto w-full max-w-7xl flex-grow px-8 py-8">
+				<div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
+					<div className="space-y-8 lg:col-span-2">
+						<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
+							{/* Profile Image and Basic Info */}
+							<div className="mb-6 flex items-start gap-4">
+								{" "}
+								{/* Changed spacing strategy */}
+								<img
+									src={getImageUrl(actor.iconUrl)}
+									alt={actor.name}
+									className="w-32 shrink-0 rounded-lg object-cover shadow-lg aspect-[2/3]" /* Adjusted image size */
+								/>
+								<div className="flex-1">
+									{" "}
+									{/* Removed max-width constraint */}
+									<h1 className="text-2xl font-bold break-normal">
+										{actor.name}
+									</h1>
+									<p className="mt-1 text-lg text-neutral-400">
+										{actor.knownForDepartment}
+									</p>
 								</div>
 							</div>
-							<Link
-								className="rounded-full p-2 transition duration-200 hover:bg-neutral-800"
-								to="/profile"
-							>
-								<User className="h-6 w-6 text-purple-400 transition hover:text-purple-300" />
-							</Link>
+
+							{/* Action Buttons */}
+							<div className="mb-6 flex space-x-2">
+								<button
+									type="button"
+									onClick={() => setIsLiked(!isLiked)}
+									className={`rounded-full p-3 transition-colors duration-300 ${
+										isLiked
+											? "bg-red-100 text-red-500"
+											: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+									}`}
+								>
+									<Heart
+										className={`h-6 w-6 ${isLiked ? "fill-current" : ""}`}
+									/>
+								</button>
+								<button
+									type="button"
+									onClick={() => setInWatchlist(!inWatchlist)}
+									className={`rounded-full p-3 transition-colors duration-300 ${
+										inWatchlist
+											? "bg-green-100 text-green-500"
+											: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+									}`}
+								>
+									{inWatchlist ? (
+										<Check className="h-6 w-6" />
+									) : (
+										<Plus className="h-6 w-6" />
+									)}
+								</button>
+							</div>
+
+							{/* Biography */}
+							<div className="mb-6">
+								<h2 className="mb-2 text-xl font-semibold">Biography</h2>
+								<div className="max-h-72 overflow-y-auto">
+									<p className="text-neutral-300">{actor.biography}</p>
+								</div>
+							</div>
+
+							{/* Personal Info */}
+							<div className="space-y-4">
+								<div className="flex items-center space-x-3 text-neutral-300">
+									<Calendar className="h-5 w-5" />
+									<span>Born: {actor.birthday}</span>
+								</div>
+								{actor.deathday && (
+									<div className="flex items-center space-x-3 text-neutral-300">
+										<Calendar className="h-5 w-5" />
+										<span>Died: {actor.deathday}</span>
+									</div>
+								)}
+								<div className="flex items-center space-x-3 text-neutral-300">
+									<Globe className="h-5 w-5" />
+									<span>Place of Birth: {actor.placeOfBirth}</span>
+								</div>
+								{actor.socials?.imdb && (
+									<div className="flex items-center space-x-3 text-neutral-300">
+										<Film className="h-5 w-5" />
+										<a
+											href={`https://www.imdb.com/name/${actor.socials.imdb}`}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="!text-purple-400 hover:!text-purple-300"
+										>
+											View on IMDb
+										</a>
+									</div>
+								)}
+							</div>
 						</div>
+					</div>
+
+					{/* Right Column - Filmography - Now spans 3 columns */}
+					<div className="lg:col-span-3">
+						{actor.credits && (
+							<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
+								<h2 className="mb-4 text-2xl font-bold">Filmography</h2>
+								<div className="max-h-[800px] overflow-y-auto pr-4">
+									<div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+										{actor.credits.cast.map((movie) => (
+											<Link
+												key={movie.id || movie.title}
+												to={`/movie/${movie.id}`}
+												className="group relative overflow-hidden rounded-lg"
+											>
+												<img
+													src={getImageUrl(movie.posterUrl)}
+													alt={movie.title || "Movie Poster"}
+													className="aspect-[2/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+												/>
+												<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-4">
+													<span className="font-medium text-white">
+														{movie.title}
+													</span>
+													<span className="text-sm text-neutral-300">
+														• {movie.character}
+													</span>
+												</div>
+											</Link>
+										))}
+									</div>
+								</div>
+							</div>
+						)}
 					</div>
 				</div>
-			</nav>
-
-			{/* Main Content */}
-			<main className="mx-auto flex-grow max-w-7xl px-6 pb-6 pt-24">
-				<h1 className="mb-8 text-3xl font-bold">Popular Actors</h1>
-
-				{isLoading ? (
-					<div className="flex items-center justify-center pt-20">
-						<div className="text-lg text-neutral-400">Loading actors...</div>
-					</div>
-				) : error ? (
-					<div className="flex items-center justify-center pt-20">
-						<div className="text-lg text-red-400">{error}</div>
-					</div>
-				) : (
-					<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-						{filteredActors.map((actor) => (
-							<ActorsCard
-								key={actor.id}
-								actor={actor}
-								onClick={handleActorClick}
-							/>
-						))}
-					</div>
-				)}
-			</main>
-
-			{/* Actor Details Modal */}
-			<Modal isOpen={!!selectedActor} onClose={() => setSelectedActor(null)}>
-				{selectedActor && (
-					<div className="relative rounded-lg bg-neutral-900 shadow-xl">
-						{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-						<button
-							onClick={() => setSelectedActor(null)}
-							className="absolute right-4 top-4 rounded-full bg-neutral-800 p-2 text-white hover:bg-neutral-700"
-						>
-							<X className="h-5 w-5" />
-						</button>
-						<div className="flex flex-col md:flex-row">
-							<div className="md:w-1/3">
-								<img
-									src={selectedActor.image}
-									alt={selectedActor.name}
-									className="h-full w-full rounded-t-lg object-cover md:rounded-l-lg md:rounded-t-none"
-								/>
-							</div>
-							<div className="flex-1 overflow-y-auto p-6">
-								<h2 className="text-2xl font-bold">{selectedActor.name}</h2>
-								<p className="mt-2 text-neutral-400">
-									Born: {selectedActor.birthYear} • {selectedActor.nationality}
-								</p>
-								<p className="mt-4">{selectedActor.biography}</p>
-
-								<h3 className="mt-6 text-xl font-semibold">Filmography</h3>
-								<div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-									{selectedActor.filmography.map((movie) => (
-										<Link
-											key={movie.id}
-											to={`/films/${movie.id}`}
-											className="group relative overflow-hidden rounded-lg bg-neutral-800"
-										>
-											<img
-												src={movie.poster}
-												alt={movie.title}
-												className="aspect-[2/3] w-full object-cover transition-transform group-hover:scale-105"
-											/>
-											<div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-											<div className="absolute bottom-0 p-3">
-												<h4 className="font-semibold text-white">
-													{movie.title}
-												</h4>
-												<p className="text-sm text-neutral-400">
-													{movie.year} • {movie.role}
-												</p>
-											</div>
-										</Link>
-									))}
-								</div>
-							</div>
-						</div>
-					</div>
-				)}
-			</Modal>
+			</div>
 
 			{/* Footer */}
-			<footer className="mt-auto bg-neutral-900 py-6 text-center text-neutral-400">
+			<footer className="bg-neutral-900 py-6 text-center text-neutral-400">
 				<p>
 					Created and Copyrighted by Owen Perry and Connor Sample. All Rights
-					Reserved &copy; 2025.
+					Reserved © 2025.
 				</p>
 			</footer>
 		</div>
 	);
 };
 
-export default ActorsPage;
+export default ActorPage;
