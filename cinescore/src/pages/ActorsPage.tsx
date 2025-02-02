@@ -11,6 +11,7 @@ import {
 	Facebook,
 	Instagram,
 	Twitter,
+	User,
 } from "lucide-react";
 import type { Movie, Credits } from "../types";
 
@@ -208,6 +209,19 @@ const ActorPage: React.FC = () => {
 								<div className="flex items-center space-x-3 text-neutral-300">
 									<Globe className="h-5 w-5" />
 									<span>Place of Birth: {actor.placeOfBirth}</span>
+								</div>
+								<div className="flex items-center space-x-3 text-neutral-300">
+									<User className="h-5 w-5" />
+									<span>
+										Gender:{" "}
+										{actor.gender === 0
+											? "Not Specified"
+											: actor.gender === 1
+												? "Female"
+												: actor.gender === 2
+													? "Male"
+													: "Non-Binary"}
+									</span>
 								</div>
 								{actor.socials?.imdb && (
 									<div className="flex items-center space-x-3 text-neutral-300">

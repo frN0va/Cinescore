@@ -26,8 +26,8 @@ interface FrontendPersonListing {
 	iconUrl: string;
 }
 
-const ACTORS_PER_PAGE = 20;
-const FEATURED_ACTORS_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Replace with actual actor IDs you want to feature
+const ACTORS_PER_PAGE = 10;
+const FEATURED_ACTORS_IDS = [206, 224513, 3223, 10859, 115440]; // Replace with actual actor IDs you want to feature
 
 const ActorBrowse: React.FC = () => {
 	const [actors, setActors] = useState<{
