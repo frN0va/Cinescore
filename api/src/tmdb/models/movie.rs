@@ -70,7 +70,7 @@ pub struct MovieDetails {
     /// Homepage URL of the movie.
     pub homepage: String,
     /// IMDb identifier for the movie.
-    pub imdb_id: String,
+    pub imdb_id: Option<String>,
     /// List of production companies involved.
     pub production_companies: Vec<ProductionCompany>,
     /// List of countries where the movie was produced.

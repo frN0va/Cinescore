@@ -48,7 +48,7 @@ pub struct FrontendMovieDetails {
     id: u64,
     /// The IMDb identifier of the movie.
     #[serde(rename = "imdbId")]
-    imdb_id: String,
+    imdb_id: Option<String>,
     /// The original language of the movie.
     #[serde(rename = "originalLanguage")]
     original_language: String,

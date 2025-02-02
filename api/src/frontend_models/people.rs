@@ -16,7 +16,7 @@ pub struct FrontendPersonDetails {
     /// A biographical description of the person.
     pub biography: String,
     /// The person's date of birth in ISO 8601 format (YYYY-MM-DD).
-    pub birthday: String,
+    pub birthday: Option<String>,
     /// The person's date of death in ISO 8601 format (YYYY-MM-DD), if applicable.
     pub deathday: Option<String>,
     /// The person's gender represented as a number:
@@ -91,7 +91,7 @@ impl From<PersonDetails> for FrontendPersonDetails {
             id: value.id,
             known_for_department: value.known_for_department,
             name: value.name,
-            place_of_birth: value.place_of_birth,
+            place_of_birth: value.place_of_birth.unwrap_or("N/A".to_owned()),
             icon_url: get_image_url(value.profile_path),
             credits: value.credits.map(FrontendPersonCredits::from),
             socials: value.external_ids.map(FrontendSocials::from),
