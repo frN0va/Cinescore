@@ -1,4 +1,5 @@
-use serde::{Deserialize, Serialize};
+#![allow(dead_code)]
+use serde::Deserialize;
 
 use super::{
     person::SearchPerson,
@@ -6,7 +7,7 @@ use super::{
 };
 
 /// Represents a collection of movies
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct Collection {
     /// The collection ID
     pub id: u64,
@@ -18,7 +19,7 @@ pub struct Collection {
     pub backdrop_path: String,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct BaseMovie {
     /// Indicates whether the movie is for adults.
     pub adult: bool,
@@ -48,7 +49,7 @@ pub struct BaseMovie {
     pub vote_count: u64,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct SearchMovie {
     #[serde(flatten)]
     pub base: BaseMovie,
@@ -56,7 +57,7 @@ pub struct SearchMovie {
     pub genre_ids: Vec<u64>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct MovieDetails {
     #[serde(flatten)]
     pub base: BaseMovie,
@@ -89,7 +90,7 @@ pub struct MovieDetails {
 }
 
 /// Represents credits information for a movie, including cast and crew.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct MovieCredits {
     /// Unique identifier for the movie.
     pub id: Option<u64>,
@@ -100,7 +101,7 @@ pub struct MovieCredits {
 }
 
 /// Represents a cast member in a movie.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct MovieCreditCast {
     #[serde(flatten)]
     pub base: SearchPerson,
@@ -115,7 +116,7 @@ pub struct MovieCreditCast {
 }
 
 /// Represents a crew member in a movie.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct MovieCreditCrew {
     #[serde(flatten)]
     pub base: SearchPerson,

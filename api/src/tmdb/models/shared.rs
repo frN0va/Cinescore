@@ -1,7 +1,8 @@
+#![allow(dead_code)]
 use serde::{Deserialize, Serialize};
 
 /// Represents a genre
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct Genre {
     /// Unique identifier for the genre.
     pub id: u64,
@@ -10,7 +11,7 @@ pub struct Genre {
 }
 
 /// Represents a production company involved in a movie.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct ProductionCompany {
     /// Unique identifier for the company.
     pub id: u64,
@@ -23,7 +24,7 @@ pub struct ProductionCompany {
 }
 
 /// Represents a country involved in movie production.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct ProductionCountry {
     /// ISO 3166-1 country code.
     pub iso_3166_1: String,
@@ -32,7 +33,7 @@ pub struct ProductionCountry {
 }
 
 /// Represents a language spoken in a movie.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Language {
     /// English name of the language.
     pub english_name: String,

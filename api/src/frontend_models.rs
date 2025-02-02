@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::tmdb::{
     client::IMAGE_BASE_URL,
@@ -22,13 +22,13 @@ fn get_image_url(path: Option<String>) -> String {
 }
 
 /// Represents a list of movies formatted for the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendMovieList {
     movies: Vec<MovieListing>,
 }
 
 /// Represents an individual movie entry in the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct MovieListing {
     /// Unique identifier for the movie.
     id: u64,
@@ -78,7 +78,7 @@ impl From<PaginatedSearchResult<SearchMovie>> for FrontendMovieList {
 }
 
 /// Represents movie credits formatted for the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendCredits {
     /// List of cast members.
     cast: Vec<FrontendCast>,
@@ -87,7 +87,7 @@ pub struct FrontendCredits {
 }
 
 /// Represents a cast member for the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendCast {
     /// Name of the cast member.
     name: Option<String>,
@@ -104,7 +104,7 @@ pub struct FrontendCast {
 }
 
 /// Represents a crew member for the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendCrew {
     /// Name of the crew member.
     name: Option<String>,
@@ -194,7 +194,7 @@ impl From<PersonCredits> for FrontendCredits {
 }
 
 /// Represents detailed movie information formatted for the frontend.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendMovieDetails {
     /// URL to the movie's backdrop image.
     #[serde(rename = "backdropUrl")]
@@ -267,7 +267,7 @@ impl From<MovieDetails> for FrontendMovieDetails {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendSocials {
     imdb: Option<String>,
     facebook: Option<String>,
@@ -288,7 +288,7 @@ impl From<Socials> for FrontendSocials {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendPersonDetails {
     biography: String,
     birthday: String,
@@ -324,12 +324,12 @@ impl From<PersonDetails> for FrontendPersonDetails {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendPeopleList {
     people: Vec<FrontendPersonListing>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize)]
 pub struct FrontendPersonListing {
     id: u64,
     name: String,

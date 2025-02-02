@@ -1,8 +1,9 @@
-use serde::{Deserialize, Serialize};
+#![allow(dead_code)]
+use serde::Deserialize;
 
 use super::{movie::BaseMovie, socials::Socials};
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct PersonDetails {
     pub adult: bool,
     pub also_known_as: Vec<String>,
@@ -22,7 +23,7 @@ pub struct PersonDetails {
     pub external_ids: Option<Socials>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct SearchPerson {
     pub adult: bool,
     pub gender: u8,
@@ -37,14 +38,14 @@ pub struct SearchPerson {
     pub known_for: Option<serde_json::Value>,
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct PersonCredits {
     pub cast: Vec<PersonCreditCast>,
     pub crew: Vec<PersonCreditCrew>,
 }
 
 /// Movie credits that a given person has with the cast role
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct PersonCreditCast {
     #[serde(flatten)]
     pub base: BaseMovie,
@@ -55,7 +56,7 @@ pub struct PersonCreditCast {
 }
 
 /// Movie credits that a given person has with the crew role
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct PersonCreditCrew {
     #[serde(flatten)]
     pub base: BaseMovie,

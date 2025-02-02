@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::tmdb::client::TMDBClient;
 
@@ -8,7 +8,7 @@ use crate::tmdb::client::TMDBClient;
 #[allow(dead_code)]
 pub trait DetailsQuery<T>
 where
-    for<'de> T: Serialize + Deserialize<'de>,
+    T: Serialize,
 {
     /// Returns a mutable reference to the query parameters.
     ///

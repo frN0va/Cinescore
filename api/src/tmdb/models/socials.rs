@@ -1,6 +1,7 @@
-use serde::{Deserialize, Serialize};
+#![allow(dead_code)]
+use serde::Deserialize;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct Socials {
     pub freebase_mid: Option<String>,
     pub freebase_id: Option<String>,

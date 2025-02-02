@@ -1,7 +1,8 @@
-use serde::{Deserialize, Serialize};
+#![allow(dead_code)]
+use serde::Deserialize;
 
 /// Represents a paginated list retrieved from a search query.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize)]
 pub struct PaginatedSearchResult<T> {
     /// Current page number of results.
     pub page: u64,
