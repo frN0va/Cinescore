@@ -5,7 +5,7 @@ use crate::{
     generate_request_struct,
     tmdb::{
         client::TMDBClient,
-        models::{PaginatedSearchResult, SearchMovie},
+        models::{movie::SearchMovie, pagination::PaginatedSearchResult},
     },
 };
 

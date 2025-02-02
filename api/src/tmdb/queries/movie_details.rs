@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use crate::{
     frontend_models::FrontendMovieDetails,
     generate_request_struct,
-    tmdb::{client::TMDBClient, models::MovieDetails},
+    tmdb::{client::TMDBClient, models::movie::MovieDetails},
 };
 
 use super::common::DetailsQuery;

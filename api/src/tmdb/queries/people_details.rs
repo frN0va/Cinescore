@@ -5,7 +5,10 @@ use crate::{
     generate_request_struct,
     tmdb::{
         client::TMDBClient,
-        models::{PaginatedSearchResult, PersonDetails, SearchPerson},
+        models::{
+            pagination::PaginatedSearchResult,
+            person::{PersonDetails, SearchPerson},
+        },
     },
 };
 
