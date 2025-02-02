@@ -49,6 +49,8 @@ pub trait MovieListQuery {
     where
         Self: Sized,
     {
+        log::debug!("Inserting language `{}` into query parameters", language);
+
         self.params().insert("language", language);
         self
     }
@@ -66,6 +68,8 @@ pub trait MovieListQuery {
     where
         Self: Sized,
     {
+        log::debug!("Inserting page `{}` into query parameters", page);
+
         self.params().insert("page", page.to_string());
         self
     }
@@ -83,6 +87,8 @@ pub trait MovieListQuery {
     where
         Self: Sized,
     {
+        log::debug!("Inserting region `{}` into query parameters", region);
+
         self.params().insert("region", region);
         self
     }
@@ -117,6 +123,8 @@ impl MovieListQuery for MovieListTrendingRequest {
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
+        log::info!("Fetching daily trending movies from TMDB API");
+
         let response = client
             .get::<PaginatedSearchResult<SearchMovie>>("/trending/movie/day", self.params)
             .await?;
@@ -154,6 +162,8 @@ impl MovieListQuery for MovieListNowPlayingRequest {
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, reqwest::Error> {
+        log::info!("Fetching now playing movies from TMDB API");
+
         let response = client
             .get::<PaginatedSearchResult<SearchMovie>>("movie/now_playing", self.params)
             .await?;

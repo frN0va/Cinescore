@@ -9,6 +9,14 @@ mod frontend_models;
 mod tmdb;
 
 pub fn build_router() -> Router {
+    if std::env::var("RUST_LOG").is_err() {
+        std::env::set_var("RUST_LOG", "info");
+    }
+
+    env_logger::init();
+
+    log::info!("Initializing API routes...");
+
     Router::new()
         .route("/api/v1/discover/trending", get(fetch_trending))
         .route(

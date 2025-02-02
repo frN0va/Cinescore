@@ -64,6 +64,8 @@ pub trait TrendingPeopleQuery {
     where
         Self: Sized,
     {
+        log::debug!("Inserting language `{}` into query parameters", language);
+
         self.params().insert("language", language);
         self
     }
@@ -81,6 +83,8 @@ pub trait TrendingPeopleQuery {
     where
         Self: Sized,
     {
+        log::debug!("Inserting page `{}` into query parameters", page);
+
         self.params().insert("page", page.to_string());
         self
     }
@@ -96,6 +100,8 @@ impl DetailsQuery<FrontendPersonDetails> for PersonDetailsRequest {
         client: &TMDBClient,
         id: u64,
     ) -> Result<FrontendPersonDetails, reqwest::Error> {
+        log::info!("Fetching person details for person ID {}", id);
+
         let response = client
             .get::<PersonDetails>(&format!("person/{}", id), self.params)
             .await?;
@@ -110,8 +116,10 @@ impl TrendingPeopleQuery for TrendingPeopleRequest {
     }
 
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, reqwest::Error> {
+        log::info!("Fetching daily trending people from TMDB API");
+
         let response = client
-            .get::<PaginatedSearchResult<SearchPerson>>("/trending/movie/day", self.params)
+            .get::<PaginatedSearchResult<SearchPerson>>("/trending/person/day", self.params)
             .await?;
 
         Ok(FrontendPeopleList::from(response))

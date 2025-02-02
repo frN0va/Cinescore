@@ -31,6 +31,7 @@ impl TMDBClient {
     ///
     /// A new `TMDBClient` instance with the provided API key and default base URL.
     pub fn new(api_key: String) -> Self {
+        log::debug!("Creating TMDBClient with provided API key");
         Self {
             client: Client::new(),
             api_key,
@@ -62,6 +63,7 @@ impl TMDBClient {
         params: HashMap<&str, String>,
     ) -> Result<T, reqwest::Error> {
         let url = format!("{}/{}", self.base_url, endpoint);
+        log::info!("Making GET request to URL: {}", url);
 
         let response = self
             .client
@@ -74,10 +76,16 @@ impl TMDBClient {
                 format!("Cinescore {}", env!("CARGO_PKG_VERSION")),
             )
             .send()
-            .await?
-            .json::<T>()
             .await?;
 
-        Ok(response)
+        if response.status().is_success() {
+            log::debug!("Successful response from TMDB API");
+        } else {
+            log::warn!("Non-success status code received: {}", response.status());
+        }
+
+        let parsed_response = response.json::<T>().await?;
+
+        Ok(parsed_response)
     }
 }

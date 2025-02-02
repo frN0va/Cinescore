@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let listener = tokio::net::TcpListener::bind(address).await.unwrap();
 
-    println!("Bound to http://{}", address);
+    log::info!("Bound to http://{}", address);
 
     axum::serve(listener, router).await.unwrap();
 

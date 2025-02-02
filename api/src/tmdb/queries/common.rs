@@ -48,6 +48,8 @@ where
     where
         Self: Sized,
     {
+        log::debug!("Inserting language `{}` into query parameters", language);
+
         self.params().insert("language", language);
         self
     }
@@ -65,6 +67,11 @@ where
     where
         Self: Sized,
     {
+        log::debug!(
+            "Inserting append_to_response `{}` into query parameters",
+            append
+        );
+
         self.params()
             .insert("append_to_response", append.to_owned());
         self

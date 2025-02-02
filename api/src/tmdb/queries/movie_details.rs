@@ -42,6 +42,8 @@ impl DetailsQuery<FrontendMovieDetails> for MovieDetailsRequest {
         client: &TMDBClient,
         id: u64,
     ) -> Result<FrontendMovieDetails, reqwest::Error> {
+        log::info!("Fetching movie details for movie ID {}", id);
+
         let response = client
             .get::<MovieDetails>(&format!("movie/{}", id), self.params)
             .await?;
