@@ -7,122 +7,169 @@ use crate::tmdb::models::{
 
 use super::common::get_image_url;
 
-/// Represents movie credits formatted for the frontend.
+/// Container for movie credits
 #[derive(Debug, Serialize)]
-pub struct FrontendCredits {
-    /// List of cast members.
-    cast: Vec<FrontendCast>,
-    /// List of crew members.
-    crew: Vec<FrontendCrew>,
+pub struct FrontendMovieCredits {
+    cast: Vec<FrontendMovieCastMember>,
+    crew: Vec<FrontendMovieCrewMember>,
 }
 
-/// Represents a cast member for the frontend.
+/// Container for person credits (filmography)
 #[derive(Debug, Serialize)]
-pub struct FrontendCast {
-    /// Name of the cast member.
-    name: Option<String>,
-    /// URL to the cast member's profile picture.
+pub struct FrontendPersonCredits {
+    cast: Vec<FrontendPersonCastCredit>,
+    crew: Vec<FrontendPersonCrewCredit>,
+}
+
+/// Common fields shared between all crew member types
+#[derive(Debug, Serialize)]
+pub struct CrewBase {
+    /// Unique identifier for the crew member
+    pub id: u64,
+    /// Department in which the crew member worked
+    pub department: String,
+}
+
+/// Common fields shared between all cast member types
+#[derive(Debug, Serialize)]
+pub struct CastBase {
+    /// Unique identifier for the cast member
+    pub id: u64,
+    /// Character played by the cast member
+    pub character: String,
+}
+
+/// Represents a crew member in the context of a movie's credits
+#[derive(Debug, Serialize)]
+pub struct FrontendMovieCrewMember {
+    #[serde(flatten)]
+    pub base: CrewBase,
+    /// Name of the crew member
+    pub name: String,
+    /// URL to the crew member's profile picture
     #[serde(rename = "iconUrl")]
-    icon_url: Option<String>,
-    /// The character played by the cast member.
-    character: String,
-    /// The URL to the image of the relavant movie poster if this is a credit
-    #[serde(rename = "posterUrl")]
-    poster_url: Option<String>,
-    /// The title of the relavant movie if this is a credit
-    title: Option<String>,
-    /// Unique identifier for the cast member.
-    id: u64,
+    pub icon_url: String,
 }
 
-/// Represents a crew member for the frontend.
+/// Represents a cast member in the context of a movie's credits
 #[derive(Debug, Serialize)]
-pub struct FrontendCrew {
-    /// Name of the crew member.
-    name: Option<String>,
-    /// URL to the crew member's profile picture.
+pub struct FrontendMovieCastMember {
+    #[serde(flatten)]
+    pub base: CastBase,
+    /// Name of the cast member
+    pub name: String,
+    /// URL to the cast member's profile picture
     #[serde(rename = "iconUrl")]
-    icon_url: Option<String>,
-    /// Department in which the crew member worked.
-    department: String,
-    /// The URL to the image of the relavant movie poster if this is a credit
-    #[serde(rename = "posterUrl")]
-    poster_url: Option<String>,
-    /// The title of the relavant movie if this is a credit
-    title: Option<String>,
-    /// Unique identifier for the crew member.
-    id: u64,
+    pub icon_url: String,
 }
 
-/// Converts a [`Crew`] struct into a [`FrontendCrew`] for frontend representation.
-impl From<MovieCreditCrew> for FrontendCrew {
+/// Represents a movie credit in a person's filmography (as crew)
+#[derive(Debug, Serialize)]
+pub struct FrontendPersonCrewCredit {
+    #[serde(flatten)]
+    pub base: CrewBase,
+    /// Title of the movie
+    pub title: String,
+    /// URL to the movie's poster
+    #[serde(rename = "posterUrl")]
+    pub poster_url: String,
+}
+
+/// Represents a movie credit in a person's filmography (as cast)
+#[derive(Debug, Serialize)]
+pub struct FrontendPersonCastCredit {
+    #[serde(flatten)]
+    pub base: CastBase,
+    /// Title of the movie
+    pub title: String,
+    /// URL to the movie's poster
+    #[serde(rename = "posterUrl")]
+    pub poster_url: String,
+}
+
+impl From<MovieCreditCrew> for FrontendMovieCrewMember {
     fn from(value: MovieCreditCrew) -> Self {
         Self {
-            name: Some(value.base.name),
-            icon_url: Some(get_image_url(value.base.profile_path)),
-            department: value.base.known_for_department,
-            id: value.base.id,
-            poster_url: None,
-            title: None,
+            base: CrewBase {
+                id: value.base.id,
+                department: value.base.known_for_department,
+            },
+            name: value.base.name,
+            icon_url: get_image_url(value.base.profile_path),
         }
     }
 }
 
-/// Converts a [`Cast`] struct into a [`FrontendCast`] for frontend representation.
-impl From<MovieCreditCast> for FrontendCast {
+impl From<MovieCreditCast> for FrontendMovieCastMember {
     fn from(value: MovieCreditCast) -> Self {
         Self {
-            name: Some(value.base.name),
-            icon_url: Some(get_image_url(value.base.profile_path)),
-            character: value.character,
-            id: value.base.id,
-            poster_url: None,
-            title: None,
+            base: CastBase {
+                id: value.base.id,
+                character: value.character,
+            },
+            name: value.base.name,
+            icon_url: get_image_url(value.base.profile_path),
         }
     }
 }
 
-impl From<PersonCreditCrew> for FrontendCrew {
+impl From<PersonCreditCrew> for FrontendPersonCrewCredit {
     fn from(value: PersonCreditCrew) -> Self {
         Self {
-            name: None,
-            icon_url: None,
-            department: value.department,
-            poster_url: Some(get_image_url(value.base.poster_path)),
-            title: Some(value.base.title),
-            id: value.base.id,
+            base: CrewBase {
+                id: value.base.id,
+                department: value.department,
+            },
+            title: value.base.title,
+            poster_url: get_image_url(value.base.poster_path),
         }
     }
 }
 
-impl From<PersonCreditCast> for FrontendCast {
+impl From<PersonCreditCast> for FrontendPersonCastCredit {
     fn from(value: PersonCreditCast) -> Self {
         Self {
-            name: None,
-            icon_url: None,
-            poster_url: Some(get_image_url(value.base.poster_path)),
-            title: Some(value.base.title),
-            id: value.base.id,
-            character: value.character,
+            base: CastBase {
+                id: value.base.id,
+                character: value.character,
+            },
+            title: value.base.title,
+            poster_url: get_image_url(value.base.poster_path),
         }
     }
 }
 
 /// Converts [`MovieCredits`] into [`FrontendCredits`] for frontend representation.
-impl From<MovieCredits> for FrontendCredits {
+impl From<MovieCredits> for FrontendMovieCredits {
     fn from(value: MovieCredits) -> Self {
         Self {
-            cast: value.cast.into_iter().map(FrontendCast::from).collect(),
-            crew: value.crew.into_iter().map(FrontendCrew::from).collect(),
+            cast: value
+                .cast
+                .into_iter()
+                .map(FrontendMovieCastMember::from)
+                .collect(),
+            crew: value
+                .crew
+                .into_iter()
+                .map(FrontendMovieCrewMember::from)
+                .collect(),
         }
     }
 }
 
-impl From<PersonCredits> for FrontendCredits {
+impl From<PersonCredits> for FrontendPersonCredits {
     fn from(value: PersonCredits) -> Self {
         Self {
-            cast: value.cast.into_iter().map(FrontendCast::from).collect(),
-            crew: value.crew.into_iter().map(FrontendCrew::from).collect(),
+            cast: value
+                .cast
+                .into_iter()
+                .map(FrontendPersonCastCredit::from)
+                .collect(),
+            crew: value
+                .crew
+                .into_iter()
+                .map(FrontendPersonCrewCredit::from)
+                .collect(),
         }
     }
 }

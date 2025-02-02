@@ -5,7 +5,7 @@ use crate::tmdb::models::{
     person::{PersonDetails, SearchPerson},
 };
 
-use super::{common::get_image_url, credits::FrontendCredits, socials::FrontendSocials};
+use super::{common::get_image_url, credits::FrontendPersonCredits, socials::FrontendSocials};
 
 #[derive(Debug, Serialize)]
 pub struct FrontendPersonDetails {
@@ -21,7 +21,7 @@ pub struct FrontendPersonDetails {
     place_of_birth: String,
     #[serde(rename = "iconUrl")]
     icon_url: String,
-    credits: Option<FrontendCredits>,
+    credits: Option<FrontendPersonCredits>,
     socials: Option<FrontendSocials>,
 }
 
@@ -52,7 +52,7 @@ impl From<PersonDetails> for FrontendPersonDetails {
             name: value.name,
             place_of_birth: value.place_of_birth,
             icon_url: get_image_url(value.profile_path),
-            credits: value.credits.map(FrontendCredits::from),
+            credits: value.credits.map(FrontendPersonCredits::from),
             socials: value.external_ids.map(FrontendSocials::from),
         }
     }

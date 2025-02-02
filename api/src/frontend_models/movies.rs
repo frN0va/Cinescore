@@ -6,7 +6,7 @@ use crate::tmdb::models::{
     shared::Language,
 };
 
-use super::{common::get_image_url, credits::FrontendCredits};
+use super::{common::get_image_url, credits::FrontendMovieCredits};
 
 /// Represents a list of movies formatted for the frontend.
 #[derive(Debug, Serialize)]
@@ -72,7 +72,7 @@ pub struct FrontendMovieDetails {
     /// The tagline of the movie.
     tagline: String,
     /// Optional movie credits (cast and crew).
-    credits: Option<FrontendCredits>,
+    credits: Option<FrontendMovieCredits>,
     /// The overall score or rating of the movie.
     #[serde(rename = "overallScore")]
     overall_score: f32,
@@ -129,7 +129,7 @@ impl From<MovieDetails> for FrontendMovieDetails {
             runtime: value.runtime,
             spoken_languages: value.spoken_languages,
             tagline: value.tagline,
-            credits: value.credits.map(FrontendCredits::from),
+            credits: value.credits.map(FrontendMovieCredits::from),
             // TODO: these 3
             overall_score: 0.0,
             is_liked: false,
