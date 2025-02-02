@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 use serde::{Deserialize, Serialize};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// Represents a genre
 #[derive(Debug, Deserialize)]
@@ -41,4 +42,18 @@ pub struct Language {
     pub iso_639_1: String,
     /// Name of the language.
     pub name: String,
+}
+
+/// The person's gender represented as a number:
+/// - 0: Not specified
+/// - 1: Female
+/// - 2: Male
+/// - 3: Non-binary
+#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[repr(u8)]
+pub enum Gender {
+    NotSpecified = 0,
+    Male = 1,
+    Female = 2,
+    NonBinary = 3,
 }

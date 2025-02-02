@@ -33,6 +33,15 @@ impl IntoResponse for ApiFetchError {
     }
 }
 impl From<reqwest::Error> for ApiFetchError {
+    /// Converts a [`reqwest::Error`] into a [`ApiFetchError`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`reqwest::Error`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`ApiFetchError`] instance with all fields mapped from the source.
     fn from(value: reqwest::Error) -> Self {
         let status = match value.status() {
             Some(v) => v.to_string(),

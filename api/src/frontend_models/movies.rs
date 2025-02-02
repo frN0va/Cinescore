@@ -1,9 +1,9 @@
 use serde::Serialize;
 
 use crate::tmdb::models::{
+    common::Language,
     movie::{MovieDetails, SearchMovie},
     pagination::PaginatedSearchResult,
-    shared::Language,
 };
 
 use super::{common::get_image_url, credits::FrontendMovieCredits};
@@ -86,6 +86,15 @@ pub struct FrontendMovieDetails {
 
 /// Converts a [`SearchMovie`] into a [`MovieListing`] for frontend representation.
 impl From<SearchMovie> for MovieListing {
+    /// Converts a [`SearchMovie`] into a [`MovieListing`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`SearchMovie`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`MovieListing`] instance with all fields mapped from the source.
     fn from(value: SearchMovie) -> Self {
         Self {
             id: value.base.id,
@@ -105,6 +114,15 @@ impl From<SearchMovie> for MovieListing {
 
 /// Converts a [`PaginatedSearchResult<SearchMovie>`] into a [`FrontendMovieList`].
 impl From<PaginatedSearchResult<SearchMovie>> for FrontendMovieList {
+    /// Converts a [`PaginatedSearchResult<SearchMovie>`] into a [`FrontendMovieList`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`PaginatedSearchResult<SearchMovie>`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendMovieList`] instance with all fields mapped from the source.
     fn from(value: PaginatedSearchResult<SearchMovie>) -> Self {
         Self {
             movies: value.results.into_iter().map(MovieListing::from).collect(),
@@ -114,6 +132,15 @@ impl From<PaginatedSearchResult<SearchMovie>> for FrontendMovieList {
 
 /// Converts a [`MovieDetails`] struct into a [`FrontendMovieDetails`] for frontend representation.
 impl From<MovieDetails> for FrontendMovieDetails {
+    /// Converts a [`MovieDetails`] into a [`FrontendMovieDetails`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`MovieDetails`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendMovieDetails`] instance with all fields mapped from the source.
     fn from(value: MovieDetails) -> Self {
         Self {
             backdrop_url: get_image_url(value.base.backdrop_path),

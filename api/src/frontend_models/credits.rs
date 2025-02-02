@@ -88,6 +88,15 @@ pub struct FrontendPersonCastCredit {
 }
 
 impl From<MovieCreditCrew> for FrontendMovieCrewMember {
+    /// Converts a [`MovieCreditCrew`] into a [`FrontendMovieCrewMember`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`MovieCreditCrew`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendMovieCrewMember`] instance with all fields mapped from the source.
     fn from(value: MovieCreditCrew) -> Self {
         Self {
             base: CrewBase {
@@ -101,6 +110,15 @@ impl From<MovieCreditCrew> for FrontendMovieCrewMember {
 }
 
 impl From<MovieCreditCast> for FrontendMovieCastMember {
+    /// Converts a [`MovieCreditCast`] into a [`FrontendMovieCastMember`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`MovieCreditCast`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendMovieCastMember`] instance with all fields mapped from the source.
     fn from(value: MovieCreditCast) -> Self {
         Self {
             base: CastBase {
@@ -114,6 +132,15 @@ impl From<MovieCreditCast> for FrontendMovieCastMember {
 }
 
 impl From<PersonCreditCrew> for FrontendPersonCrewCredit {
+    /// Converts a [`PersonCreditCrew`] into a [`FrontendPersonCrewCredit`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`PersonCreditCrew`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendPersonCrewCredit`] instance with all fields mapped from the source.
     fn from(value: PersonCreditCrew) -> Self {
         Self {
             base: CrewBase {
@@ -127,6 +154,15 @@ impl From<PersonCreditCrew> for FrontendPersonCrewCredit {
 }
 
 impl From<PersonCreditCast> for FrontendPersonCastCredit {
+    /// Converts a [`PersonCreditCast`] into a [`FrontendPersonCastCredit`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`PersonCreditCast`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendPersonCastCredit`] instance with all fields mapped from the source.
     fn from(value: PersonCreditCast) -> Self {
         Self {
             base: CastBase {
@@ -141,6 +177,15 @@ impl From<PersonCreditCast> for FrontendPersonCastCredit {
 
 /// Converts [`MovieCredits`] into [`FrontendCredits`] for frontend representation.
 impl From<MovieCredits> for FrontendMovieCredits {
+    /// Converts a [`MovieCredits`] into a [`FrontendMovieCredits`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`MovieCredits`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendMovieCredits`] instance with all fields mapped from the source.
     fn from(value: MovieCredits) -> Self {
         Self {
             cast: value
@@ -158,6 +203,15 @@ impl From<MovieCredits> for FrontendMovieCredits {
 }
 
 impl From<PersonCredits> for FrontendPersonCredits {
+    /// Converts a [`PersonCredits`] into a [`FrontendPersonCredits`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`PersonCredits`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendPersonCredits`] instance with all fields mapped from the source.
     fn from(value: PersonCredits) -> Self {
         Self {
             cast: value

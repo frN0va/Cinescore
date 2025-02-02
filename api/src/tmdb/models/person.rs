@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use serde::Deserialize;
 
-use super::{movie::BaseMovie, socials::Socials};
+use super::{common::Gender, movie::BaseMovie, socials::Socials};
 
 #[derive(Debug, Deserialize)]
 pub struct PersonDetails {
@@ -10,7 +10,7 @@ pub struct PersonDetails {
     pub biography: String,
     pub birthday: String,
     pub deathday: Option<String>,
-    pub gender: u8,
+    pub gender: Gender,
     pub homepage: Option<String>,
     pub id: u64,
     pub imdb_id: String,
@@ -26,7 +26,7 @@ pub struct PersonDetails {
 #[derive(Debug, Deserialize)]
 pub struct SearchPerson {
     pub adult: bool,
-    pub gender: u8,
+    pub gender: Gender,
     pub id: u64,
     pub known_for_department: String,
     pub name: String,

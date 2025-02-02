@@ -2,6 +2,7 @@ use serde::Serialize;
 
 use crate::tmdb::models::socials::Socials;
 
+/// This struct contains information on a specific person's social media IDs
 #[derive(Debug, Serialize)]
 pub struct FrontendSocials {
     imdb: Option<String>,
@@ -12,6 +13,15 @@ pub struct FrontendSocials {
 }
 
 impl From<Socials> for FrontendSocials {
+    /// Converts a [`Socials`] into a [`FrontendSocials`].
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The source [`Socials`] to convert from
+    ///
+    /// # Returns
+    ///
+    /// A new [`FrontendSocials`] instance with all fields mapped from the source.
     fn from(value: Socials) -> Self {
         Self {
             imdb: value.imdb_id,

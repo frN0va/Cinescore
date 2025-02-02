@@ -2,8 +2,8 @@
 use serde::Deserialize;
 
 use super::{
+    common::{Genre, Language, ProductionCompany, ProductionCountry},
     person::SearchPerson,
-    shared::{Genre, Language, ProductionCompany, ProductionCountry},
 };
 
 /// Represents a collection of movies
