@@ -1,9 +1,8 @@
 use serde::Serialize;
 
 use crate::tmdb::models::{
-    common::Language,
+    common::{Language, PaginatedSearchResult},
     movie::{MovieDetails, SearchMovie},
-    pagination::PaginatedSearchResult,
 };
 
 use super::{common::get_image_url, credits::FrontendMovieCredits};

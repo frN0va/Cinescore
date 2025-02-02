@@ -5,7 +5,7 @@ use crate::{
     generate_request_struct,
     tmdb::{
         client::{ApiFetchError, TMDBClient},
-        models::{movie::SearchMovie, pagination::PaginatedSearchResult},
+        models::{common::PaginatedSearchResult, movie::SearchMovie},
     },
 };
 

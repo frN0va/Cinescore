@@ -7,9 +7,6 @@ pub mod common;
 /// Data structures and request models for fetching movie-related data from TMDB.
 pub mod movie;
 
-/// Utilities and models for handling paginated API responses from TMDB.
-pub mod pagination;
-
 /// Data structures and request models for fetching person-related data from TMDB.
 pub mod person;
 

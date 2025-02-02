@@ -6,7 +6,7 @@ use crate::{
     tmdb::{
         client::{ApiFetchError, TMDBClient},
         models::{
-            pagination::PaginatedSearchResult,
+            common::PaginatedSearchResult,
             person::{PersonDetails, SearchPerson},
         },
     },

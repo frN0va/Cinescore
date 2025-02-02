@@ -1,8 +1,7 @@
 use serde::Serialize;
 
 use crate::tmdb::models::{
-    common::Gender,
-    pagination::PaginatedSearchResult,
+    common::{Gender, PaginatedSearchResult},
     person::{PersonDetails, SearchPerson},
 };
 
