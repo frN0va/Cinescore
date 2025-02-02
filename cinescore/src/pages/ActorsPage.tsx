@@ -127,7 +127,7 @@ const ActorPage: React.FC = () => {
 									<div className="mt-4 flex space-x-3">
 										{actor.socials?.facebook && (
 											<a
-												href={actor.socials.facebook}
+												href={`https://facebook.com/${actor.socials.facebook.replace("@", "")}`}
 												target="_blank"
 												rel="noopener noreferrer"
 												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
@@ -135,9 +135,10 @@ const ActorPage: React.FC = () => {
 												<Facebook className="h-5 w-5" />
 											</a>
 										)}
+
 										{actor.socials?.instagram && (
 											<a
-												href={actor.socials.instagram}
+												href={`https://instagram.com/${actor.socials.instagram.replace("@", "")}`}
 												target="_blank"
 												rel="noopener noreferrer"
 												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
@@ -147,7 +148,7 @@ const ActorPage: React.FC = () => {
 										)}
 										{actor.socials?.twitter && (
 											<a
-												href={actor.socials.twitter}
+												href={`https://twitter.com/${actor.socials.twitter.replace("@", "")}`}
 												target="_blank"
 												rel="noopener noreferrer"
 												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
