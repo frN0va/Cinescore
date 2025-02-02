@@ -15,6 +15,7 @@ import {
 	Globe,
 } from "lucide-react";
 import type { Credits } from "../types";
+import { format } from "date-fns";
 
 interface FrontendMovieDetails {
 	backdropUrl: string;
@@ -189,7 +190,7 @@ const MoviePage: React.FC = () => {
 						<div className="space-y-4 rounded-lg bg-neutral-900 p-6 shadow-xl">
 							<div className="flex items-center space-x-3 text-neutral-300">
 								<Calendar className="h-5 w-5" />
-								<span>Released: {movie.releaseDate}</span>
+								<span>Released: {movie.releaseDate ? format(new Date(movie.releaseDate), "MMM d, yyyy") : "Unknown"}</span>
 							</div>
 							<div className="flex items-center space-x-3 text-neutral-300">
 								<Clock className="h-5 w-5" />

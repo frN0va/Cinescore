@@ -1,14 +1,16 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { addDays, format } from "date-fns";
 import {
 	Film,
 	Heart,
-	Plus,
-	Check,
 	ChevronLeft,
 	Calendar,
 	Globe,
+	Facebook,
+	Instagram,
+	Twitter,
 } from "lucide-react";
 import type { Movie, Credits } from "../types";
 
@@ -40,7 +42,6 @@ const ActorPage: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [isLiked, setIsLiked] = useState(false);
-	const [inWatchlist, setInWatchlist] = useState(false);
 
 	useEffect(() => {
 		const fetchActorDetails = async () => {
@@ -109,26 +110,56 @@ const ActorPage: React.FC = () => {
 						<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
 							{/* Profile Image and Basic Info */}
 							<div className="mb-6 flex items-start gap-4">
-								{" "}
-								{/* Changed spacing strategy */}
 								<img
 									src={getImageUrl(actor.iconUrl)}
 									alt={actor.name}
-									className="w-32 shrink-0 rounded-lg object-cover shadow-lg aspect-[2/3]" /* Adjusted image size */
+									className="w-32 shrink-0 rounded-lg object-cover shadow-lg aspect-[2/3]"
 								/>
 								<div className="flex-1">
-									{" "}
-									{/* Removed max-width constraint */}
 									<h1 className="text-2xl font-bold break-normal">
 										{actor.name}
 									</h1>
 									<p className="mt-1 text-lg text-neutral-400">
 										{actor.knownForDepartment}
 									</p>
+
+									{/* Social Media Links */}
+									<div className="mt-4 flex space-x-3">
+										{actor.socials?.facebook && (
+											<a
+												href={actor.socials.facebook}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
+											>
+												<Facebook className="h-5 w-5" />
+											</a>
+										)}
+										{actor.socials?.instagram && (
+											<a
+												href={actor.socials.instagram}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
+											>
+												<Instagram className="h-5 w-5" />
+											</a>
+										)}
+										{actor.socials?.twitter && (
+											<a
+												href={actor.socials.twitter}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="rounded-full bg-neutral-800 p-2 text-neutral-300 hover:bg-neutral-700 transition-colors"
+											>
+												<Twitter className="h-5 w-5" />
+											</a>
+										)}
+									</div>
 								</div>
 							</div>
 
-							{/* Action Buttons */}
+							{/* Like Button */}
 							<div className="mb-6 flex space-x-2">
 								<button
 									type="button"
@@ -142,21 +173,6 @@ const ActorPage: React.FC = () => {
 									<Heart
 										className={`h-6 w-6 ${isLiked ? "fill-current" : ""}`}
 									/>
-								</button>
-								<button
-									type="button"
-									onClick={() => setInWatchlist(!inWatchlist)}
-									className={`rounded-full p-3 transition-colors duration-300 ${
-										inWatchlist
-											? "bg-green-100 text-green-500"
-											: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-									}`}
-								>
-									{inWatchlist ? (
-										<Check className="h-6 w-6" />
-									) : (
-										<Plus className="h-6 w-6" />
-									)}
 								</button>
 							</div>
 
@@ -172,7 +188,15 @@ const ActorPage: React.FC = () => {
 							<div className="space-y-4">
 								<div className="flex items-center space-x-3 text-neutral-300">
 									<Calendar className="h-5 w-5" />
-									<span>Born: {actor.birthday}</span>
+									<span>
+										Born:{" "}
+										{actor.birthday
+											? format(
+													addDays(new Date(actor.birthday), 1),
+													"MMM d, yyyy",
+												)
+											: "Unknown"}
+									</span>
 								</div>
 								{actor.deathday && (
 									<div className="flex items-center space-x-3 text-neutral-300">
@@ -201,7 +225,7 @@ const ActorPage: React.FC = () => {
 						</div>
 					</div>
 
-					{/* Right Column - Filmography - Now spans 3 columns */}
+					{/* Right Column - Filmography */}
 					<div className="lg:col-span-3">
 						{actor.credits && (
 							<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
