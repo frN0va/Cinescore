@@ -2,7 +2,8 @@ use axum::{extract::Path, response::IntoResponse, Json};
 
 use crate::{
     frontend_models::{
-        FrontendMovieDetails, FrontendMovieList, FrontendPeopleList, FrontendPersonDetails,
+        movies::{FrontendMovieDetails, FrontendMovieList},
+        people::{FrontendPeopleList, FrontendPersonDetails},
     },
     tmdb::{
         client::TMDBClient,

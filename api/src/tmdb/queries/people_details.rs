@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    frontend_models::{FrontendPeopleList, FrontendPersonDetails},
+    frontend_models::people::{FrontendPeopleList, FrontendPersonDetails},
     generate_request_struct,
     tmdb::{
         client::TMDBClient,
