@@ -17,7 +17,13 @@ use crate::{
 };
 
 fn get_tmdb_client() -> TMDBClient {
-    TMDBClient::new(std::env::var("TMDB_API_KEY").expect("TMDB_API_KEY must be set"))
+    TMDBClient::new(match std::env::var("TMDB_API_KEY") {
+        Ok(v) => v,
+        Err(_) => {
+            log::error!("`TMDB_API_KEY` environment variable must be set.");
+            std::process::exit(1);
+        }
+    })
 }
 
 pub async fn fetch_trending() -> Result<Json<FrontendMovieList>, ApiFetchError> {

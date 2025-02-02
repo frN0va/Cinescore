@@ -32,7 +32,7 @@ macro_rules! generate_request_struct {
             }
         }
 
-        impl crate::tmdb::queries::traits::HasParams for $request_name {
+        impl $crate::tmdb::queries::traits::HasParams for $request_name {
             fn params(&mut self) -> &mut HashMap<&'static str, String> {
                 &mut self.params
             }

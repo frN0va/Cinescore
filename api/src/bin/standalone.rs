@@ -23,11 +23,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "0.0.0.0:8000"
     };
 
-    let listener = tokio::net::TcpListener::bind(address).await.unwrap();
+    let listener = match tokio::net::TcpListener::bind(address).await {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("Error while binding to address {}: {}", address, e);
+            std::process::exit(1);
+        }
+    };
 
     log::info!("Bound to http://{}", address);
 
-    axum::serve(listener, router).await.unwrap();
+    match axum::serve(listener, router).await {
+        Ok(_) => (),
+        Err(e) => log::error!("Error serving axum app: {}", e),
+    };
 
     Ok(())
 }
