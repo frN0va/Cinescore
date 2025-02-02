@@ -175,7 +175,7 @@ impl From<PersonCreditCast> for FrontendPersonCastCredit {
     }
 }
 
-/// Converts [`MovieCredits`] into [`FrontendCredits`] for frontend representation.
+/// Converts [`MovieCredits`] into [`FrontendMovieCredits`] for frontend representation.
 impl From<MovieCredits> for FrontendMovieCredits {
     /// Converts a [`MovieCredits`] into a [`FrontendMovieCredits`].
     ///
