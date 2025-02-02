@@ -116,7 +116,7 @@ impl From<SearchPerson> for FrontendPersonListing {
             id: value.id,
             name: value.name,
             gender: value.gender,
-            department: value.known_for_department,
+            department: value.known_for_department.unwrap_or("N/A".to_owned()),
             icon_url: get_image_url(value.profile_path),
         }
     }

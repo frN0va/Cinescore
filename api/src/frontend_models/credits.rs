@@ -101,7 +101,7 @@ impl From<MovieCreditCrew> for FrontendMovieCrewMember {
         Self {
             base: CrewBase {
                 id: value.base.id,
-                department: value.base.known_for_department,
+                department: value.base.known_for_department.unwrap_or("N/A".to_owned()),
             },
             name: value.base.name,
             icon_url: get_image_url(value.base.profile_path),

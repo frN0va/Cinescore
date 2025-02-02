@@ -28,7 +28,7 @@ pub struct SearchPerson {
     pub adult: bool,
     pub gender: Gender,
     pub id: u64,
-    pub known_for_department: String,
+    pub known_for_department: Option<String>,
     pub name: String,
     pub original_name: String,
     pub media_type: Option<String>,
