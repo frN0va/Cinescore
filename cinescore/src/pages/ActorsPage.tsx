@@ -103,7 +103,7 @@ const ActorPage: React.FC = () => {
 				</Link>
 			</div>
 
-			<div className="relative mx-auto w-full max-w-7xl flex-grow px-8 py-8">
+			<div className="relative mx-auto w-full max-w-8xl flex-grow px-8 py-8">
 				<div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
 					<div className="space-y-8 lg:col-span-2">
 						<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
