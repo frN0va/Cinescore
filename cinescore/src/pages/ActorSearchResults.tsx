@@ -161,10 +161,17 @@ const ActorSearchResults: React.FC = () => {
 						) : (
 							<div className="space-y-6">
 								{results.map((actor) => (
-									<div
+									<button
+										type="button"
 										key={actor.id}
 										onClick={() => handleActorClick(actor.id)}
-										className="group flex cursor-pointer gap-6 rounded-lg bg-neutral-800/50 p-4 transition-colors hover:bg-neutral-800"
+										onKeyDown={(e) => {
+											if (e.key === "Enter") {
+												handleActorClick(actor.id);
+											}
+										}}
+										tabIndex={0}
+										className="group flex cursor-pointer gap-6 rounded-lg bg-neutral-800/50 p-4 transition-colors hover:bg-neutral-800 w-full text-left"
 									>
 										<div className="relative h-48 w-32 flex-shrink-0">
 											{actor.iconUrl ? (
@@ -192,7 +199,7 @@ const ActorSearchResults: React.FC = () => {
 												)}
 											</p>
 										</div>
-									</div>
+									</button>
 								))}
 							</div>
 						)}
