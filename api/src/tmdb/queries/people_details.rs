@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::{
     frontend_models::people::{FrontendPeopleList, FrontendPersonDetails},
     generate_request_struct,

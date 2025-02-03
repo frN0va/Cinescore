@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use crate::{
     frontend_models::movies::FrontendMovieDetails,
     generate_request_struct,

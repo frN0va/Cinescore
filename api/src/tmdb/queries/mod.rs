@@ -13,6 +13,9 @@ pub mod movie_lists;
 /// Request models for fetching detailed information about people from TMDB.
 pub mod people_details;
 
+/// Request models for searching movies/people on TMDB.
+pub mod search;
+
 /// Macro for generating API request structures with predefined parameters.
 #[macro_export]
 macro_rules! generate_request_struct {
@@ -33,7 +36,7 @@ macro_rules! generate_request_struct {
         }
 
         impl $crate::tmdb::queries::traits::HasParams for $request_name {
-            fn params(&mut self) -> &mut HashMap<&'static str, String> {
+            fn params(&mut self) -> &mut std::collections::HashMap<&'static str, String> {
                 &mut self.params
             }
         }

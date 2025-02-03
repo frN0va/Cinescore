@@ -40,11 +40,11 @@ where
     ///
     /// # Returns
     ///
-    /// A `Result` containing a generic details struct on success or a `reqwest::Error` on failure.
+    /// A `Result` containing a generic details struct on success or a [`ApiFetchError`] on failure.
     ///
     /// # Errors
     ///
-    /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
+    /// This function will return a [`ApiFetchError`] if the request fails or if the response cannot be parsed.
     async fn fetch(self, client: &TMDBClient) -> Result<T, ApiFetchError>;
 }
 
@@ -68,11 +68,11 @@ where
     ///
     /// # Returns
     ///
-    /// A `Result` containing a generic details struct on success or a `reqwest::Error` on failure.
+    /// A `Result` containing a generic details struct on success or a [`ApiFetchError`] on failure.
     ///
     /// # Errors
     ///
-    /// This function will return a `reqwest::Error` if the request fails or if the response cannot be parsed.
+    /// This function will return a [`ApiFetchError`] if the request fails or if the response cannot be parsed.
     async fn fetch(self, client: &TMDBClient, id: u64) -> Result<T, ApiFetchError>;
 }
 
@@ -172,6 +172,110 @@ pub trait PageQueryParam: HasParams {
         log::debug!("Inserting page `{}` into query parameters", page);
 
         self.params().insert("page", page.to_string());
+        self
+    }
+}
+
+/// A trait for adding an `include_adult` query parameter to an API request.
+///
+/// This is used for filtering adult content.
+pub trait IncludeAdultQueryParam: HasParams {
+    /// Sets the `include_adult` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `include_adult` - A `bool` representing whether or not to include adult content.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn include_adult(mut self, include_adult: bool) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!(
+            "Inserting include_adult `{}` into query parameters",
+            include_adult
+        );
+
+        self.params()
+            .insert("include_adult", include_adult.to_string());
+        self
+    }
+}
+
+/// A trait for adding a `primary_release_year` query parameter to an API request.
+///
+/// This is used for filtering results to a specific primary release year
+pub trait PrimaryReleaseYearQueryParam: HasParams {
+    /// Sets the `primary_release_year` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `year` - A `String` representing the primary release year to filter content by.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn primary_release_year(mut self, year: String) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!(
+            "Inserting primary_release_year `{}` into query parameters",
+            year
+        );
+
+        self.params()
+            .insert("primary_release_year", year.to_string());
+        self
+    }
+}
+
+/// A trait for adding a `year` query parameter to an API request.
+///
+/// This is used for filtering results to a specific release year.
+pub trait YearQueryParam: HasParams {
+    /// Sets the `year` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `year` - A `String` representing the release year to filter content by.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn year(mut self, year: String) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!("Inserting year `{}` into query parameters", year);
+
+        self.params().insert("year", year.to_string());
+        self
+    }
+}
+
+/// A trait for adding a `query` query parameter to an API request.
+///
+/// This is used for filtering results by a query, such as in searching.
+pub trait QueryQueryParam: HasParams {
+    /// Sets the `query` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `query` - A `String` representing the query to search.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn query(mut self, query: String) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!("Inserting query `{}` into query parameters", query);
+
+        self.params().insert("query", query.to_string());
         self
     }
 }

@@ -1,4 +1,5 @@
 use axum::{extract::Path, Json};
+use serde::Deserialize;
 
 use crate::{
     frontend_models::{
@@ -11,7 +12,8 @@ use crate::{
             movie_details::MovieDetailsRequest,
             movie_lists::{MovieListNowPlayingRequest, MovieListTrendingRequest},
             people_details::{PersonDetailsRequest, TrendingPeopleRequest},
-            traits::{AppendToResponseQueryParam, IdQuery, Query},
+            search::{SearchMoviesRequest, SearchPeopleRequest},
+            traits::{AppendToResponseQueryParam, IdQuery, Query, QueryQueryParam},
         },
     },
 };
@@ -68,6 +70,37 @@ pub async fn fetch_person_details(
         PersonDetailsRequest::new()
             .append_to_response("credits,external_ids")
             .fetch(&client, person_id)
+            .await?,
+    ))
+}
+
+#[derive(Deserialize)]
+pub struct SearchParams {
+    query: String,
+}
+
+pub async fn search_movies(
+    params: axum::extract::Query<SearchParams>,
+) -> Result<Json<FrontendMovieList>, ApiFetchError> {
+    let client = get_tmdb_client();
+
+    Ok(Json(
+        SearchMoviesRequest::new()
+            .query(params.query.clone())
+            .fetch(&client)
+            .await?,
+    ))
+}
+
+pub async fn search_people(
+    params: axum::extract::Query<SearchParams>,
+) -> Result<Json<FrontendPeopleList>, ApiFetchError> {
+    let client = get_tmdb_client();
+
+    Ok(Json(
+        SearchPeopleRequest::new()
+            .query(params.query.clone())
+            .fetch(&client)
             .await?,
     ))
 }

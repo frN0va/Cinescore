@@ -20,6 +20,11 @@ pub enum ApiFetchError {
     /// a network error (404, 500) on the part of TMDB or it may be a malformed response body
     #[error("Error while fetching data from TMDB. Got status: {0}")]
     Request(#[from] reqwest::Error),
+    #[error("Missing query parameter `{param}` in request `{request_name}`")]
+    MissingQueryParam {
+        param: &'static str,
+        request_name: &'static str,
+    },
     /// An error that occured during the deserialization of the JSON returned from the TMDB API
     #[error("Deserialization error at {path}: {source}")]
     Deserialization {
