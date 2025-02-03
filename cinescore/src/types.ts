@@ -11,6 +11,7 @@ export type Movie = {
 };
 
 export type Cast = {
+	id: number;
 	name?: string;
 	iconUrl?: string;
 	character: string;

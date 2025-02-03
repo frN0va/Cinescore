@@ -39,13 +39,19 @@ const HomePage: React.FC = () => {
 	const [isSearching, setIsSearching] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() =>
-		Object.keys({
+	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() => {
+		return Object.keys({
 			"Trending Now": [],
 			"Now Playing": [],
 			...staticMovieCategories,
-		}).reduce((acc, category) => ({ ...acc, [category]: 0 }), {}),
-	);
+		}).reduce(
+			(acc, category) => {
+				acc[category] = 0;
+				return acc;
+			},
+			{} as Record<string, number>,
+		);
+	});
 
 	useEffect(() => {
 		const fetchMovies = async () => {
@@ -116,33 +122,33 @@ const HomePage: React.FC = () => {
 
 	const handleRankMovie = (movieId: number, rank: number) => {
 		const updatedMovies = { ...movies };
-		Object.keys(updatedMovies).forEach((category) => {
+		for (const category of Object.keys(updatedMovies)) {
 			updatedMovies[category] = updatedMovies[category].map((movie) =>
 				movie.id === movieId ? { ...movie, rank } : movie,
 			);
-		});
+		}
 		setMovies(updatedMovies);
 	};
 
 	const handleLikeMovie = (movieId: number) => {
 		const updatedMovies = { ...movies };
-		Object.keys(updatedMovies).forEach((category) => {
+		for (const category of Object.keys(updatedMovies)) {
 			updatedMovies[category] = updatedMovies[category].map((movie) =>
 				movie.id === movieId ? { ...movie, isLiked: !movie.isLiked } : movie,
 			);
-		});
+		}
 		setMovies(updatedMovies);
 	};
 
 	const handleAddToWatchlist = (movieId: number) => {
 		const updatedMovies = { ...movies };
-		Object.keys(updatedMovies).forEach((category) => {
+		for (const category of Object.keys(updatedMovies)) {
 			updatedMovies[category] = updatedMovies[category].map((movie) =>
 				movie.id === movieId
 					? { ...movie, inWatchlist: !movie.inWatchlist }
 					: movie,
 			);
-		});
+		}
 		setMovies(updatedMovies);
 	};
 

@@ -74,7 +74,7 @@ const ActorSearchResults: React.FC = () => {
 		navigate(`/actors/${actorId}`);
 	};
 
-	const truncateBiography = (bio: string, maxLength: number = 500) => {
+	const truncateBiography = (bio: string, maxLength = 500) => {
 		if (bio.length <= maxLength) return bio;
 		return `${bio.substring(0, maxLength)}...`;
 	};
