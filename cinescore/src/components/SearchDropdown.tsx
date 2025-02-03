@@ -1,7 +1,9 @@
 import type React from "react";
 import { Film } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { Movie } from "../types";
+import { useEffect, useRef } from "react";
+import type { Credits, Movie } from "../types";
+import { format } from "date-fns";
 
 interface SearchDropdownProps {
 	results: Movie[];
@@ -10,16 +12,57 @@ interface SearchDropdownProps {
 	onClose: () => void;
 }
 
+interface FrontendMovieDetails {
+	backdropUrl: string;
+	budget: number;
+	id: number;
+	imdbId: string;
+	originalLanguage: string;
+	overview: string;
+	posterUrl: string;
+	title: string;
+	releaseDate: string;
+	revenue: number;
+	runtime: number;
+	spokenLanguages: Array<{ name: string }>;
+	tagline: string;
+	rank?: number;
+	overallScore?: number;
+	credits?: Credits;
+}
+
 export const SearchDropdown: React.FC<SearchDropdownProps> = ({
 	results,
 	isLoading,
 	searchQuery,
 	onClose,
 }) => {
+	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target as Node)
+			) {
+				onClose();
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [onClose]);
+
 	if (searchQuery.length === 0) return null;
 
 	return (
-		<div className="absolute left-0 right-0 top-full mt-2 max-h-96 overflow-y-auto rounded-lg bg-neutral-800 shadow-xl">
+		<div
+			ref={dropdownRef}
+			className="absolute left-0 right-0 top-full mt-2 max-h-96 overflow-y-auto rounded-lg bg-neutral-800 shadow-xl"
+		>
 			{isLoading ? (
 				<div className="p-4 text-center text-neutral-400">Searching...</div>
 			) : results.length === 0 ? (
@@ -50,7 +93,9 @@ export const SearchDropdown: React.FC<SearchDropdownProps> = ({
 										{movie.title}
 									</h4>
 									<span className="text-xs text-neutral-400">
-										{new Date(movie.releaseDate).getFullYear()}
+										{movie.releaseDate
+											? format(new Date(movie.releaseDate), "yyyy")
+											: "Unknown"}
 									</span>
 								</div>
 							</Link>
