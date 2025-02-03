@@ -4,6 +4,7 @@ import ProfilePage from "./pages/ProfilePage";
 import MoviePage from "./pages/MoviePage";
 import ActorsPage from "./pages/ActorsPage";
 import ActorBrowse from "./pages/ActorBrowse"
+import SearchResults from "./pages/SearchResults"
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<Route path="/movie/:id" element={<MoviePage />} />
 				<Route path="/actors/:id" element={<ActorsPage />} />
 				<Route path="/actors" element={<ActorBrowse />} />
+				<Route path="/search" element={<SearchResults />} />
 			</Routes>
 		</BrowserRouter>
 	);

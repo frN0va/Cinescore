@@ -5,6 +5,16 @@ import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";
 import CategoryCarosel, {
 	MOVIES_PER_PAGE,
 } from "../components/CategoryCarousel";
+import { SearchDropdown } from "../components/SearchDropdown";
+import type { Movie } from "../types";
+
+interface MovieCategories {
+	[key: string]: MovieListing[];
+}
+
+const staticMovieCategories = {
+	"Top Rated": [],
+};
 
 interface MovieListing {
 	id: number;
@@ -17,14 +27,6 @@ interface MovieListing {
 	inWatchlist: boolean;
 }
 
-interface MovieCategories {
-	[key: string]: MovieListing[];
-}
-
-const staticMovieCategories = {
-	"Top Rated": [],
-};
-
 const HomePage: React.FC = () => {
 	const [movies, setMovies] = useState<MovieCategories>({
 		"Trending Now": [],
@@ -33,6 +35,8 @@ const HomePage: React.FC = () => {
 	});
 	const [activeNav, setActiveNav] = useState("Films");
 	const [searchQuery, setSearchQuery] = useState("");
+	const [searchResults, setSearchResults] = useState<Movie[]>([]);
+	const [isSearching, setIsSearching] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>(() =>
@@ -40,11 +44,7 @@ const HomePage: React.FC = () => {
 			"Trending Now": [],
 			"Now Playing": [],
 			...staticMovieCategories,
-		}).reduce(
-			// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-			(acc, category) => ({ ...acc, [category]: 0 }),
-			{},
-		),
+		}).reduce((acc, category) => ({ ...acc, [category]: 0 }), {}),
 	);
 
 	useEffect(() => {
@@ -85,6 +85,34 @@ const HomePage: React.FC = () => {
 
 		fetchMovies();
 	}, []);
+
+	// Search functionality
+	useEffect(() => {
+		const searchMovies = async () => {
+			if (searchQuery.length < 2) {
+				setSearchResults([]);
+				return;
+			}
+
+			setIsSearching(true);
+			try {
+				const response = await fetch(
+					`/api/v1/search/movies?query=${encodeURIComponent(searchQuery)}`,
+				);
+				if (!response.ok) throw new Error("Search failed");
+				const data = await response.json();
+				setSearchResults(data.movies);
+			} catch (error) {
+				console.error("Search error:", error);
+				setSearchResults([]);
+			} finally {
+				setIsSearching(false);
+			}
+		};
+
+		const debounceTimeout = setTimeout(searchMovies, 300);
+		return () => clearTimeout(debounceTimeout);
+	}, [searchQuery]);
 
 	const handleRankMovie = (movieId: number, rank: number) => {
 		const updatedMovies = { ...movies };
@@ -166,7 +194,7 @@ const HomePage: React.FC = () => {
 												: "text-neutral-300 hover:bg-neutral-800 hover:text-white"
 										}`}
 										onClick={() => setActiveNav(item.name)}
-										to={`/${item.name.toLowerCase()}`}
+										to={item.to}
 									>
 										{item.icon}
 										<span className="text-sm font-medium">{item.name}</span>
@@ -188,6 +216,12 @@ const HomePage: React.FC = () => {
 										value={searchQuery}
 									/>
 								</div>
+								<SearchDropdown
+									results={searchResults}
+									isLoading={isSearching}
+									searchQuery={searchQuery}
+									onClose={() => setSearchQuery("")}
+								/>
 							</div>
 							<Link
 								className="rounded-full p-2 transition duration-200 hover:bg-neutral-800"

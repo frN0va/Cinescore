@@ -27,7 +27,7 @@ interface FrontendPersonListing {
 }
 
 const ACTORS_PER_PAGE = 10;
-const FEATURED_ACTORS_IDS = [206, 224513, 3223, 10859, 115440]; // Replace with actual actor IDs you want to feature
+const FEATURED_ACTORS_IDS = [206, 224513, 3223, 30614, 115440]; // Replace with actual actor IDs you want to feature
 
 const ActorBrowse: React.FC = () => {
 	const [actors, setActors] = useState<{
@@ -153,7 +153,7 @@ const ActorBrowse: React.FC = () => {
 								/>
 							</div>
 							<div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-								<h3 className="text-sm font-semibold text-white group-hover:text-purple-400">
+								<h3 className="text-sm font-bold text-white group-hover:text-purple-700">
 									{actor.name}
 								</h3>
 								<p className="text-xs text-neutral-400">{actor.department}</p>

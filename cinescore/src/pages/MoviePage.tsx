@@ -13,6 +13,8 @@ import {
 	Users,
 	DollarSign,
 	Globe,
+	Trophy,
+	ChevronDown,
 } from "lucide-react";
 import type { Credits } from "../types";
 import { format } from "date-fns";
@@ -45,6 +47,8 @@ const MoviePage: React.FC = () => {
 	const [inWatchlist, setInWatchlist] = useState(false);
 	const [hoveredRank, setHoveredRank] = useState(0);
 	const [showAllCast, setShowAllCast] = useState(false);
+	const [showTop5Dropdown, setShowTop5Dropdown] = useState(false);
+	const [selectedTop5Rank, setSelectedTop5Rank] = useState<number | null>(null);
 
 	useEffect(() => {
 		const fetchMovieDetails = async () => {
@@ -67,14 +71,29 @@ const MoviePage: React.FC = () => {
 		};
 
 		fetchMovieDetails();
+
+		// Close dropdown when clicking outside
+		const handleClickOutside = (event: MouseEvent) => {
+			const target = event.target as HTMLElement;
+			if (!target.closest(".top5-dropdown")) {
+				setShowTop5Dropdown(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, [id]);
 
 	const handleRank = async (rank: number) => {
 		if (!movie) return;
 		setHoveredRank(rank);
-		// Here you would typically make an API call to update the rank
-		// For now, we'll just update the local state
 		setMovie({ ...movie, rank });
+	};
+
+	const handleTop5Select = (rank: number) => {
+		setSelectedTop5Rank(rank);
+		setShowTop5Dropdown(false);
+		// Here you would typically make an API call to update the user's top 5 list
 	};
 
 	if (isLoading) {
@@ -166,6 +185,39 @@ const MoviePage: React.FC = () => {
 											<Plus className="h-6 w-6" />
 										)}
 									</button>
+									<div className="relative top5-dropdown">
+										<button
+											type="button"
+											onClick={() => setShowTop5Dropdown(!showTop5Dropdown)}
+											className={`flex items-center space-x-1 rounded-full p-3 transition-colors duration-300 ${
+												selectedTop5Rank
+													? "bg-yellow-100 text-yellow-600"
+													: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+											}`}
+										>
+											<Trophy className="h-6 w-6" />
+											<ChevronDown className="h-4 w-4" />
+										</button>
+
+										{showTop5Dropdown && (
+											<div className="absolute right-0 mt-2 w-48 rounded-lg bg-neutral-800 py-2 shadow-xl">
+												<div className="px-4 py-2 text-sm text-neutral-400">
+													Add to Top 5
+												</div>
+												{[1, 2, 3, 4, 5].map((rank) => (
+													<button type="button"
+														key={rank}
+														onClick={() => handleTop5Select(rank)}
+														className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${
+															selectedTop5Rank === rank ? "bg-neutral-700" : ""
+														}`}
+													>
+														#{rank} in Top 5
+													</button>
+												))}
+											</div>
+										)}
+									</div>
 								</div>
 								<div className="flex justify-start space-x-2">
 									{[1, 2, 3, 4, 5].map((rank) => (
@@ -190,7 +242,12 @@ const MoviePage: React.FC = () => {
 						<div className="space-y-4 rounded-lg bg-neutral-900 p-6 shadow-xl">
 							<div className="flex items-center space-x-3 text-neutral-300">
 								<Calendar className="h-5 w-5" />
-								<span>Released: {movie.releaseDate ? format(new Date(movie.releaseDate), "MMM d, yyyy") : "Unknown"}</span>
+								<span>
+									Released:{" "}
+									{movie.releaseDate
+										? format(new Date(movie.releaseDate), "MMM d, yyyy")
+										: "Unknown"}
+								</span>
 							</div>
 							<div className="flex items-center space-x-3 text-neutral-300">
 								<Clock className="h-5 w-5" />
