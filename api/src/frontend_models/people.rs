@@ -34,7 +34,7 @@ pub struct FrontendPersonDetails {
     /// URL to the person's profile image.
     #[serde(rename = "iconUrl")]
     pub icon_url: String,
-    /// The person's movie and TV credits, both as cast and crew member.
+    /// The person's movie credits, both as cast and crew member.
     /// May be None if credit information is not requested or available.
     pub credits: Option<FrontendPersonCredits>,
     /// The person's social media profiles and external identifiers.

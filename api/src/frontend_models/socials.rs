@@ -3,12 +3,18 @@ use serde::Serialize;
 use crate::tmdb::models::socials::Socials;
 
 /// This struct contains information on a specific person's social media IDs
+#[allow(clippy::doc_markdown)]
 #[derive(Debug, Serialize)]
 pub struct FrontendSocials {
+    /// The person's IMDb ID, if available.
     imdb: Option<String>,
+    /// The person's Facebook username or ID, if available.
     facebook: Option<String>,
+    /// The person's Instagram username, if available.
     instagram: Option<String>,
+    /// The person's TikTok username, if available.
     tiktok: Option<String>,
+    /// The person's Twitter username, if available.
     twitter: Option<String>,
 }
 

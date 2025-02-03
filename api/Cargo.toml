@@ -23,7 +23,7 @@ tokio = { version = "1.28.2", features = ["full"] }
 
 [lints.clippy]
 unwrap_used = "forbid"
-expect_used = "forbid"
+expect_used = "deny"
 panic = "forbid"
 doc_markdown = "warn"
 missing_docs_in_private_items = "warn"

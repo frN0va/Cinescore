@@ -10,6 +10,7 @@ use super::{common::get_image_url, credits::FrontendMovieCredits};
 /// Represents a list of movies formatted for the frontend.
 #[derive(Debug, Serialize)]
 pub struct FrontendMovieList {
+    /// A list of movies
     movies: Vec<MovieListing>,
 }
 
@@ -46,6 +47,7 @@ pub struct FrontendMovieDetails {
     /// Unique identifier for the movie.
     id: u64,
     /// The IMDb identifier of the movie.
+    #[allow(clippy::doc_markdown)]
     #[serde(rename = "imdbId")]
     imdb_id: Option<String>,
     /// The original language of the movie.

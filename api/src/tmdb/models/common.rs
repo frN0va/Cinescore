@@ -45,16 +45,16 @@ pub struct Language {
 }
 
 /// The person's gender represented as a number:
-/// - 0: Not specified
-/// - 1: Female
-/// - 2: Male
-/// - 3: Non-binary
 #[derive(Debug, Serialize_repr, Deserialize_repr)]
 #[repr(u8)]
 pub enum Gender {
+    /// 0: Not specified
     NotSpecified = 0,
+    /// 1: Male
     Male = 1,
+    /// 2: Female
     Female = 2,
+    /// 3: Non-binary
     NonBinary = 3,
 }
 

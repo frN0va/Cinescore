@@ -1,3 +1,4 @@
+//! Cinescore is an open source movie rating platform. This crate contains the API
 use axum::{routing::get, Router};
 use discover::{
     fetch_movie_details, fetch_now_playing, fetch_person_details, fetch_trending,

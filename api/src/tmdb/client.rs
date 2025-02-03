@@ -20,28 +20,34 @@ pub enum ApiFetchError {
     /// a network error (404, 500) on the part of TMDB or it may be a malformed response body
     #[error("Error while fetching data from TMDB. Got status: {0}")]
     Request(#[from] reqwest::Error),
+    /// An error that was triggered due to an endpoint expecting a query parameter to be present
+    /// when it was excluded from the request
     #[error("Missing query parameter `{param}` in request `{request_name}`")]
     MissingQueryParam {
+        /// The query param which is missing
         param: &'static str,
+        /// The name of the request that was expecting the param
         request_name: &'static str,
     },
     /// An error that occured during the deserialization of the JSON returned from the TMDB API
     #[error("Deserialization error at {path}: {source}")]
     Deserialization {
+        /// The path in the JSON where the error occured
         path: String,
+        /// The source error
         #[source]
         source: serde_json::Error,
     },
 }
 
 impl IntoResponse for ApiFetchError {
-    /// Converts an ApiFetchError into an [`axum::response::Response`]
+    /// Converts an [`ApiFetchError`] into an [`axum::response::Response`]
     fn into_response(self) -> axum::response::Response {
         log::error!("{}", self);
 
         (
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-            "Error while fetching data from the TMDB API",
+            "Error encountered while fetching data from the TMDB API",
         )
             .into_response()
     }
@@ -50,8 +56,11 @@ impl IntoResponse for ApiFetchError {
 /// A struct representing a client for interacting with the TMDB API.
 #[derive(Debug, Clone)]
 pub struct TMDBClient {
+    /// The [`reqwest::Client`] to use for sending requests
     client: Client,
+    /// Your TMDB API key
     api_key: String,
+    /// The API's base URL
     base_url: String,
 }
 

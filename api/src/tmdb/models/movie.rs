@@ -51,6 +51,7 @@ pub struct BaseMovie {
 
 #[derive(Debug, Deserialize)]
 pub struct SearchMovie {
+    /// Basic movie details.
     #[serde(flatten)]
     pub base: BaseMovie,
     /// List of genre IDs associated with the movie.
@@ -59,6 +60,7 @@ pub struct SearchMovie {
 
 #[derive(Debug, Deserialize)]
 pub struct MovieDetails {
+    /// Basic movie details.
     #[serde(flatten)]
     pub base: BaseMovie,
     /// Collection the movie belongs to, if any.
@@ -70,6 +72,7 @@ pub struct MovieDetails {
     /// Homepage URL of the movie.
     pub homepage: String,
     /// IMDb identifier for the movie.
+    #[allow(clippy::doc_markdown)]
     pub imdb_id: Option<String>,
     /// List of production companies involved.
     pub production_companies: Vec<ProductionCompany>,
@@ -103,6 +106,7 @@ pub struct MovieCredits {
 /// Represents a cast member in a movie.
 #[derive(Debug, Deserialize)]
 pub struct MovieCreditCast {
+    /// Basic person details.
     #[serde(flatten)]
     pub base: SearchPerson,
     /// Unique cast ID.
@@ -118,6 +122,7 @@ pub struct MovieCreditCast {
 /// Represents a crew member in a movie.
 #[derive(Debug, Deserialize)]
 pub struct MovieCreditCrew {
+    /// Basic person details.
     #[serde(flatten)]
     pub base: SearchPerson,
     /// Unique credit ID.

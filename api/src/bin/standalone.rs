@@ -1,3 +1,4 @@
+//! The standalone cinescore API binary
 use api::build_router;
 
 #[tokio::main]

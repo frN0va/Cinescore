@@ -1,5 +1,7 @@
 use crate::tmdb::client::IMAGE_BASE_URL;
 
+/// A default placeholder image for images that are missing from API responses, such as profile
+/// pictures or movie posters
 const DEFAULT_PLACEHOLDER_IMAGE: &str =
     "https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png";
 

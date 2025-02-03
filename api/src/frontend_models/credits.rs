@@ -10,14 +10,18 @@ use super::common::get_image_url;
 /// Container for movie credits
 #[derive(Debug, Serialize)]
 pub struct FrontendMovieCredits {
+    /// A list of cast members in a movie's credits
     cast: Vec<FrontendMovieCastMember>,
+    /// A list of crew members in a movie's credits
     crew: Vec<FrontendMovieCrewMember>,
 }
 
 /// Container for person credits (filmography)
 #[derive(Debug, Serialize)]
 pub struct FrontendPersonCredits {
+    /// A list of cast credits a person has.
     cast: Vec<FrontendPersonCastCredit>,
+    /// A list of crew credits a person has.
     crew: Vec<FrontendPersonCrewCredit>,
 }
 
@@ -42,6 +46,7 @@ pub struct CastBase {
 /// Represents a crew member in the context of a movie's credits
 #[derive(Debug, Serialize)]
 pub struct FrontendMovieCrewMember {
+    /// Basic crew member details.
     #[serde(flatten)]
     pub base: CrewBase,
     /// Name of the crew member
@@ -54,6 +59,7 @@ pub struct FrontendMovieCrewMember {
 /// Represents a cast member in the context of a movie's credits
 #[derive(Debug, Serialize)]
 pub struct FrontendMovieCastMember {
+    /// Basic cast member details.
     #[serde(flatten)]
     pub base: CastBase,
     /// Name of the cast member
@@ -66,6 +72,7 @@ pub struct FrontendMovieCastMember {
 /// Represents a movie credit in a person's filmography (as crew)
 #[derive(Debug, Serialize)]
 pub struct FrontendPersonCrewCredit {
+    /// Basic crew member details.
     #[serde(flatten)]
     pub base: CrewBase,
     /// Title of the movie
@@ -78,6 +85,7 @@ pub struct FrontendPersonCrewCredit {
 /// Represents a movie credit in a person's filmography (as cast)
 #[derive(Debug, Serialize)]
 pub struct FrontendPersonCastCredit {
+    /// Basic cast member details.
     #[serde(flatten)]
     pub base: CastBase,
     /// Title of the movie
