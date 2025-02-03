@@ -4,6 +4,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     restart: always
+    tty: true
     container_name: cinescore-api
   frontend:
     build:

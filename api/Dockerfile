@@ -23,5 +23,5 @@ ENV RUST_LOG="info"
 ENV ENVIRONMENT="production"
 
 EXPOSE 8000
-ENTRYPOINT ["/bin/sh", "-c", "./cinescore-api"]
+ENTRYPOINT ["/bin/sh", "-c", "./cinescore-api --bind 0.0.0.0 --port 8000"]
 
