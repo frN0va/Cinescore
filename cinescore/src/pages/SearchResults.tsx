@@ -151,7 +151,9 @@ const SearchResults: React.FC = () => {
 											)}
 											<div className="absolute right-2 top-2 flex items-center rounded-full bg-black/70 px-2 py-1">
 												<Star className="mr-1 h-4 w-4 text-yellow-400" />
-												<span className="font-bold">{movie.overallScore.toFixed(1)}</span>
+												<span className="font-bold">
+													{movie.overallScore.toFixed(1)}
+												</span>
 											</div>
 										</div>
 										<div className="flex flex-grow flex-col">
@@ -175,19 +177,34 @@ const SearchResults: React.FC = () => {
 								SHOW RESULTS FOR
 							</h2>
 							<div className="space-y-2">
-								<button type="button" className="w-full rounded-md bg-purple-400 px-4 py-2 text-left text-sm font-medium text-white">
+								<button
+									type="button"
+									className="w-full rounded-md bg-purple-400 px-4 py-2 text-left text-sm font-medium text-white"
+								>
 									All
 								</button>
-								<button type="button" className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white">
+								<button
+									type="button"
+									className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white"
+								>
 									Films
 								</button>
-								<button type="button" className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white">
+								<button
+									type="button"
+									className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white"
+								>
 									Reviews
 								</button>
-								<button type="button" className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white">
+								<button
+									type="button"
+									className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white"
+								>
 									Lists
 								</button>
-								<button type="button" className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white">
+								<button
+									type="button"
+									className="w-full rounded-md px-4 py-2 text-left text-sm font-medium text-neutral-400 transition-colors hover:bg-neutral-700 hover:text-white"
+								>
 									Members
 								</button>
 							</div>

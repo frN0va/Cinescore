@@ -203,7 +203,12 @@ const ActorPage: React.FC = () => {
 								{actor.deathday && (
 									<div className="flex items-center space-x-3 text-neutral-300">
 										<Calendar className="h-5 w-5" />
-										<span>Died: {actor.deathday ? format(new Date(actor.deathday), "MMM d, yyyy") : "Unknown"}</span>
+										<span>
+											Died:{" "}
+											{actor.deathday
+												? format(new Date(actor.deathday), "MMM d, yyyy")
+												: "Unknown"}
+										</span>
 									</div>
 								)}
 								<div className="flex items-center space-x-3 text-neutral-300">

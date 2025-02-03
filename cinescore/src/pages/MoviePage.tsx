@@ -205,7 +205,8 @@ const MoviePage: React.FC = () => {
 													Add to Top 5
 												</div>
 												{[1, 2, 3, 4, 5].map((rank) => (
-													<button type="button"
+													<button
+														type="button"
 														key={rank}
 														onClick={() => handleTop5Select(rank)}
 														className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${

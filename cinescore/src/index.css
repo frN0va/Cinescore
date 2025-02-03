@@ -1,67 +1,67 @@
 @import "tailwindcss";
 
 @theme {
-  --container-8xl: 90rem;
+	--container-8xl: 90rem;
 }
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0a0a0a;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+	color-scheme: dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #0a0a0a;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 body,
 #root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-  background-color: #0a0a0a;
-  display: flex;
-  flex-direction: column;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100vh;
+	background-color: #0a0a0a;
+	display: flex;
+	flex-direction: column;
 }
 
 a {
-  font-weight: 500;
-  color: #7e22ce;
-  text-decoration: inherit;
-  transition: color 0.3s ease;
+	font-weight: 500;
+	color: #7e22ce;
+	text-decoration: inherit;
+	transition: color 0.3s ease;
 }
 
 a:hover {
-  color: #9333ea;
+	color: #9333ea;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+	font-size: 3.2em;
+	line-height: 1.1;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1e1e1e;
-  cursor: pointer;
-  transition: all 0.25s;
+	border-radius: 8px;
+	border: 1px solid transparent;
+	padding: 0.6em 1.2em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	background-color: #1e1e1e;
+	cursor: pointer;
+	transition: all 0.25s;
 }
 
 button:hover {
-  background-color: #2a2a2a;
-  border-color: #7e22ce;
+	background-color: #2a2a2a;
+	border-color: #7e22ce;
 }
 
 button:focus,
 button:focus-visible {
-  outline: 4px auto #9333ea;
+	outline: 4px auto #9333ea;
 }

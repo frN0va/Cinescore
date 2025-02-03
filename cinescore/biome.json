@@ -7,9 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": [
-			"**/*.json"
-		]
+		"ignore": ["**/*.json"]
 	},
 	"formatter": {
 		"enabled": true,
