@@ -25,6 +25,7 @@ interface MovieListing {
 	overallScore: number;
 	isLiked: boolean;
 	inWatchlist: boolean;
+	releaseDate: string;
 }
 
 const HomePage: React.FC = () => {
