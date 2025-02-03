@@ -135,6 +135,11 @@ const SearchResults: React.FC = () => {
 									<div
 										key={movie.id}
 										onClick={() => handleMovieClick(movie.id)}
+										onKeyUp={(e) => {
+											if (e.key === "Enter" || e.key === " ") {
+												handleMovieClick(movie.id);
+											}
+										}}
 										className="group flex cursor-pointer gap-6 rounded-lg bg-neutral-800/50 p-4 transition-colors hover:bg-neutral-800"
 									>
 										<div className="relative h-48 w-32 flex-shrink-0">
@@ -152,7 +157,7 @@ const SearchResults: React.FC = () => {
 											<div className="absolute right-2 top-2 flex items-center rounded-full bg-black/70 px-2 py-1">
 												<Star className="mr-1 h-4 w-4 text-yellow-400" />
 												<span className="font-bold">
-													{movie.overallScore.toFixed(1)}
+													{(movie.overallScore ?? 0).toFixed(1)}
 												</span>
 											</div>
 										</div>

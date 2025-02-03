@@ -13,7 +13,7 @@ import {
 	Twitter,
 	User,
 } from "lucide-react";
-import type { Movie, Credits } from "../types";
+import type { Credits } from "../types";
 
 interface FrontendSocials {
 	imdb?: string;
@@ -69,12 +69,6 @@ const ActorPage: React.FC = () => {
 	const getImageUrl = (path?: string) => {
 		if (!path) return "/placeholder-person.jpg";
 		return path;
-	};
-
-	const getFontSizeClass = (name: string) => {
-		if (name.length > 25) return "text-lg";
-		if (name.length > 20) return "text-xl";
-		return "text-2xl";
 	};
 
 	if (isLoading) {

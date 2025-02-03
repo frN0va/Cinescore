@@ -2,7 +2,7 @@ import type React from "react";
 import { Film } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
-import type { Credits, Movie } from "../types";
+import type { Movie } from "../types";
 import { format } from "date-fns";
 
 interface SearchDropdownProps {
@@ -10,25 +10,6 @@ interface SearchDropdownProps {
 	isLoading: boolean;
 	searchQuery: string;
 	onClose: () => void;
-}
-
-interface FrontendMovieDetails {
-	backdropUrl: string;
-	budget: number;
-	id: number;
-	imdbId: string;
-	originalLanguage: string;
-	overview: string;
-	posterUrl: string;
-	title: string;
-	releaseDate: string;
-	revenue: number;
-	runtime: number;
-	spokenLanguages: Array<{ name: string }>;
-	tagline: string;
-	rank?: number;
-	overallScore?: number;
-	credits?: Credits;
 }
 
 export const SearchDropdown: React.FC<SearchDropdownProps> = ({

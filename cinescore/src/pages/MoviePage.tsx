@@ -10,7 +10,6 @@ import {
 	ChevronLeft,
 	Clock,
 	Calendar,
-	Users,
 	DollarSign,
 	Globe,
 	Trophy,

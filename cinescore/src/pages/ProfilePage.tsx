@@ -34,7 +34,7 @@ const ProfilePage: React.FC = () => {
 		"My Watchlist": 0,
 	});
 
-	const [rankedMovies, setRankedMovies] = useState<RankedMovie[]>([
+	const [rankedMovies] = useState<RankedMovie[]>([
 		{
 			id: 1,
 			rank: 1,
@@ -77,7 +77,7 @@ const ProfilePage: React.FC = () => {
 		},
 	]);
 
-	const [likedMovies, setLikedMovies] = useState<RankedMovie[]>([
+	const [likedMovies] = useState<RankedMovie[]>([
 		{
 			id: 6,
 			rank: 0,
@@ -125,7 +125,7 @@ const ProfilePage: React.FC = () => {
 		},
 	]);
 
-	const [watchlist, setWatchlist] = useState<RankedMovie[]>([
+	const [watchlist] = useState<RankedMovie[]>([
 		{
 			id: 11,
 			rank: 0,
@@ -280,7 +280,7 @@ const ProfilePage: React.FC = () => {
 						currentPage[category] * MOVIES_PER_PAGE,
 						(currentPage[category] + 1) * MOVIES_PER_PAGE,
 					)
-					.map((movie, index) => (
+					.map((movie) => (
 						<div
 							key={movie.id}
 							className="bg-neutral-900 rounded-lg overflow-hidden shadow-xl transform transition hover:scale-105 hover:shadow-2xl"
