@@ -44,13 +44,11 @@ impl IntoResponse for ApiFetchError {
     /// Converts an [`ApiFetchError`] into an [`axum::response::Response`]
     fn into_response(self) -> axum::response::Response {
         log::error!("{}", self);
-        match self {
-            Self::Request(e) => {
-                if let Some(status_code) = e.status() {
-                    log::error!("Errored with status code: {}", status_code)
-                }
+
+        if let Self::Request(e) = self {
+            if let Some(status_code) = e.status() {
+                log::error!("Errored with status code: {}", status_code)
             }
-            _ => (),
         }
 
         (
