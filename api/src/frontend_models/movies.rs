@@ -34,6 +34,9 @@ pub struct MovieListing {
     /// Whether the movie is in the user's watchlist.
     #[serde(rename = "inWatchlist")]
     in_watchlist: bool,
+    /// Release date of the movie.
+    #[serde(rename = "releaseDate")]
+    release_date: String,
 }
 
 /// Represents detailed movie information formatted for the frontend.
@@ -105,6 +108,7 @@ impl From<SearchMovie> for MovieListing {
                 .base
                 .overview
                 .unwrap_or("No overview provided".to_owned()),
+            release_date: value.base.release_date,
             // TODO: these 3
             overall_score: 0.0,
             is_liked: false,
