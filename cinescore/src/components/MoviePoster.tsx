@@ -47,13 +47,13 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 				</div>
 				{showDetails && (
 					<div className="absolute inset-0 flex flex-col justify-between bg-black/80 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-						<div className="flex-1 overflow-y-auto">
-							<h3 className="mb-2 text-2xl font-bold leading-tight">
+						<div className="flex-1">
+							<h3 className="mb-2 text-xl font-extrabold leading-tight">
 								{movie.title}
 							</h3>
 							<p className="text-sm">
-								{movie.description.length > 180
-									? `${movie.description.substring(0, 180)}...`
+								{movie.description.length > 200
+									? `${movie.description.substring(0, 200)}...`
 									: movie.description}
 							</p>
 						</div>
