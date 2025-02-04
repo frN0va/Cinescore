@@ -24,7 +24,7 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 	return (
 		// biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
 		<div
-			className="flex flex-col cursor-pointer"
+			className="flex flex-col cursor-pointer font-sans"
 			onClick={() => navigate(`/movie/${movie.id}`)}
 		>
 			<div
