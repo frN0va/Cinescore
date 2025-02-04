@@ -243,7 +243,10 @@ const MoviePage: React.FC = () => {
 							<div className="flex items-center space-x-3 text-neutral-300">
 								<Calendar className="h-5 w-5" />
 								<span>
-									Released:{" "}
+									{new Date(movie.releaseDate) > new Date()
+										? "Releasing"
+										: "Released"}
+									:{" "}
 									{movie.releaseDate
 										? format(new Date(movie.releaseDate), "MMM d, yyyy")
 										: "Unknown"}
