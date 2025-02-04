@@ -62,7 +62,7 @@ const HomePage: React.FC = () => {
 					await Promise.all([
 						fetch("/api/v1/discover/trending"),
 						fetch("/api/v1/discover/now_playing"),
-						fetch("/api/v1/discover/trending"),
+						fetch("/api/v1/discover/upcoming"),
 					]);
 
 				if (!trendingResponse.ok) {

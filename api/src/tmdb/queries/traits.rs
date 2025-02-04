@@ -350,21 +350,36 @@ pub trait PrimaryReleaseDateQueryParam: HasParams {
     }
 }
 
+/// An enum defining the things you can sort by in the TMDB API
 #[derive(Debug, Clone, Copy)]
 pub enum SortBy {
+    /// Sort by original title ascending
     OriginalTitleAsc,
+    /// Sort by original title descending
     OriginalTitleDesc,
+    /// Sort by popularity ascending
     PopularityAsc,
+    /// Sort by popularity descending
     PopularityDesc,
+    /// Sort by revenue ascending
     RevenueAsc,
+    /// Sort by revenue descending
     RevenueDesc,
+    /// Sort by primary release date ascending
     PrimaryReleaseDateAsc,
+    /// Sort by primary release date descending
     PrimaryReleaseDateDesc,
+    /// Sort by title ascending
     TitleAsc,
+    /// Sort by title descending
     TitleDesc,
+    /// Sort by vote average ascending
     VoteAverageAsc,
+    /// Sort by vote average descending
     VoteAverageDesc,
+    /// Sort by vote count ascending
     VoteCountAsc,
+    /// Sort by vote count descending
     VoteCountDesc,
 }
 
@@ -408,8 +423,7 @@ pub trait SortByQueryParam: HasParams {
         Self: Sized,
     {
         log::debug!("Inserting sort_by `{}` into query parameters", sort_by);
-        self.params()
-            .insert("primary_release_date.gte", sort_by.to_string());
+        self.params().insert("sort_by", sort_by.to_string());
 
         self
     }

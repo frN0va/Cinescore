@@ -1,6 +1,6 @@
 //! Defines axum route handlers for interacting with the cinescore backend and the TMDB API
 use axum::{extract::Path, Json};
-use chrono::Utc;
+use chrono::{Months, Utc};
 use serde::Deserialize;
 
 use crate::{
@@ -97,12 +97,17 @@ pub async fn fetch_person_details(
     ))
 }
 
+/// Fetches upcoming movies from TMDB. This includes anything releasing tomorrow and up to 6
+/// months in the future.
 pub async fn fetch_upcoming_movies() -> Result<Json<FrontendMovieList>, ApiFetchError> {
     let client = get_tmdb_client();
     log::info!("Fetching upcoming movies");
     Ok(Json(
         DiscoverMoviesRequest::new()
-            .primary_release_date_range(None, Some(Utc::now().date_naive()))
+            .primary_release_date_range(
+                Some(Utc::now().date_naive()),
+                Utc::now().date_naive().checked_add_months(Months::new(6)),
+            )
             .include_adult(false)
             .include_video(false)
             .language("en-US")
