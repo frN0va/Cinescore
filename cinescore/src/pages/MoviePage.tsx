@@ -184,56 +184,66 @@ const MoviePage: React.FC = () => {
 											<Plus className="h-6 w-6" />
 										)}
 									</button>
-									<div className="relative top5-dropdown">
-										<button
-											type="button"
-											onClick={() => setShowTop5Dropdown(!showTop5Dropdown)}
-											className={`flex items-center space-x-1 rounded-full p-3 transition-colors duration-300 ${
-												selectedTop5Rank
-													? "bg-yellow-100 text-yellow-600"
-													: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
-											}`}
-										>
-											<Trophy className="h-6 w-6" />
-											<ChevronDown className="h-4 w-4" />
-										</button>
 
-										{showTop5Dropdown && (
-											<div className="absolute right-0 mt-2 w-48 rounded-lg bg-neutral-800 py-2 shadow-xl">
-												<div className="px-4 py-2 text-sm text-neutral-400">
-													Add to Top 5
+									{/* Conditionally render Top 5 button only if the movie is released */}
+									{new Date(movie.releaseDate) <= new Date() && (
+										<div className="relative top5-dropdown">
+											<button
+												type="button"
+												onClick={() => setShowTop5Dropdown(!showTop5Dropdown)}
+												className={`flex items-center space-x-1 rounded-full p-3 transition-colors duration-300 ${
+													selectedTop5Rank
+														? "bg-yellow-100 text-yellow-600"
+														: "bg-neutral-800 text-neutral-300 hover:bg-neutral-700"
+												}`}
+											>
+												<Trophy className="h-6 w-6" />
+												<ChevronDown className="h-4 w-4" />
+											</button>
+
+											{showTop5Dropdown && (
+												<div className="absolute right-0 mt-2 w-48 rounded-lg bg-neutral-800 py-2 shadow-xl">
+													<div className="px-4 py-2 text-sm text-neutral-400">
+														Add to Top 5
+													</div>
+													{[1, 2, 3, 4, 5].map((rank) => (
+														<button
+															type="button"
+															key={rank}
+															onClick={() => handleTop5Select(rank)}
+															className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${
+																selectedTop5Rank === rank
+																	? "bg-neutral-700"
+																	: ""
+															}`}
+														>
+															#{rank} in Top 5
+														</button>
+													))}
 												</div>
-												{[1, 2, 3, 4, 5].map((rank) => (
-													<button
-														type="button"
-														key={rank}
-														onClick={() => handleTop5Select(rank)}
-														className={`w-full px-4 py-2 text-left hover:bg-neutral-700 ${
-															selectedTop5Rank === rank ? "bg-neutral-700" : ""
-														}`}
-													>
-														#{rank} in Top 5
-													</button>
-												))}
-											</div>
-										)}
+											)}
+										</div>
+									)}
+								</div>
+
+								{/* Conditionally render star rating only if the movie is released */}
+								{new Date(movie.releaseDate) <= new Date() && (
+									<div className="flex justify-start space-x-2 mt-2">
+										{[1, 2, 3, 4, 5].map((rank) => (
+											<Star
+												key={rank}
+												className={`h-8 w-8 cursor-pointer transition-colors ${
+													rank <= hoveredRank
+														? "text-yellow-400"
+														: "text-gray-500"
+												} hover:text-yellow-300`}
+												onMouseEnter={() => setHoveredRank(rank)}
+												onMouseLeave={() => setHoveredRank(movie.rank || 0)}
+												onClick={() => handleRank(rank)}
+											/>
+										))}
 									</div>
-								</div>
-								<div className="flex justify-start space-x-2">
-									{[1, 2, 3, 4, 5].map((rank) => (
-										<Star
-											key={rank}
-											className={`h-8 w-8 cursor-pointer transition-colors ${
-												rank <= hoveredRank
-													? "text-yellow-400"
-													: "text-gray-500"
-											} hover:text-yellow-300`}
-											onMouseEnter={() => setHoveredRank(rank)}
-											onMouseLeave={() => setHoveredRank(movie.rank || 0)}
-											onClick={() => handleRank(rank)}
-										/>
-									))}
-								</div>
+								)}
 							</div>
 
 							<p className="text-lg text-neutral-300">{movie.overview}</p>
