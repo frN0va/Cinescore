@@ -12,10 +12,16 @@ use crate::{
         client::{ApiFetchError, TMDBClient},
         queries::{
             movie_details::MovieDetailsRequest,
-            movie_lists::{MovieListNowPlayingRequest, MovieListTrendingRequest},
+            movie_lists::{
+                DiscoverMoviesRequest, MovieListNowPlayingRequest, MovieListTrendingRequest,
+            },
             people_details::{PersonDetailsRequest, TrendingPeopleRequest},
             search::{SearchMoviesRequest, SearchPeopleRequest},
-            traits::{AppendToResponseQueryParam, IdQuery, Query, QueryQueryParam},
+            traits::{
+                AppendToResponseQueryParam, IdQuery, IncludeAdultQueryParam,
+                IncludeVideoQueryParam, LanguageQueryParam, PrimaryReleaseDateQueryParam, Query,
+                QueryQueryParam, SortBy, SortByQueryParam,
+            },
         },
     },
 };
@@ -87,6 +93,21 @@ pub async fn fetch_person_details(
         PersonDetailsRequest::new()
             .append_to_response("credits,external_ids")
             .fetch(&client, person_id)
+            .await?,
+    ))
+}
+
+pub async fn fetch_upcoming_movies() -> Result<Json<FrontendMovieList>, ApiFetchError> {
+    let client = get_tmdb_client();
+    log::info!("Fetching upcoming movies");
+    Ok(Json(
+        DiscoverMoviesRequest::new()
+            .primary_release_date_range(None, Some(Utc::now().date_naive()))
+            .include_adult(false)
+            .include_video(false)
+            .language("en-US")
+            .sort_by(SortBy::PopularityDesc)
+            .fetch(&client)
             .await?,
     ))
 }

@@ -208,6 +208,32 @@ pub trait IncludeAdultQueryParam: HasParams {
     }
 }
 
+/// A trait for adding an `include_video` query parameter to an API request.
+pub trait IncludeVideoQueryParam: HasParams {
+    /// Sets the `include_video` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `include_video` - A `bool` representing whether or not to include a video in the response.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn include_video(mut self, include_video: bool) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!(
+            "Inserting include_video `{}` into query parameters",
+            include_video
+        );
+
+        self.params()
+            .insert("include_video", include_video.to_string());
+        self
+    }
+}
+
 /// A trait for adding a `primary_release_year` query parameter to an API request.
 ///
 /// This is used for filtering results to a specific primary release year
@@ -319,6 +345,71 @@ pub trait PrimaryReleaseDateQueryParam: HasParams {
             self.params()
                 .insert("primary_release_date.lte", year.to_string());
         }
+
+        self
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum SortBy {
+    OriginalTitleAsc,
+    OriginalTitleDesc,
+    PopularityAsc,
+    PopularityDesc,
+    RevenueAsc,
+    RevenueDesc,
+    PrimaryReleaseDateAsc,
+    PrimaryReleaseDateDesc,
+    TitleAsc,
+    TitleDesc,
+    VoteAverageAsc,
+    VoteAverageDesc,
+    VoteCountAsc,
+    VoteCountDesc,
+}
+
+impl Display for SortBy {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let value = match self {
+            SortBy::OriginalTitleAsc => "original_title.asc",
+            SortBy::OriginalTitleDesc => "original_title.desc",
+            SortBy::PopularityAsc => "popularity.asc",
+            SortBy::PopularityDesc => "popularity.desc",
+            SortBy::RevenueAsc => "revenue.asc",
+            SortBy::RevenueDesc => "revenue.desc",
+            SortBy::PrimaryReleaseDateAsc => "primary_release_date.asc",
+            SortBy::PrimaryReleaseDateDesc => "primary_release_date.desc",
+            SortBy::TitleAsc => "title.asc",
+            SortBy::TitleDesc => "title.desc",
+            SortBy::VoteAverageAsc => "vote_average.asc",
+            SortBy::VoteAverageDesc => "vote_average.desc",
+            SortBy::VoteCountAsc => "vote_count.asc",
+            SortBy::VoteCountDesc => "vote_count.desc",
+        };
+        write!(f, "{}", value)
+    }
+}
+
+/// A trait for adding a `sort_by` query parameter to an API request.
+///
+/// This is used for sorting the API data
+pub trait SortByQueryParam: HasParams {
+    /// Sets the `sort_by` query parameter for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `sort_by` - What to sort by
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn sort_by(mut self, sort_by: SortBy) -> Self
+    where
+        Self: Sized,
+    {
+        log::debug!("Inserting sort_by `{}` into query parameters", sort_by);
+        self.params()
+            .insert("primary_release_date.gte", sort_by.to_string());
 
         self
     }
