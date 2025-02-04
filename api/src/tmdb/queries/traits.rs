@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Display};
 
 use serde::Serialize;
 
@@ -89,13 +89,13 @@ pub trait LanguageQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn language(mut self, language: String) -> Self
+    fn language<S: Into<String> + Display>(mut self, language: S) -> Self
     where
         Self: Sized,
     {
         log::debug!("Inserting language `{}` into query parameters", language);
 
-        self.params().insert("language", language);
+        self.params().insert("language", language.to_string());
         self
     }
 }
@@ -113,7 +113,7 @@ pub trait AppendToResponseQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn append_to_response(mut self, append: &str) -> Self
+    fn append_to_response<S: Into<String> + Display>(mut self, append: S) -> Self
     where
         Self: Sized,
     {
@@ -123,7 +123,7 @@ pub trait AppendToResponseQueryParam: HasParams {
         );
 
         self.params()
-            .insert("append_to_response", append.to_owned());
+            .insert("append_to_response", append.to_string());
         self
     }
 }
@@ -141,13 +141,13 @@ pub trait RegionQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn region(mut self, region: String) -> Self
+    fn region<S: Into<String> + Display>(mut self, region: S) -> Self
     where
         Self: Sized,
     {
         log::debug!("Inserting region `{}` into query parameters", region);
 
-        self.params().insert("region", region);
+        self.params().insert("region", region.to_string());
         self
     }
 }
@@ -217,7 +217,7 @@ pub trait PrimaryReleaseYearQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn primary_release_year(mut self, year: String) -> Self
+    fn primary_release_year<S: Into<String> + Display>(mut self, year: S) -> Self
     where
         Self: Sized,
     {
@@ -245,7 +245,7 @@ pub trait YearQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn year(mut self, year: String) -> Self
+    fn year<S: Into<String> + Display>(mut self, year: S) -> Self
     where
         Self: Sized,
     {
@@ -269,7 +269,7 @@ pub trait QueryQueryParam: HasParams {
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn query(mut self, query: String) -> Self
+    fn query<S: Into<String> + Display>(mut self, query: S) -> Self
     where
         Self: Sized,
     {
