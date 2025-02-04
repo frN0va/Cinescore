@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use crate::tmdb::models::{
-    common::{Gender, PaginatedSearchResult},
+    common::{Date, Gender, PaginatedSearchResult},
     person::{PersonDetails, SearchPerson},
 };
 
@@ -15,9 +15,9 @@ pub struct FrontendPersonDetails {
     /// A biographical description of the person.
     pub biography: String,
     /// The person's date of birth in ISO 8601 format (YYYY-MM-DD).
-    pub birthday: Option<String>,
+    pub birthday: Option<Date>,
     /// The person's date of death in ISO 8601 format (YYYY-MM-DD), if applicable.
-    pub deathday: Option<String>,
+    pub deathday: Option<Date>,
     /// The person's gender represented as a number:
     pub gender: Gender,
     /// Unique identifier for the person.

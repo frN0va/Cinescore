@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use crate::tmdb::models::{
-    common::{Language, PaginatedSearchResult},
+    common::{Date, Language, PaginatedSearchResult},
     movie::{MovieDetails, SearchMovie},
 };
 
@@ -36,7 +36,7 @@ pub struct MovieListing {
     in_watchlist: bool,
     /// Release date of the movie.
     #[serde(rename = "releaseDate")]
-    release_date: String,
+    release_date: Date,
 }
 
 /// Represents detailed movie information formatted for the frontend.
@@ -65,7 +65,7 @@ pub struct FrontendMovieDetails {
     title: String,
     /// The release date of the movie.
     #[serde(rename = "releaseDate")]
-    release_date: String,
+    release_date: Date,
     /// The revenue of the movie in dollars.
     revenue: u64,
     /// The runtime of the movie in minutes.

@@ -1,4 +1,6 @@
 #![allow(dead_code)]
+use std::{fmt::Display, str::FromStr};
+
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
@@ -69,4 +71,65 @@ pub struct PaginatedSearchResult<T> {
     pub total_pages: u64,
     /// Total number of results found.
     pub total_results: u64,
+}
+
+/// A simple struct to define a date. There is no error checking for the validity of the date
+#[derive(Debug)]
+pub struct Date {
+    /// Year of the [`Date`]
+    year: u16,
+    /// Month of the [`Date`]
+    month: u8,
+    /// Day of the [`Date`]
+    day: u8,
+}
+
+impl Date {
+    /// Construct a new [`Date`] object. This does not check the validity of the date.
+    pub fn new(year: u16, month: u8, day: u8) -> Self {
+        Self { year, month, day }
+    }
+}
+
+impl Display for Date {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}-{:02}-{:02}", self.year, self.month, self.day)
+    }
+}
+
+impl FromStr for Date {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let parts: Vec<&str> = s.split('-').collect();
+        if parts.len() != 3 {
+            return Err("Invalid date format: expected YYYY-MM-DD".into());
+        }
+
+        let year = parts[0].parse::<u16>().map_err(|_| "Invalid year")?;
+        let month = parts[1].parse::<u8>().map_err(|_| "Invalid month")?;
+        let day = parts[2].parse::<u8>().map_err(|_| "Invalid day")?;
+
+        Ok(Date::new(year, month, day))
+    }
+}
+
+impl Serialize for Date {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for Date {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(serde::de::Error::custom)
+    }
 }

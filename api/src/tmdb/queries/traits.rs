@@ -3,7 +3,10 @@ use std::{collections::HashMap, fmt::Display};
 
 use serde::Serialize;
 
-use crate::tmdb::client::{ApiFetchError, TMDBClient};
+use crate::tmdb::{
+    client::{ApiFetchError, TMDBClient},
+    models::common::Date,
+};
 
 /// Defines a route that supports query parameters.
 ///
@@ -240,12 +243,12 @@ pub trait YearQueryParam: HasParams {
     ///
     /// # Arguments
     ///
-    /// * `year` - A `String` representing the release year to filter content by.
+    /// * `year` - A `u16` representing the release year to filter content by.
     ///
     /// # Returns
     ///
     /// A new instance of the struct implementing this trait with the updated query parameters.
-    fn year<S: Into<String> + Display>(mut self, year: S) -> Self
+    fn year(mut self, year: u16) -> Self
     where
         Self: Sized,
     {
