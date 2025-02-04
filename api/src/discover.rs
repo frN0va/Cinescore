@@ -1,5 +1,6 @@
 //! Defines axum route handlers for interacting with the cinescore backend and the TMDB API
 use axum::{extract::Path, Json};
+use chrono::Utc;
 use serde::Deserialize;
 
 use crate::{

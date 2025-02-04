@@ -34,7 +34,7 @@ impl IdQuery<FrontendMovieDetails> for MovieDetailsRequest {
         client: &TMDBClient,
         id: u64,
     ) -> Result<FrontendMovieDetails, ApiFetchError> {
-        log::info!("Fetching movie details for movie ID {}", id);
+        log::debug!("Fetching movie details for movie ID {}", id);
 
         let response = client
             .get::<MovieDetails>(&format!("movie/{}", id), self.params)

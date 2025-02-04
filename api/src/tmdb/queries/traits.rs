@@ -1,12 +1,13 @@
 #![allow(dead_code)]
-use std::{collections::HashMap, fmt::Display};
+use std::{
+    collections::HashMap,
+    fmt::{self, Display},
+};
 
+use chrono::NaiveDate;
 use serde::Serialize;
 
-use crate::tmdb::{
-    client::{ApiFetchError, TMDBClient},
-    models::common::Date,
-};
+use crate::tmdb::client::{ApiFetchError, TMDBClient};
 
 /// Defines a route that supports query parameters.
 ///
@@ -279,6 +280,46 @@ pub trait QueryQueryParam: HasParams {
         log::debug!("Inserting query `{}` into query parameters", query);
 
         self.params().insert("query", query.to_string());
+        self
+    }
+}
+
+/// A trait for adding a `primary_release_date` query parameter to an API request.
+///
+/// This is used for filtering results by release date bounds
+pub trait PrimaryReleaseDateQueryParam: HasParams {
+    /// Sets the `primary_release_date.gte` and/or `primary_release_date.lte` query parameters for the request.
+    ///
+    /// # Arguments
+    ///
+    /// * `gte` - An optional lower bound for the release year.
+    /// * `lte` - An optional upper bound for the release year.
+    ///
+    /// # Returns
+    ///
+    /// A new instance of the struct implementing this trait with the updated query parameters.
+    fn primary_release_date_range(mut self, gte: Option<NaiveDate>, lte: Option<NaiveDate>) -> Self
+    where
+        Self: Sized,
+    {
+        if let Some(date) = gte {
+            log::debug!(
+                "Inserting primary_release_date.gte `{}` into query parameters",
+                date
+            );
+            self.params()
+                .insert("primary_release_date.gte", date.to_string());
+        }
+
+        if let Some(year) = lte {
+            log::debug!(
+                "Inserting primary_release_date.lte `{}` into query parameters",
+                year
+            );
+            self.params()
+                .insert("primary_release_date.lte", year.to_string());
+        }
+
         self
     }
 }
