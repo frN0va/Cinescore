@@ -29,7 +29,7 @@ impl Query<FrontendPeopleList> for SearchPeopleRequest {
     ) -> Result<FrontendPeopleList, crate::tmdb::client::ApiFetchError> {
         // require query param to be set
         match self.params.get("query") {
-            Some(v) => log::info!("Fetching people search results for \"{}\"", v),
+            Some(v) => log::debug!("Fetching people search results for \"{}\"", v),
             None => {
                 return Err(ApiFetchError::MissingQueryParam {
                     param: "query",
@@ -53,7 +53,7 @@ impl Query<FrontendMovieList> for SearchMoviesRequest {
     ) -> Result<FrontendMovieList, crate::tmdb::client::ApiFetchError> {
         // require query param to be set
         match self.params.get("query") {
-            Some(v) => log::info!("Fetching movie search results for \"{}\"", v),
+            Some(v) => log::debug!("Fetching movie search results for \"{}\"", v),
             None => {
                 return Err(ApiFetchError::MissingQueryParam {
                     param: "query",

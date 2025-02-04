@@ -34,7 +34,7 @@ impl Query<FrontendMovieList> for MovieListTrendingRequest {
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, ApiFetchError> {
-        log::info!("Fetching daily trending movies from TMDB API");
+        log::debug!("Fetching daily trending movies from TMDB API");
 
         let response = client
             .get::<PaginatedSearchResult<SearchMovie>>("/trending/movie/day", self.params)
@@ -59,7 +59,7 @@ impl Query<FrontendMovieList> for MovieListNowPlayingRequest {
     ///
     /// This function will return a `reqwest::Error` if the request fails or if deserialization fails.
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendMovieList, ApiFetchError> {
-        log::info!("Fetching now playing movies from TMDB API");
+        log::debug!("Fetching now playing movies from TMDB API");
 
         let response = client
             .get::<PaginatedSearchResult<SearchMovie>>("movie/now_playing", self.params)

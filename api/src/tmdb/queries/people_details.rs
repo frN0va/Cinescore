@@ -28,7 +28,7 @@ impl IdQuery<FrontendPersonDetails> for PersonDetailsRequest {
         client: &TMDBClient,
         id: u64,
     ) -> Result<FrontendPersonDetails, ApiFetchError> {
-        log::info!("Fetching person details for person ID {}", id);
+        log::debug!("Fetching person details for person ID {}", id);
 
         let response = client
             .get::<PersonDetails>(&format!("person/{}", id), self.params)
@@ -40,7 +40,7 @@ impl IdQuery<FrontendPersonDetails> for PersonDetailsRequest {
 
 impl Query<FrontendPeopleList> for TrendingPeopleRequest {
     async fn fetch(self, client: &TMDBClient) -> Result<FrontendPeopleList, ApiFetchError> {
-        log::info!("Fetching daily trending people from TMDB API");
+        log::debug!("Fetching daily trending people from TMDB API");
 
         let response = client
             .get::<PaginatedSearchResult<SearchPerson>>("/trending/person/day", self.params)
