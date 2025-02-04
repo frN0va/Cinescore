@@ -47,12 +47,13 @@ const MoviePoster: React.FC<MoviePosterProps> = ({
 				</div>
 				{showDetails && (
 					<div className="absolute inset-0 flex flex-col justify-between bg-black/80 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-						<div>
-							<h3 className="mb-2 text-2xl font-bold">{movie.title}</h3>
+						<div className="flex-1 overflow-y-auto">
+							<h3 className="mb-2 text-2xl font-bold leading-tight">
+								{movie.title}
+							</h3>
 							<p className="text-sm">
 								{movie.description.length > 180
-									? // biome-ignore lint/style/useTemplate: <explanation>
-										movie.description.substring(0, 180) + "..."
+									? `${movie.description.substring(0, 180)}...`
 									: movie.description}
 							</p>
 						</div>
