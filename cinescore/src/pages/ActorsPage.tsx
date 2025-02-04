@@ -89,18 +89,19 @@ const ActorPage: React.FC = () => {
 
 	return (
 		<div className="flex min-h-screen flex-col bg-neutral-950 text-white">
-			<div className="mx-auto max-w-7xl px-8">
-				<Link
-					to="/actors"
-					className="absolute left-8 top-8 flex items-center space-x-2 rounded-full bg-neutral-900/50 px-4 py-2 backdrop-blur-sm transition hover:bg-neutral-800"
-				>
-					<ChevronLeft className="h-5 w-5" />
-					<span>Back to Actors</span>
-				</Link>
-			</div>
+			<div className="relative mx-auto w-full max-w-8xl flex-grow px-4 py-8 sm:px-6 lg:px-8">
+				{/* Back Button */}
+				<div className="mb-6">
+					<Link
+						to="/actors"
+						className="inline-flex items-center space-x-2 rounded-full bg-neutral-900/50 px-4 py-2 backdrop-blur-sm transition hover:bg-neutral-800"
+					>
+						<ChevronLeft className="h-5 w-5" />
+						<span>Back to Actors</span>
+					</Link>
+				</div>
 
-			<div className="relative mx-auto w-full max-w-8xl flex-grow px-8 py-8">
-				<div className="grid grid-cols-1 gap-12 lg:grid-cols-5">
+				<div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
 					<div className="space-y-8 lg:col-span-2">
 						<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
 							{/* Profile Image and Basic Info */}
@@ -245,7 +246,7 @@ const ActorPage: React.FC = () => {
 							<div className="rounded-lg bg-neutral-900 p-6 shadow-xl">
 								<h2 className="mb-4 text-2xl font-bold">Filmography</h2>
 								<div className="max-h-[800px] overflow-y-auto pr-4">
-									<div className="grid grid-cols-2 gap-6 sm:grid-cols-3">
+									<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 										{actor.credits.cast.map((movie) => (
 											<Link
 												key={movie.id || movie.title}
