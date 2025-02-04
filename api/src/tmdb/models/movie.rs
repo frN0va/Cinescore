@@ -3,7 +3,7 @@ use chrono::NaiveDate;
 use serde::Deserialize;
 
 use super::{
-    common::{Genre, Language, ProductionCompany, ProductionCountry},
+    common::{deserialize_date, Genre, Language, ProductionCompany, ProductionCountry},
     person::SearchPerson,
 };
 
@@ -39,7 +39,8 @@ pub struct BaseMovie {
     /// Path to the movie's poster image.
     pub poster_path: Option<String>,
     /// Release date of the movie.
-    pub release_date: NaiveDate,
+    #[serde(deserialize_with = "deserialize_date")]
+    pub release_date: Option<NaiveDate>,
     /// Title of the movie.
     pub title: String,
     /// Indicates whether the movie has videos

@@ -2,7 +2,11 @@
 use chrono::NaiveDate;
 use serde::Deserialize;
 
-use super::{common::Gender, movie::BaseMovie, socials::Socials};
+use super::{
+    common::{deserialize_date, Gender},
+    movie::BaseMovie,
+    socials::Socials,
+};
 
 /// Represents detailed information about a person, such as an actor or director.
 #[derive(Debug, Deserialize)]
@@ -14,8 +18,10 @@ pub struct PersonDetails {
     /// A biography of the person.
     pub biography: String,
     /// The person's birth date, if available.
+    #[serde(deserialize_with = "deserialize_date")]
     pub birthday: Option<NaiveDate>,
     /// The person's death date, if applicable.
+    #[serde(deserialize_with = "deserialize_date")]
     pub deathday: Option<NaiveDate>,
     /// The person's gender.
     pub gender: Gender,

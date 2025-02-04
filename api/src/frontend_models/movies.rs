@@ -37,7 +37,7 @@ pub struct MovieListing {
     in_watchlist: bool,
     /// Release date of the movie.
     #[serde(rename = "releaseDate")]
-    release_date: NaiveDate,
+    release_date: Option<NaiveDate>,
 }
 
 /// Represents detailed movie information formatted for the frontend.
@@ -66,7 +66,7 @@ pub struct FrontendMovieDetails {
     title: String,
     /// The release date of the movie.
     #[serde(rename = "releaseDate")]
-    release_date: NaiveDate,
+    release_date: Option<NaiveDate>,
     /// The revenue of the movie in dollars.
     revenue: u64,
     /// The runtime of the movie in minutes.

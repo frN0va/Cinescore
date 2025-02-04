@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
-use serde::{Deserialize, Serialize};
+use chrono::NaiveDate;
+use serde::{Deserialize, Deserializer, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
 /// Represents a genre
@@ -70,4 +71,24 @@ pub struct PaginatedSearchResult<T> {
     pub total_pages: u64,
     /// Total number of results found.
     pub total_results: u64,
+}
+
+pub fn deserialize_date<'de, D>(deserializer: D) -> Result<Option<NaiveDate>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let date_str: Option<String> = Option::deserialize(deserializer)?;
+
+    match date_str {
+        Some(str) => {
+            if str.is_empty() {
+                Ok(None)
+            } else {
+                NaiveDate::parse_from_str(&str, "%Y-%m-%d")
+                    .map(Some)
+                    .map_err(serde::de::Error::custom)
+            }
+        }
+        None => Ok(None),
+    }
 }
