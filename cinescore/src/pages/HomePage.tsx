@@ -13,7 +13,8 @@ interface MovieCategories {
 }
 
 const staticMovieCategories = {
-	"Top Rated": [],
+	"Controversial Ratings": [],
+	"Upcoming Movies": [],
 };
 
 interface MovieListing {
@@ -57,10 +58,12 @@ const HomePage: React.FC = () => {
 	useEffect(() => {
 		const fetchMovies = async () => {
 			try {
-				const [trendingResponse, nowPlayingResponse] = await Promise.all([
-					fetch("/api/v1/discover/trending"),
-					fetch("/api/v1/discover/now_playing"),
-				]);
+				const [trendingResponse, nowPlayingResponse, upcomingResponse] =
+					await Promise.all([
+						fetch("/api/v1/discover/trending"),
+						fetch("/api/v1/discover/now_playing"),
+						fetch("/api/v1/discover/trending"),
+					]);
 
 				if (!trendingResponse.ok) {
 					throw new Error("Failed to fetch trending movies");
@@ -71,6 +74,7 @@ const HomePage: React.FC = () => {
 
 				const trendingData = await trendingResponse.json();
 				const nowPlayingData = await nowPlayingResponse.json();
+				const upcomingData = await upcomingResponse.json();
 
 				setMovies((prev) => ({
 					...prev,
@@ -79,6 +83,10 @@ const HomePage: React.FC = () => {
 						rank: 0,
 					})),
 					"Now Playing": nowPlayingData.movies.map((movie: MovieListing) => ({
+						...movie,
+						rank: 0,
+					})),
+					"Upcoming Movies": upcomingData.movies.map((movie: MovieListing) => ({
 						...movie,
 						rank: 0,
 					})),
