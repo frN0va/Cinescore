@@ -13,14 +13,6 @@ use super::{common::get_image_url, credits::FrontendMovieCredits};
 pub struct FrontendMovieList {
     /// A list of movies
     movies: Vec<MovieListing>,
-    total_results: u64,
-}
-
-/// Represents the total number of movies for a particular search result
-#[derive(Debug, Serialize)]
-pub struct TotalNumMovies {
-    /// The total number of movies
-    num_movies: u64,
 }
 
 /// Represents an individual movie entry in the frontend.
@@ -140,7 +132,6 @@ impl From<PaginatedSearchResult<SearchMovie>> for FrontendMovieList {
     fn from(value: PaginatedSearchResult<SearchMovie>) -> Self {
         Self {
             movies: value.results.into_iter().map(MovieListing::from).collect(),
-            total_results: value.total_results,
         }
     }
 }
@@ -176,14 +167,6 @@ impl From<MovieDetails> for FrontendMovieDetails {
             overall_score: 0.0,
             is_liked: false,
             in_watchlist: false,
-        }
-    }
-}
-
-impl From<FrontendMovieList> for TotalNumMovies {
-    fn from(value: FrontendMovieList) -> Self {
-        Self {
-            num_movies: value.total_results,
         }
     }
 }
