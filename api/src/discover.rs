@@ -5,7 +5,7 @@ use serde::Deserialize;
 
 use crate::{
     frontend_models::{
-        movies::{FrontendMovieDetails, FrontendMovieList},
+        movies::{FrontendMovieDetails, FrontendMovieList, TotalNumMovies},
         people::{FrontendPeopleList, FrontendPersonDetails},
     },
     tmdb::{
@@ -95,6 +95,18 @@ pub async fn fetch_person_details(
             .fetch(&client, person_id)
             .await?,
     ))
+}
+
+pub async fn fetch_total_number_movies() -> Result<Json<TotalNumMovies>, ApiFetchError> {
+    let client = get_tmdb_client();
+    log::info!("Fetching total number of movies in TMDB database");
+    Ok(Json(TotalNumMovies::from(
+        DiscoverMoviesRequest::new()
+            .include_adult(false)
+            .include_video(false)
+            .fetch(&client)
+            .await?,
+    )))
 }
 
 /// Fetches upcoming movies from TMDB. This includes anything releasing tomorrow and up to 6
