@@ -7,6 +7,7 @@ import CategoryCarosel, {
 } from "../components/CategoryCarousel";
 import { SearchDropdown } from "../components/SearchDropdown";
 import type { Movie } from "../types";
+import ProfileDropdown from "../components/ProfileDropdown";
 
 interface MovieCategories {
 	[key: string]: MovieListing[];
@@ -238,12 +239,12 @@ const HomePage: React.FC = () => {
 									onClose={() => setSearchQuery("")}
 								/>
 							</div>
-							<Link
-								className="rounded-full p-2 transition duration-200 hover:bg-neutral-800"
-								to="/profile"
-							>
-								<User className="h-6 w-6 text-purple-400 transition hover:text-purple-300" />
-							</Link>
+							<ProfileDropdown
+								isAuthenticated={false} // Replace with your auth state
+								onLogout={() => {
+									// Handle logout logic here
+								}}
+							/>
 						</div>
 					</div>
 				</div>

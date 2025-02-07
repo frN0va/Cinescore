@@ -12,6 +12,7 @@ import {
 	ChevronRight,
 	Trophy,
 } from "lucide-react";
+import ProfileDropdown from "../components/ProfileDropdown";
 
 interface RankedMovie {
 	rank: number;
@@ -26,7 +27,7 @@ interface RankedMovie {
 const MOVIES_PER_PAGE = 5;
 
 const ProfilePage: React.FC = () => {
-	const [activeNav, setActiveNav] = useState("Films");
+	const [activeNav, setActiveNav] = useState("Profile");
 	const [searchQuery, setSearchQuery] = useState("");
 	const [currentPage, setCurrentPage] = useState<Record<string, number>>({
 		"Top 5 Movies": 0,
@@ -361,12 +362,12 @@ const ProfilePage: React.FC = () => {
 									/>
 								</div>
 							</div>
-							<Link
-								to="/"
-								className="hover:bg-neutral-800 p-2 rounded-full transition duration-200"
-							>
-								<Film className="w-6 h-6 text-blue-400 hover:text-blue-300 transition" />
-							</Link>
+							<ProfileDropdown
+								isAuthenticated={false} // Replace with your auth state
+								onLogout={() => {
+									// Handle logout logic here
+								}}
+							/>
 						</div>
 					</div>
 				</div>

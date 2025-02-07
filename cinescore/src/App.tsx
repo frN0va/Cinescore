@@ -6,6 +6,7 @@ import ActorsPage from "./pages/ActorsPage";
 import ActorBrowse from "./pages/ActorBrowse";
 import SearchResults from "./pages/SearchResults";
 import ActorSearchResults from "./pages/ActorSearchResults";
+import SignInPage from "./pages/SignInPage";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 				<Route path="/actors" element={<ActorBrowse />} />
 				<Route path="/search" element={<SearchResults />} />
 				<Route path="/search/actors" element={<ActorSearchResults />} />
+				<Route path="/signin" element={<SignInPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
