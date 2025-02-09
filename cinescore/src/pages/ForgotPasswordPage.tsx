@@ -4,20 +4,19 @@ import { Link } from "react-router-dom";
 import {
 	Popcorn,
 	Mail,
-	Lock,
 	Film,
 	User,
 	Clapperboard,
 	Search,
+	ArrowLeft,
 } from "lucide-react";
-import { FaGoogle, FaGithub } from "react-icons/fa";
 import { SearchDropdown } from "../components/SearchDropdown";
 import ProfileDropdown from "../components/ProfileDropdown";
 import type { Movie } from "../types";
 
-const SignInPage = () => {
+const ForgotPasswordPage = () => {
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [isSubmitted, setIsSubmitted] = useState(false);
 	const [activeNav, setActiveNav] = useState("Films");
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchResults] = useState<Movie[]>([]);
@@ -25,7 +24,8 @@ const SignInPage = () => {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		// Handle sign in logic here
+		setIsSubmitted(true);
+		// Handle password reset logic here
 	};
 
 	const navItems = [
@@ -96,127 +96,84 @@ const SignInPage = () => {
 				</div>
 			</nav>
 
-			{/* Sign In Content */}
+			{/* Back to Sign In */}
+			<div className="fixed top-20 left-4 z-40">
+				<Link
+					to="/signin"
+					className="flex items-center text-neutral-400 hover:text-neutral-300 transition-colors duration-200 bg-neutral-900/90 px-4 py-2 rounded-lg backdrop-blur-sm"
+				>
+					<ArrowLeft className="h-4 w-4 mr-2" />
+					<span>Back to Sign In</span>
+				</Link>
+			</div>
+
+			{/* Forgot Password Content */}
 			<div className="flex-grow flex items-center justify-center px-4 py-12 mt-16">
 				<div className="max-w-md w-full space-y-8">
-					{/* Sign In Header */}
+					{/* Header */}
 					<div className="text-center">
 						<h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-							Welcome Back!
+							Reset Your Password
 						</h2>
 						<p className="mt-2 text-neutral-400">
-							Sign in to rate and review your favorite films!
+							Enter your email address and we'll send you instructions to reset
+							your password.
 						</p>
 					</div>
 
-					{/* Sign In Form */}
+					{/* Reset Password Form */}
 					<div className="bg-neutral-900/50 p-8 rounded-xl shadow-xl border border-neutral-800">
-						<form onSubmit={handleSubmit} className="space-y-6">
-							<div>
-								<label
-									htmlFor="email"
-									className="block text-sm font-medium text-neutral-300 mb-2"
-								>
-									Email
-								</label>
-								<div className="relative">
-									<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-										<Mail className="h-5 w-5 text-neutral-500" />
-									</div>
-									<input
-										id="email"
-										type="email"
-										required
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										className="block w-full pl-10 pr-3 py-2 border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-										placeholder="you@example.com"
-									/>
-								</div>
-							</div>
-
-							<div>
-								<label
-									htmlFor="password"
-									className="block text-sm font-medium text-neutral-300 mb-2"
-								>
-									Password
-								</label>
-								<div className="relative">
-									<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-										<Lock className="h-5 w-5 text-neutral-500" />
-									</div>
-									<input
-										id="password"
-										type="password"
-										required
-										value={password}
-										onChange={(e) => setPassword(e.target.value)}
-										className="block w-full pl-10 pr-3 py-2 border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-										placeholder="••••••••"
-									/>
-								</div>
-							</div>
-
-							<div className="flex items-center justify-between">
-								<div className="flex items-center">
-									<input
-										id="remember-me"
-										type="checkbox"
-										className="h-4 w-4 rounded border-neutral-700 bg-neutral-900 text-purple-500 focus:ring-purple-500"
-									/>
+						{!isSubmitted ? (
+							<form onSubmit={handleSubmit} className="space-y-6">
+								<div>
 									<label
-										htmlFor="remember-me"
-										className="ml-2 block text-sm text-neutral-400"
+										htmlFor="email"
+										className="block text-sm font-medium text-neutral-300 mb-2"
 									>
-										Remember me
+										Email Address
 									</label>
+									<div className="relative">
+										<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+											<Mail className="h-5 w-5 text-neutral-500" />
+										</div>
+										<input
+											id="email"
+											type="email"
+											required
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
+											className="block w-full pl-10 pr-3 py-2 border border-neutral-800 rounded-lg bg-neutral-900 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+											placeholder="you@example.com"
+										/>
+									</div>
 								</div>
-								<Link
-									to="/forgot-password"
-									className="text-sm text-purple-400 hover:text-purple-300"
-								>
-									Forgot password?
-								</Link>
-							</div>
 
-							<button
-								type="submit"
-								className="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200"
-							>
-								Sign In
-							</button>
-						</form>
-
-						<div className="mt-6">
-							<div className="relative">
-								<div className="absolute inset-0 flex items-center">
-									<div className="w-full border-t border-neutral-800" />
-								</div>
-								<div className="relative flex justify-center text-sm">
-									<span className="px-2 bg-neutral-900 text-neutral-400">
-										Or continue with
-									</span>
-								</div>
-							</div>
-
-							<div className="mt-6 grid grid-cols-2 gap-3">
 								<button
-									type="button"
-									className="w-full inline-flex justify-center py-2 px-4 border border-neutral-800 rounded-lg shadow-sm bg-neutral-900 text-neutral-300 hover:bg-neutral-800 transition-colors duration-200"
+									type="submit"
+									className="w-full py-2 px-4 border border-transparent rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200"
 								>
-									<FaGoogle className="h-5 w-5" />
-									<span className="ml-2">Google</span>
+									Send Reset Instructions
 								</button>
-								<button
-									type="button"
-									className="w-full inline-flex justify-center py-2 px-4 border border-neutral-800 rounded-lg shadow-sm bg-neutral-900 text-neutral-300 hover:bg-neutral-800 transition-colors duration-200"
-								>
-									<FaGithub className="h-5 w-5" />
-									<span className="ml-2">GitHub</span>
-								</button>
+							</form>
+						) : (
+							<div className="text-center space-y-4">
+								<div className="bg-green-500/10 text-green-400 p-4 rounded-lg">
+									<p>
+										If an account exists for {email}, you will receive password
+										reset instructions.
+									</p>
+								</div>
+								<p className="text-neutral-400">
+									Didn't receive the email? Check your spam folder or{" "}
+									<button type="button"
+										onClick={() => setIsSubmitted(false)}
+										className="text-purple-400 hover:text-purple-300"
+									>
+										try again
+									</button>
+								</p>
 							</div>
-						</div>
+						)}
 					</div>
 
 					{/* Sign Up Link */}
@@ -245,4 +202,4 @@ const SignInPage = () => {
 	);
 };
 
-export default SignInPage;
+export default ForgotPasswordPage;

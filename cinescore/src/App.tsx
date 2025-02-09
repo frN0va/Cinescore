@@ -8,6 +8,7 @@ import SearchResults from "./pages/SearchResults";
 import ActorSearchResults from "./pages/ActorSearchResults";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 				<Route path="/search/actors" element={<ActorSearchResults />} />
 				<Route path="/signin" element={<SignInPage />} />
 				<Route path="/signup" element={<SignUpPage />} />
+				<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
