@@ -7,6 +7,7 @@ import ActorBrowse from "./pages/ActorBrowse";
 import SearchResults from "./pages/SearchResults";
 import ActorSearchResults from "./pages/ActorSearchResults";
 import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 				<Route path="/search" element={<SearchResults />} />
 				<Route path="/search/actors" element={<ActorSearchResults />} />
 				<Route path="/signin" element={<SignInPage />} />
+				<Route path="/signup" element={<SignUpPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
