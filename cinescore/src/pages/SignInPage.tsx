@@ -9,6 +9,7 @@ import {
 	User,
 	Clapperboard,
 	Search,
+	Trophy,
 } from "lucide-react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { SearchDropdown } from "../components/SearchDropdown";
@@ -35,6 +36,11 @@ const SignInPage = () => {
 			name: "Directors",
 			icon: <Clapperboard className="h-5 w-5" />,
 			to: "/directors",
+		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
 		},
 	];
 

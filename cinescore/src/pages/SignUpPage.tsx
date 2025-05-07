@@ -10,6 +10,7 @@ import {
 	Clapperboard,
 	Search,
 	UserPlus,
+	Trophy,
 } from "lucide-react";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import { SearchDropdown } from "../components/SearchDropdown";
@@ -38,6 +39,11 @@ const SignUpPage = () => {
 			name: "Directors",
 			icon: <Clapperboard className="h-5 w-5" />,
 			to: "/directors",
+		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
 		},
 	];
 
@@ -256,7 +262,7 @@ const SignUpPage = () => {
 							</div>
 
 							<div className="mt-6 grid grid-cols-2 gap-3">
-              <button
+								<button
 									type="button"
 									className="w-full inline-flex justify-center py-2 px-4 border border-neutral-800 rounded-lg shadow-sm bg-neutral-900 text-neutral-300 hover:bg-neutral-800 transition-colors duration-200"
 								>

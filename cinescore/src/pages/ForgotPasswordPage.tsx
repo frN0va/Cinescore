@@ -9,6 +9,7 @@ import {
 	Clapperboard,
 	Search,
 	ArrowLeft,
+	Trophy,
 } from "lucide-react";
 import { SearchDropdown } from "../components/SearchDropdown";
 import ProfileDropdown from "../components/ProfileDropdown";
@@ -35,6 +36,11 @@ const ForgotPasswordPage = () => {
 			name: "Directors",
 			icon: <Clapperboard className="h-5 w-5" />,
 			to: "/directors",
+		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
 		},
 	];
 

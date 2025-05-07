@@ -1,7 +1,14 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Film, User, Clapperboard, Search, Popcorn } from "lucide-react";
+import {
+	Film,
+	User,
+	Clapperboard,
+	Search,
+	Popcorn,
+	Trophy,
+} from "lucide-react";
 import CategoryCarosel, {
 	MOVIES_PER_PAGE,
 } from "../components/CategoryCarousel";
@@ -185,6 +192,11 @@ const HomePage: React.FC = () => {
 			name: "Directors",
 			icon: <Clapperboard className="h-5 w-5" />,
 			to: "/directors",
+		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
 		},
 	];
 

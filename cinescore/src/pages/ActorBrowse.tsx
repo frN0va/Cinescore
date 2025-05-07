@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { User, Search, Popcorn, Film, Clapperboard } from "lucide-react";
+import { User, Search, Popcorn, Film, Clapperboard, Trophy } from "lucide-react";
 import type { Crew } from "../types";
 
 const ACTORS_PER_PAGE = 10;
@@ -128,6 +128,11 @@ const ActorBrowse: React.FC = () => {
 			name: "Directors",
 			icon: <Clapperboard className="h-5 w-5" />,
 			to: "/directors",
+		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
 		},
 	];
 

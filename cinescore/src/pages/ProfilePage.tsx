@@ -182,6 +182,11 @@ const ProfilePage: React.FC = () => {
 			icon: <Clapperboard className="w-5 h-5" />,
 			to: "/directors",
 		},
+		{
+			name: "Tier Lists",
+			icon: <Trophy className="h-5 w-5" />,
+			to: "/tierlist",
+		},
 	];
 
 	const handlePrevPage = (category: string) => {
