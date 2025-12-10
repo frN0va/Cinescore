@@ -1,4 +1,4 @@
-FROM rust:1.84-alpine3.20 AS build
+FROM rust:1.91.1-alpine3.20 AS build
 RUN apk add build-base openssl-dev openssl-libs-static libssl3 libcrypto3
 
 WORKDIR /app

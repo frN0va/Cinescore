@@ -2,7 +2,7 @@
 use std::net::Ipv4Addr;
 
 use api::build_router;
-use clap::{arg, command, Parser};
+use clap::Parser;
 
 /// CLI Arguments struct
 #[derive(Parser)]

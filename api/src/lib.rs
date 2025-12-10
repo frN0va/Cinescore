@@ -10,11 +10,8 @@ mod frontend_models;
 mod tmdb;
 
 pub fn build_router() -> Router {
-    if std::env::var("RUST_LOG").is_err() {
-        std::env::set_var("RUST_LOG", "info");
-    }
-
-    env_logger::init();
+    let env = env_logger::Env::default().filter_or("RUST_LOG", "info");
+    env_logger::init_from_env(env);
 
     log::info!("Initializing API routes...");
 

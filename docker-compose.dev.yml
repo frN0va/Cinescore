@@ -7,14 +7,15 @@ services:
     volumes:
       - ./api:/app
     environment:
-      - ENVIRONMENT=development
-      - RUST_LOG=api=debug
+      ENVIRONMENT: development
+      RUST_LOG: api=debug
+      DATABASE_URL: postgres://cinescore:cinescore@db:5432/cinescore
     ports:
       - "8000:8000"
     command: cargo watch -x "run -- --bind 0.0.0.0 --port 8000"
     tty: true
     depends_on:
-      - database
+      - db
 
   frontend:
     build:
@@ -28,8 +29,8 @@ services:
       - "5173:5173"
     command: npm run dev -- --host
 
-  database:
-    image: postgres:16-alpine
+  db:
+    image: postgres:18-alpine
     container_name: cinescore-db-dev
     restart: always
     environment:
@@ -39,7 +40,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pg_data_dev:/var/lib/postgresql/data
 
   nginx:
     image: nginx:stable-alpine
@@ -54,4 +55,4 @@ services:
       - api
 
 volumes:
-  pg_data:
+  pg_data_dev:
