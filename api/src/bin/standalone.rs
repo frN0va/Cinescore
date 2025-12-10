@@ -4,6 +4,7 @@ use std::net::Ipv4Addr;
 use api::build_router;
 use clap::Parser;
 use sqlx::postgres::PgPoolOptions;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 /// CLI Arguments struct
 #[derive(Parser)]
@@ -24,8 +25,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         panic!(".env file does not exist");
     }
 
-    let env = env_logger::Env::default().filter_or("RUST_LOG", "info");
-    env_logger::init_from_env(env);
+    tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| "cinescore_api=info,api=info".into()),
+        )
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
     let variables = ["TMDB_API_KEY"];
 
@@ -40,14 +46,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // connect to DB
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 
-    log::info!("Connecting to database");
+    tracing::info!("Connecting to database");
     let pool = PgPoolOptions::new()
         .max_connections(5)
         .connect(&database_url)
         .await
         .expect("failed to connect to database");
 
-    log::info!("Running database migrations");
+    tracing::info!("Running database migrations");
     sqlx::migrate!()
         .run(&pool)
         .await
@@ -61,16 +67,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let listener = match tokio::net::TcpListener::bind(&address).await {
         Ok(v) => v,
         Err(e) => {
-            log::error!("Error while binding to address {}: {}", address, e);
+            tracing::error!("Error while binding to address {}: {}", address, e);
             std::process::exit(1);
         }
     };
 
-    log::info!("Bound to http://{}", address);
+    tracing::info!("Bound to http://{}", address);
 
     match axum::serve(listener, router).await {
         Ok(_) => (),
-        Err(e) => log::error!("Error serving axum app: {}", e),
+        Err(e) => tracing::error!("Error serving axum app: {}", e),
     };
 
     Ok(())

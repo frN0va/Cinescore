@@ -34,7 +34,7 @@ fn get_tmdb_client() -> TMDBClient {
     TMDBClient::new(match std::env::var("TMDB_API_KEY") {
         Ok(v) => v,
         Err(_) => {
-            log::error!("`TMDB_API_KEY` environment variable must be set.");
+            tracing::error!("`TMDB_API_KEY` environment variable must be set.");
             std::process::exit(1);
         }
     })
@@ -43,21 +43,21 @@ fn get_tmdb_client() -> TMDBClient {
 /// Fetches the list of trending movies from TMDB.
 pub async fn fetch_trending() -> Result<Json<FrontendMovieList>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching trending movies");
+    tracing::info!("Fetching trending movies");
     Ok(Json(MovieListTrendingRequest::new().fetch(&client).await?))
 }
 
 /// Fetches the list of trending people from TMDB.
 pub async fn fetch_trending_people() -> Result<Json<FrontendPeopleList>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching trending people");
+    tracing::info!("Fetching trending people");
     Ok(Json(TrendingPeopleRequest::new().fetch(&client).await?))
 }
 
 /// Fetches the list of movies that are currently playing in theaters.
 pub async fn fetch_now_playing() -> Result<Json<FrontendMovieList>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching now playing movies");
+    tracing::info!("Fetching now playing movies");
     Ok(Json(
         MovieListNowPlayingRequest::new().fetch(&client).await?,
     ))
@@ -71,7 +71,7 @@ pub async fn fetch_movie_details(
     Path(movie_id): Path<u64>,
 ) -> Result<Json<FrontendMovieDetails>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching details for movie ID: {}", movie_id);
+    tracing::info!("Fetching details for movie ID: {}", movie_id);
     Ok(Json(
         MovieDetailsRequest::new()
             .append_to_response("credits")
@@ -88,7 +88,7 @@ pub async fn fetch_person_details(
     Path(person_id): Path<u64>,
 ) -> Result<Json<FrontendPersonDetails>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching details for person ID: {}", person_id);
+    tracing::info!("Fetching details for person ID: {}", person_id);
     Ok(Json(
         PersonDetailsRequest::new()
             .append_to_response("credits,external_ids")
@@ -101,7 +101,7 @@ pub async fn fetch_person_details(
 /// months in the future.
 pub async fn fetch_upcoming_movies() -> Result<Json<FrontendMovieList>, ApiFetchError> {
     let client = get_tmdb_client();
-    log::info!("Fetching upcoming movies");
+    tracing::info!("Fetching upcoming movies");
     Ok(Json(
         DiscoverMoviesRequest::new()
             .primary_release_date_range(

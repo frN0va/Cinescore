@@ -43,11 +43,11 @@ pub enum ApiFetchError {
 impl IntoResponse for ApiFetchError {
     /// Converts an [`ApiFetchError`] into an [`axum::response::Response`]
     fn into_response(self) -> axum::response::Response {
-        log::error!("{}", self);
+        tracing::error!("{}", self);
 
         if let Self::Request(e) = self {
             if let Some(status_code) = e.status() {
-                log::error!("Errored with status code: {}", status_code)
+                tracing::error!("Errored with status code: {}", status_code)
             }
         }
 
@@ -81,7 +81,7 @@ impl TMDBClient {
     ///
     /// A new `TMDBClient` instance with the provided API key and default base URL.
     pub fn new(api_key: String) -> Self {
-        log::debug!("Creating TMDBClient with provided API key");
+        tracing::debug!("Creating TMDBClient with provided API key");
         Self {
             client: Client::new(),
             api_key,
@@ -113,7 +113,7 @@ impl TMDBClient {
         params: HashMap<&str, String>,
     ) -> Result<T, ApiFetchError> {
         let url = format!("{}/{}", self.base_url, endpoint);
-        log::info!("Making GET request to URL: {}", url);
+        tracing::info!("Making GET request to URL: {}", url);
 
         let response = self
             .client
@@ -129,9 +129,9 @@ impl TMDBClient {
             .await?;
 
         if response.status().is_success() {
-            log::debug!("Successful response from TMDB API");
+            tracing::debug!("Successful response from TMDB API");
         } else {
-            log::warn!("Non-success status code received: {}", response.status());
+            tracing::warn!("Non-success status code received: {}", response.status());
         }
 
         let response_as_value = response.json::<serde_json::Value>().await?;

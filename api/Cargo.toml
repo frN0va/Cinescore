@@ -2,10 +2,10 @@
 name = "api"
 version = "0.1.0"
 edition = "2024"
-default-run = "standalone"
+default-run = "cinescore_api"
 
 [[bin]]
-name = "standalone"
+name = "cinescore_api"
 path = "src/bin/standalone.rs"
 
 [dependencies]
@@ -18,8 +18,6 @@ chrono = { version = "0.4.39", default-features = false, features = [
 ] }
 clap = { version = "4.5.27", features = ["cargo", "derive"] }
 dotenvy = "0.15.7"
-env_logger = "0.11.6"
-log = "0.4.25"
 reqwest = { version = "0.12.12", features = ["json"] }
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = "1.0.137"
@@ -35,8 +33,11 @@ sqlx = { version = "0.8.6", features = [
 ] }
 thiserror = "2.0.11"
 tokio = { version = "1.28.2", features = ["full"] }
+tower-http = { version = "0.6.8", features = ["trace"] }
 tower-sessions = "0.14.0"
 tower-sessions-sqlx-store = { version = "0.15.0", features = ["postgres"] }
+tracing = "0.1.43"
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
 uuid = { version = "1.19.0", features = ["v4", "serde"] }
 
 [lints.clippy]

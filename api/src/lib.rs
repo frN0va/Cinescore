@@ -6,6 +6,7 @@ use discover::{
     fetch_trending_people, fetch_upcoming_movies, search_movies, search_people,
 };
 use sqlx::PgPool;
+use tower_http::trace::TraceLayer;
 use tower_sessions::{cookie::time::Duration, Expiry, SessionManagerLayer};
 use tower_sessions_sqlx_store::PostgresStore;
 
@@ -17,7 +18,7 @@ mod frontend_models;
 mod tmdb;
 
 pub async fn build_router(pool: PgPool) -> Router {
-    log::info!("Creating session manager...");
+    tracing::info!("Creating session manager...");
 
     let session_store = PostgresStore::new(pool.clone());
     session_store
@@ -33,7 +34,7 @@ pub async fn build_router(pool: PgPool) -> Router {
     let backend = Backend::new(pool.clone());
     let auth_layer = AuthManagerLayerBuilder::new(backend, session_layer).build();
 
-    log::info!("Initializing API routes...");
+    tracing::info!("Initializing API routes...");
 
     Router::new()
         .route("/api/v1/discover/trending", get(fetch_trending))
@@ -49,4 +50,5 @@ pub async fn build_router(pool: PgPool) -> Router {
         .route("/api/v1/search/people", get(search_people))
         .nest("/api/v1/auth", auth::build_router(pool.clone()))
         .layer(auth_layer)
+        .layer(TraceLayer::new_for_http())
 }

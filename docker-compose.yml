@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     environment:
       ENVIRONMENT: production
-      RUST_LOG: api=debug,standalone=debug
+      RUST_LOG: api=debug,cinescore_api=debug,tower_http=debug
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     restart: always
     tty: true

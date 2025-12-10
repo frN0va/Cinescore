@@ -10,14 +10,14 @@ RUN cargo fetch
 
 COPY . .
 
-RUN cargo build --bin standalone --release
+RUN cargo build --bin cinescore_api --release
 
 FROM alpine:3.20
 
-COPY --from=build /app/target/release/standalone ./cinescore-api
+COPY --from=build /app/target/release/cinescore_api ./cinescore_api
 
 ENV ENVIRONMENT="production"
 
 EXPOSE 8000
-ENTRYPOINT ["/bin/sh", "-c", "./cinescore-api --bind 0.0.0.0 --port 8000"]
+ENTRYPOINT ["/bin/sh", "-c", "./cinescore_api --bind 0.0.0.0 --port 8000"]
 

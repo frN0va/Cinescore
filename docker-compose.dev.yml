@@ -8,7 +8,7 @@ services:
       - ./api:/app
     environment:
       ENVIRONMENT: development
-      RUST_LOG: api=debug,standalone=debug
+      RUST_LOG: api=debug,cinescore_api=debug,tower_http=debug
       DATABASE_URL: postgres://cinescore:cinescore@db:5432/cinescore
     ports:
       - "8000:8000"

@@ -85,7 +85,7 @@ impl AuthnBackend for Backend {
         &self,
         creds: Self::Credentials,
     ) -> Result<Option<Self::User>, Self::Error> {
-        log::debug!("Authenticating user");
+        tracing::debug!("Authenticating user");
 
         let user = sqlx::query_as::<_, User>("SELECT * FROM users WHERE email = $1")
             .bind(&creds.email)
@@ -96,7 +96,7 @@ impl AuthnBackend for Backend {
             let parsed_hash = match PasswordHash::new(&user.password_hash) {
                 Ok(h) => h,
                 Err(e) => {
-                    log::error!("Invalid password hash for creds {:?}: {}", creds, e);
+                    tracing::error!("Invalid password hash for creds {:?}: {}", creds, e);
                     return Ok(None);
                 }
             };
@@ -105,7 +105,7 @@ impl AuthnBackend for Backend {
                 .verify_password(creds.password.as_bytes(), &parsed_hash)
                 .is_ok()
             {
-                log::debug!("Authentication successful");
+                tracing::debug!("Authentication successful");
                 return Ok(Some(user));
             }
         }

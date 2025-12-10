@@ -97,7 +97,7 @@ pub trait LanguageQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting language `{}` into query parameters", language);
+        tracing::debug!("Inserting language `{}` into query parameters", language);
 
         self.params().insert("language", language.to_string());
         self
@@ -121,7 +121,7 @@ pub trait AppendToResponseQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!(
+        tracing::debug!(
             "Inserting append_to_response `{}` into query parameters",
             append
         );
@@ -149,7 +149,7 @@ pub trait RegionQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting region `{}` into query parameters", region);
+        tracing::debug!("Inserting region `{}` into query parameters", region);
 
         self.params().insert("region", region.to_string());
         self
@@ -173,7 +173,7 @@ pub trait PageQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting page `{}` into query parameters", page);
+        tracing::debug!("Inserting page `{}` into query parameters", page);
 
         self.params().insert("page", page.to_string());
         self
@@ -197,7 +197,7 @@ pub trait IncludeAdultQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!(
+        tracing::debug!(
             "Inserting include_adult `{}` into query parameters",
             include_adult
         );
@@ -223,7 +223,7 @@ pub trait IncludeVideoQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!(
+        tracing::debug!(
             "Inserting include_video `{}` into query parameters",
             include_video
         );
@@ -251,7 +251,7 @@ pub trait PrimaryReleaseYearQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!(
+        tracing::debug!(
             "Inserting primary_release_year `{}` into query parameters",
             year
         );
@@ -279,7 +279,7 @@ pub trait YearQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting year `{}` into query parameters", year);
+        tracing::debug!("Inserting year `{}` into query parameters", year);
 
         self.params().insert("year", year.to_string());
         self
@@ -303,7 +303,7 @@ pub trait QueryQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting query `{}` into query parameters", query);
+        tracing::debug!("Inserting query `{}` into query parameters", query);
 
         self.params().insert("query", query.to_string());
         self
@@ -329,7 +329,7 @@ pub trait PrimaryReleaseDateQueryParam: HasParams {
         Self: Sized,
     {
         if let Some(date) = gte {
-            log::debug!(
+            tracing::debug!(
                 "Inserting primary_release_date.gte `{}` into query parameters",
                 date
             );
@@ -338,7 +338,7 @@ pub trait PrimaryReleaseDateQueryParam: HasParams {
         }
 
         if let Some(year) = lte {
-            log::debug!(
+            tracing::debug!(
                 "Inserting primary_release_date.lte `{}` into query parameters",
                 year
             );
@@ -422,7 +422,7 @@ pub trait SortByQueryParam: HasParams {
     where
         Self: Sized,
     {
-        log::debug!("Inserting sort_by `{}` into query parameters", sort_by);
+        tracing::debug!("Inserting sort_by `{}` into query parameters", sort_by);
         self.params().insert("sort_by", sort_by.to_string());
 
         self
