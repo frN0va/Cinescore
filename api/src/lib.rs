@@ -1,17 +1,37 @@
 //! Cinescore is an open source movie rating platform. This crate contains the API
 use axum::{routing::get, Router};
+use axum_login::AuthManagerLayerBuilder;
 use discover::{
     fetch_movie_details, fetch_now_playing, fetch_person_details, fetch_trending,
     fetch_trending_people, fetch_upcoming_movies, search_movies, search_people,
 };
+use sqlx::PgPool;
+use tower_sessions::{cookie::time::Duration, Expiry, SessionManagerLayer};
+use tower_sessions_sqlx_store::PostgresStore;
 
+use crate::auth::Backend;
+
+mod auth;
 mod discover;
 mod frontend_models;
 mod tmdb;
 
-pub fn build_router() -> Router {
-    let env = env_logger::Env::default().filter_or("RUST_LOG", "info");
-    env_logger::init_from_env(env);
+pub async fn build_router(pool: PgPool) -> Router {
+    log::info!("Creating session manager...");
+
+    let session_store = PostgresStore::new(pool.clone());
+    session_store
+        .migrate()
+        .await
+        .expect("Failed to run session migrations");
+
+    // with_secure is false in debug and true in release
+    let session_layer = SessionManagerLayer::new(session_store)
+        .with_secure(!cfg!(debug_assertions))
+        .with_expiry(Expiry::OnInactivity(Duration::days(1)));
+
+    let backend = Backend::new(pool.clone());
+    let auth_layer = AuthManagerLayerBuilder::new(backend, session_layer).build();
 
     log::info!("Initializing API routes...");
 
@@ -27,4 +47,6 @@ pub fn build_router() -> Router {
         .route("/api/v1/people/{id}", get(fetch_person_details))
         .route("/api/v1/search/movies", get(search_movies))
         .route("/api/v1/search/people", get(search_people))
+        .nest("/api/v1/auth", auth::build_router(pool.clone()))
+        .layer(auth_layer)
 }

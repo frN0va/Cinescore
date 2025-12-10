@@ -3,6 +3,7 @@ use std::net::Ipv4Addr;
 
 use api::build_router;
 use clap::Parser;
+use sqlx::postgres::PgPoolOptions;
 
 /// CLI Arguments struct
 #[derive(Parser)]
@@ -20,21 +21,42 @@ struct Cli {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // load dotenv file if exists, and if not, check that environment variable is defined
     if dotenvy::from_filename(".env").is_err() {
-        assert!(
-            std::env::var("TMDB_API_KEY").is_ok(),
-            ".env file does not exists and environment variable TMDB_API_KEY is not set"
-        )
+        panic!(".env file does not exist");
     }
 
-    assert!(
-        std::env::var("TMDB_API_KEY").is_ok(),
-        "environment variable TMDB_API_KEY is not set"
-    );
+    let env = env_logger::Env::default().filter_or("RUST_LOG", "info");
+    env_logger::init_from_env(env);
+
+    let variables = ["TMDB_API_KEY"];
+
+    for var in variables {
+        assert!(
+            std::env::var(var).is_ok(),
+            "environment variable {} is not set",
+            var
+        );
+    }
+
+    // connect to DB
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
+    log::info!("Connecting to database");
+    let pool = PgPoolOptions::new()
+        .max_connections(5)
+        .connect(&database_url)
+        .await
+        .expect("failed to connect to database");
+
+    log::info!("Running database migrations");
+    sqlx::migrate!()
+        .run(&pool)
+        .await
+        .expect("Failed to run migrations");
 
     let args = Cli::parse();
     let address = format!("{}:{}", args.bind, args.port);
 
-    let router = build_router();
+    let router = build_router(pool).await;
 
     let listener = match tokio::net::TcpListener::bind(&address).await {
         Ok(v) => v,

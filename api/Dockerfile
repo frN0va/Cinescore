@@ -16,10 +16,6 @@ FROM alpine:3.20
 
 COPY --from=build /app/target/release/standalone ./cinescore-api
 
-# TODO: maybe this isnt the best idea
-COPY .env .env
-
-ENV RUST_LOG="info"
 ENV ENVIRONMENT="production"
 
 EXPOSE 8000
