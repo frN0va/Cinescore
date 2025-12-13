@@ -1,9 +1,15 @@
 //! Defines axum route handlers for interacting with the cinescore backend and the TMDB API
-use axum::{extract::Path, Json};
+use axum::{
+    extract::{Path, State},
+    Json,
+};
+use axum_login::AuthSession;
 use chrono::{Months, Utc};
 use serde::Deserialize;
+use sqlx::PgPool;
 
 use crate::{
+    auth::Backend,
     frontend_models::{
         movies::{FrontendMovieDetails, FrontendMovieList},
         people::{FrontendPeopleList, FrontendPersonDetails},
@@ -68,16 +74,54 @@ pub async fn fetch_now_playing() -> Result<Json<FrontendMovieList>, ApiFetchErro
 /// # Arguments
 /// * `movie_id` - The ID of the movie to fetch details for.
 pub async fn fetch_movie_details(
+    State(pool): State<PgPool>,
+    auth_session: AuthSession<Backend>,
     Path(movie_id): Path<u64>,
 ) -> Result<Json<FrontendMovieDetails>, ApiFetchError> {
     let client = get_tmdb_client();
     tracing::info!("Fetching details for movie ID: {}", movie_id);
-    Ok(Json(
-        MovieDetailsRequest::new()
-            .append_to_response("credits")
-            .fetch(&client, movie_id)
-            .await?,
-    ))
+
+    // first, we fetch TMDB data
+    let mut movie_details = MovieDetailsRequest::new()
+        .append_to_response("credits")
+        .fetch(&client, movie_id)
+        .await?;
+
+    let user_id = auth_session.user.map(|u| u.id);
+
+    let (is_liked, in_watchlist) = if let Some(uid) = user_id {
+        // if user is authed, check movie status
+        let liked: bool = sqlx::query_scalar(
+            "SELECT EXISTS(SELECT 1 FROM movie_likes WHERE user_id = $1 AND movie_id = $2)",
+        )
+        .bind(uid)
+        .bind(movie_id as i64)
+        .fetch_one(&pool)
+        .await
+        .unwrap_or(false);
+
+        let watchlist: bool = sqlx::query_scalar(
+            "SELECT EXISTS(SELECT 1 FROM movie_watchlist WHERE user_id = $1 AND movie_id = $2)",
+        )
+        .bind(uid)
+        .bind(movie_id as i64)
+        .fetch_one(&pool)
+        .await
+        .unwrap_or(false);
+
+        (liked, watchlist)
+    } else {
+        // not authed, default to not liked or watchlisted
+        (false, false)
+    };
+
+    // TODO: use our avg rating instead of TMDB?
+    // maybe something like:
+    // SELECT AVG(rating)::float8 FROM movie_ratings WHERE movie_id = ...
+    //
+    movie_details.set_user_interaction(is_liked, in_watchlist);
+
+    Ok(Json(movie_details))
 }
 
 /// Fetches detailed information about a specific person, including their credits and external IDs.

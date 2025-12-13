@@ -15,6 +15,7 @@ use crate::auth::Backend;
 mod auth;
 mod discover;
 mod frontend_models;
+mod interactions;
 mod tmdb;
 
 pub async fn build_router(pool: PgPool) -> Router {
@@ -48,6 +49,11 @@ pub async fn build_router(pool: PgPool) -> Router {
         .route("/api/v1/people/{id}", get(fetch_person_details))
         .route("/api/v1/search/movies", get(search_movies))
         .route("/api/v1/search/people", get(search_people))
+        .with_state(pool.clone())
+        .nest(
+            "/api/v1/interactions",
+            interactions::build_router(pool.clone()),
+        )
         .nest("/api/v1/auth", auth::build_router(pool.clone()))
         .layer(auth_layer)
         .layer(TraceLayer::new_for_http())

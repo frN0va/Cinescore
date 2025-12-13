@@ -170,3 +170,10 @@ impl From<MovieDetails> for FrontendMovieDetails {
         }
     }
 }
+
+impl FrontendMovieDetails {
+    pub fn set_user_interaction(&mut self, is_liked: bool, in_watchlist: bool) {
+        self.is_liked = is_liked;
+        self.in_watchlist = in_watchlist;
+    }
+}
